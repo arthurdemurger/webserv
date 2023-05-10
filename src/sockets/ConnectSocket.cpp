@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 14:04:13 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:48:47 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ ConnectSocket::ConnectSocket(int domain, int service, int protocol, int port, u_
 	Socket(domain, service, protocol, port, interface)
 {
 	// Establish network connection
-	check(connect_to_ntwk(), CONNECT);
+	if (connect_to_ntwk() < 0)
+		throw ConnectSocket::ConnectException();
 }
 
 ConnectSocket::ConnectSocket(const ConnectSocket &copy) : Socket(copy) { }

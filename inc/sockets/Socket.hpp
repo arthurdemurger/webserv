@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:50 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 14:03:45 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:48:42 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,18 @@ class Socket
 		struct sockaddr_in	getAddress(void) const;
 
 		/*
+		** ------------------------------- Exceptions --------------------------------
+		*/
+		class SocketException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw() { return "Socket failed."; };
+		};
+
+		/*
 		** ------------------------------- Methods --------------------------------
 		*/
 		virtual int	connect_to_ntwk() = 0;
-		void		check(int itemToTest, int error);
 };
 
 # endif

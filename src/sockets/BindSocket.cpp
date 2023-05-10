@@ -18,8 +18,8 @@
 BindSocket::BindSocket(int domain, int service, int protocol, int port, u_long interface) :
 	Socket(domain, service, protocol, port, interface)
 {
-	// Establish network connection
-	check(connect_to_ntwk(), BIND);
+	if (connect_to_ntwk() < 0)
+		throw BindSocket::BindException();
 }
 
 BindSocket::BindSocket(const BindSocket &copy) : Socket(copy) { }

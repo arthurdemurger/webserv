@@ -35,6 +35,15 @@ class BindSocket : public Socket
 		const BindSocket	&operator=(const BindSocket &copy);
 
 		/*
+		** ------------------------------- Exceptions --------------------------------
+		*/
+		class BindException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw() { return "Bind failed."; };
+		};
+
+		/*
 		** ------------------------------- Methods --------------------------------
 		*/
 		int	connect_to_ntwk(void);

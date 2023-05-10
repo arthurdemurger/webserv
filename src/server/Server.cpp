@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.cpp                                         :+:      :+:    :+:   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 15:49:56 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:46:56 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,40 +54,24 @@ ListenSocket	*Server::getSocket(void) const { return (socket); }
 ** ------------------------------- METHODS --------------------------------
 */
 
-void	Server::check(int itemToCheck, int error)
-{
-	if (itemToCheck < 0)
-	{
-		switch(error)
-		{
-			case ACCEPT:
-				perror("Accept failed.");
-				break ;
-			case READ:
-				perror("Read failed.");
-			default:
-				perror("problem detected.");
-		}
-		exit(EXIT_FAILURE);
-	}
-}
-
 void	Server::accepter()
 {
 	struct sockaddr_in	address = socket->getAddress();
 	int					addressLen = sizeof(address);
 	int					n;
 
-	check((tmpSocket = accept(socket->getServerSock(), (struct sockaddr *) &address, (socklen_t *) &addressLen)), ACCEPT);
-	check((n = read(tmpSocket, buffer, 30000)), READ);
+	if((tmpSocket = accept(socket->getServerSock(), (struct sockaddr *) &address, (socklen_t *) &addressLen)) < 0)
+		throw Server::AcceptException();
+	if ((n = read(tmpSocket, buffer, 30000)) < 0)
+		throw Server::ReadException();
 }
 
-void	Server::handler()
+void	Server::handler() const
 {
 	std::cout << buffer << std::endl;
 }
 
-void	Server::responder()
+void	Server::responder() const
 {
 	char *hello = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
 	write(tmpSocket, hello, strlen(hello));

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.hpp                                         :+:      :+:    :+:   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 15:48:42 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:47:02 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ class Server
 		** ------------------------------- Methods --------------------------------
 		*/
 		void	accepter();
-		void	handler();
-		void	responder();
-		void	check(int itemToCheck, int error);
+		void	handler() const;
+		void	responder() const;
 		Server();
 
 	public:
@@ -56,6 +55,20 @@ class Server
 		** ------------------------------- Methods --------------------------------
 		*/
 		void launcher();
+
+		/*
+		** ------------------------------- Exceptions --------------------------------
+		*/
+		class ReadException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw() { return "Read failed."; };
+		};
+		class AcceptException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw() { return "Accept failed."; };
+		};
 };
 
 #endif

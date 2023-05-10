@@ -18,7 +18,8 @@
 ListenSocket::ListenSocket(int domain, int service, int protocol, int port, u_long interface, int bklg) :
 	BindSocket(domain, service, protocol, port, interface), backlog(bklg)
 {
-	check((isListening = listening()), LISTEN);
+	if ((isListening = listening()) < 0)
+		throw ListenSocket::ListenException();
 }
 
 ListenSocket::ListenSocket(const ListenSocket &copy) : BindSocket(copy), backlog(copy.backlog) { }
@@ -53,7 +54,7 @@ int					ListenSocket::getIsListening(void) const { return (isListening); }
 ** ------------------------------- METHODS --------------------------------
 */
 
-int	ListenSocket::listening(void)
+int	ListenSocket::listening(void) const
 {
 	return (listen(getServerSock(), backlog));
 }

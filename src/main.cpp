@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:12:06 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 15:56:28 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:49:41 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,16 @@
 
 int main(void)
 {
-	Server serv(AF_INET, SOCK_STREAM, 0, PORT, INADDR_ANY, 10);
+	try
+	{
+		Server serv(AF_INET, SOCK_STREAM, 0, PORT, INADDR_ANY, 10);
 
-	serv.launcher();
+		serv.launcher();
+	}
+	catch (const std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
 	return (0);
 }
