@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Socket.cpp                                         :+:      :+:    :+:   */
+/*   BindingSocket.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 10:21:06 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/10 10:25:57 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Socket.hpp"
+#include "../inc/BindingSocket.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-Socket::Socket(int domain, int service, int protocol, int port,  u_long interface)
+BindingSocket::BindingSocket(int domain, int service, int protocol, int port, u_long interface) : Socket(domain, service, protocol, port, interface)
 {
 	address.sin_family = domain;
 	address.sin_port = htons(port);
@@ -23,28 +23,18 @@ Socket::Socket(int domain, int service, int protocol, int port,  u_long interfac
 
 	// Establish connection
 	check((serverSock = socket(domain, service , protocol)), "socket failed.");
-
 }
 
 /*
 ** ------------------------------- DESTRUCTOR --------------------------------
 */
-Socket::~Socket() { }
+BindingSocket::~BindingSocket() { }
 
 /*
 ** ------------------------------- ACCESSORS --------------------------------
 */
-int					Socket::getServerSock(void) const { return (serverSock); };
-int					Socket::getConnection(void) const { return (connection); };
-struct sockaddr_in	Socket::getAddress(void) const { return (address); };
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
-void		Socket::check(int item, char *message)
-{
-	if (item < 0)
-		perror(message);
-	exit(EXIT_FAILURE);
-}
 

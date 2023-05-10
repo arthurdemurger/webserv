@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Socket.hpp                                         :+:      :+:    :+:   */
+/*   BindingSocket.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:50 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 10:26:37 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/10 10:26:12 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SOCKET_HPP
+#ifndef BINDINGSOCKET_HPP
 
-# define SOCKET_HPP
+# define BINDINGSOCKET_HPP
 
-#include <iostream>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include "Socket.hpp"
 
-class Socket
+class BindingSocket : public Socket
 {
-	protected:
+	private:
 		int					serverSock;
 		int					connection;
 		struct sockaddr_in	address;
@@ -29,21 +27,17 @@ class Socket
 		/*
 		** ------------------------------- Canonical form --------------------------------
 		*/
-		Socket(int domain, int service, int protocol, int port, u_long interface);
-		virtual ~Socket();
+		BindingSocket(int domain, int service, int protocol, int port, u_long interface);
+		~BindingSocket();
 
 		/*
 		** ------------------------------- Accessors --------------------------------
 		*/
-		int					getServerSock(void) const;
-		int					getConnection(void) const;
-		struct sockaddr_in	getAddress(void) const;
 
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		virtual int	connect_to_ntwk() = 0;
-		void		check(int item, char *message);
+		virtual int	connect_to_ntwk();
 };
 
 # endif
