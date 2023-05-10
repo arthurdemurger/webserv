@@ -10,34 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/BindSocket.hpp"
+#include "../../inc/sockets/ListenSocket.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-BindSocket::BindSocket(int domain, int service, int protocol, int port, u_long interface) :
-	Socket(domain, service, protocol, port, interface)
+ListenSocket::ListenSocket(int domain, int service, int protocol, int port, u_long interface, int bklg) :
+	BindSocket(domain, service, protocol, port, interface), backlog(bklg)
 {
-	// Establish network connection
-	setConnection(connect_to_ntwk());
-	check(getConnection(), "Bind failed.");
+	check((isListening = listening()), LISTEN);
 }
 
-BindSocket::BindSocket(const BindSocket &copy)
-{
-	*this = copy;
-}
+ListenSocket::ListenSocket(const ListenSocket &copy) : BindSocket(copy), backlog(copy.backlog) { }
 
 /*
 ** ------------------------------- OPERATOR OVERLOAD --------------------------------
 */
-const BindSocket	&BindSocket::operator=(const BindSocket &copy)
+const ListenSocket	&ListenSocket::operator=(const ListenSocket &copy)
 {
 	if (this != &copy)
 	{
 		serverSock = copy.getServerSock();
-		connection = copy.getConnection();
+		isConnected = copy.getIsConnected();
 		address = copy.getAddress();
+		backlog = copy.getBacklog();
+		isListening = copy.getIsListening();
 	}
 	return (*this);
 }
@@ -45,19 +42,20 @@ const BindSocket	&BindSocket::operator=(const BindSocket &copy)
 /*
 ** ------------------------------- DESTRUCTOR --------------------------------
 */
-BindSocket::~BindSocket() { }
+ListenSocket::~ListenSocket() { }
 
 /*
 ** ------------------------------- ACCESSORS --------------------------------
 */
+int					ListenSocket::getBacklog(void) const { return (backlog); }
+int					ListenSocket::getIsListening(void) const { return (isListening); }
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
 
-int	BindSocket::connect_to_ntwk(void)
+int	ListenSocket::listening(void)
 {
-	return (bind(serverSock, (struct sockaddr *) &address, sizeof(address)));
+	return (listen(getIsConnected(), backlog));
 }
-
 

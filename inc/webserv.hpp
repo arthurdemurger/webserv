@@ -1,18 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/10 12:12:06 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 12:17:42 by ademurge         ###   ########.fr       */
+/*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
+/*   Updated: 2023/05/10 12:22:41 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/webserv.hpp"
+#ifndef WEBSERV_HPP
 
-int main(void)
-{
-	ListenSocket(AF_INET, SOCK_STREAM, 0, PORT, INADDR_ANY, 10);
-}
+#define WEBSERV_HPP
+
+/* Some utils libraries */
+#include <iostream>
+
+/* Sockets headers */
+#include "sockets/Socket.hpp"
+#include "sockets/BindSocket.hpp"
+#include "sockets/ConnectSocket.hpp"
+#include "sockets/ListenSocket.hpp"
+
+/* Define constants */
+# define PORT 8080
+
+#endif

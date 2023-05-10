@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ConnectSocket.cpp                                  :+:      :+:    :+:   */
+/*   BindSocket.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 11:20:50 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/10 11:12:19 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/ConnectSocket.hpp"
+#include "../../inc/sockets/BindSocket.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-ConnectSocket::ConnectSocket(int domain, int service, int protocol, int port, u_long interface) :
+BindSocket::BindSocket(int domain, int service, int protocol, int port, u_long interface) :
 	Socket(domain, service, protocol, port, interface)
 {
 	// Establish network connection
-	setConnection(connect_to_ntwk());
-	check(getConnection(), "Bind failed.");
+	setIsConnected(connect_to_ntwk());
+	check(getIsConnected(), BIND);
 }
 
-ConnectSocket::ConnectSocket(const ConnectSocket &copy)
+BindSocket::BindSocket(const BindSocket &copy)
 {
 	*this = copy;
 }
@@ -31,12 +31,12 @@ ConnectSocket::ConnectSocket(const ConnectSocket &copy)
 /*
 ** ------------------------------- OPERATOR OVERLOAD --------------------------------
 */
-const ConnectSocket	&ConnectSocket::operator=(const ConnectSocket &copy)
+const BindSocket	&BindSocket::operator=(const BindSocket &copy)
 {
 	if (this != &copy)
 	{
 		serverSock = copy.getServerSock();
-		connection = copy.getConnection();
+		isConnected = copy.getIsConnected();
 		address = copy.getAddress();
 	}
 	return (*this);
@@ -45,7 +45,7 @@ const ConnectSocket	&ConnectSocket::operator=(const ConnectSocket &copy)
 /*
 ** ------------------------------- DESTRUCTOR --------------------------------
 */
-ConnectSocket::~ConnectSocket() { }
+BindSocket::~BindSocket() { }
 
 /*
 ** ------------------------------- ACCESSORS --------------------------------
@@ -55,9 +55,9 @@ ConnectSocket::~ConnectSocket() { }
 ** ------------------------------- METHODS --------------------------------
 */
 
-int	ConnectSocket::connect_to_ntwk(void)
+int	BindSocket::connect_to_ntwk(void)
 {
-	return (connect(serverSock, (struct sockaddr *) &address, sizeof(address)));
+	return (bind(serverSock, (struct sockaddr *) &address, sizeof(address)));
 }
 
 
