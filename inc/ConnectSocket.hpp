@@ -1,43 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BindingSocket.hpp                                  :+:      :+:    :+:   */
+/*   ConnectSocket.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:50 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 10:26:12 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/10 11:21:24 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BINDINGSOCKET_HPP
+#ifndef CONNECTSOCKET_HPP
 
-# define BINDINGSOCKET_HPP
+# define CONNECTSOCKET_HPP
 
 #include "Socket.hpp"
 
-class BindingSocket : public Socket
+class ConnectSocket : public Socket
 {
 	private:
-		int					serverSock;
-		int					connection;
-		struct sockaddr_in	address;
-
+		ConnectSocket();
 	public:
 		/*
 		** ------------------------------- Canonical form --------------------------------
 		*/
-		BindingSocket(int domain, int service, int protocol, int port, u_long interface);
-		~BindingSocket();
+		ConnectSocket(const ConnectSocket &copy);
+		ConnectSocket(int domain, int service, int protocol, int port, u_long interface);
+		~ConnectSocket();
 
 		/*
-		** ------------------------------- Accessors --------------------------------
+		** ------------------------------- Operator overload --------------------------------
 		*/
+		const ConnectSocket	&operator=(const ConnectSocket &copy);
 
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		virtual int	connect_to_ntwk();
+		int	connect_to_ntwk(void);
 };
 
 # endif

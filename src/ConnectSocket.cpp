@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Socket.cpp                                         :+:      :+:    :+:   */
+/*   ConnectSocket.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 11:16:20 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/10 11:20:50 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Socket.hpp"
+#include "../inc/ConnectSocket.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-Socket::Socket(int domain, int service, int protocol, int port,  u_long interface)
+ConnectSocket::ConnectSocket(int domain, int service, int protocol, int port, u_long interface) :
+	Socket(domain, service, protocol, port, interface)
 {
-	address.sin_family = domain;
-	address.sin_port = htons(port);
-	address.sin_addr.s_addr = htonl(interface);
-
-	// Establish connection
-	check((serverSock = socket(domain, service , protocol)), "socket failed.");
+	// Establish network connection
+	setConnection(connect_to_ntwk());
+	check(getConnection(), "Bind failed.");
 }
 
-Socket::Socket(const Socket &copy)
+ConnectSocket::ConnectSocket(const ConnectSocket &copy)
 {
 	*this = copy;
 }
@@ -33,38 +31,33 @@ Socket::Socket(const Socket &copy)
 /*
 ** ------------------------------- OPERATOR OVERLOAD --------------------------------
 */
-const Socket	&Socket::operator=(const Socket &copy)
+const ConnectSocket	&ConnectSocket::operator=(const ConnectSocket &copy)
 {
 	if (this != &copy)
 	{
-		serverSock = copy.serverSock;
-		connection = copy.connection;
-		address = copy.address;
+		serverSock = copy.getServerSock();
+		connection = copy.getConnection();
+		address = copy.getAddress();
 	}
 	return (*this);
 }
 
-
 /*
 ** ------------------------------- DESTRUCTOR --------------------------------
 */
-Socket::~Socket() { }
+ConnectSocket::~ConnectSocket() { }
 
 /*
 ** ------------------------------- ACCESSORS --------------------------------
 */
-int					Socket::getServerSock(void) const { return (serverSock); };
-int					Socket::getConnection(void) const { return (connection); };
-struct sockaddr_in	Socket::getAddress(void) const { return (address); };
-void				Socket::setConnection(int con) { connection = con; };
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
-void		Socket::check(int item, char *message)
+
+int	ConnectSocket::connect_to_ntwk(void)
 {
-	if (item < 0)
-		perror(message);
-	exit(EXIT_FAILURE);
+	return (connect(serverSock, (struct sockaddr *) &address, sizeof(address)));
 }
+
 
