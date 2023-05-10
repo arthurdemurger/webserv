@@ -31,7 +31,6 @@ const ListenSocket	&ListenSocket::operator=(const ListenSocket &copy)
 	if (this != &copy)
 	{
 		serverSock = copy.getServerSock();
-		isConnected = copy.getIsConnected();
 		address = copy.getAddress();
 		backlog = copy.getBacklog();
 		isListening = copy.getIsListening();
@@ -56,6 +55,6 @@ int					ListenSocket::getIsListening(void) const { return (isListening); }
 
 int	ListenSocket::listening(void)
 {
-	return (listen(getIsConnected(), backlog));
+	return (listen(getServerSock(), backlog));
 }
 

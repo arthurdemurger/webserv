@@ -19,14 +19,10 @@ BindSocket::BindSocket(int domain, int service, int protocol, int port, u_long i
 	Socket(domain, service, protocol, port, interface)
 {
 	// Establish network connection
-	setIsConnected(connect_to_ntwk());
-	check(getIsConnected(), BIND);
+	check(connect_to_ntwk(), BIND);
 }
 
-BindSocket::BindSocket(const BindSocket &copy)
-{
-	*this = copy;
-}
+BindSocket::BindSocket(const BindSocket &copy) : Socket(copy) { }
 
 /*
 ** ------------------------------- OPERATOR OVERLOAD --------------------------------
@@ -36,7 +32,6 @@ const BindSocket	&BindSocket::operator=(const BindSocket &copy)
 	if (this != &copy)
 	{
 		serverSock = copy.getServerSock();
-		isConnected = copy.getIsConnected();
 		address = copy.getAddress();
 	}
 	return (*this);

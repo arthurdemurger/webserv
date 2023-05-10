@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 12:27:32 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/10 14:03:38 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ const Socket	&Socket::operator=(const Socket &copy)
 	if (this != &copy)
 	{
 		serverSock = copy.serverSock;
-		isConnected = copy.isConnected;
 		address = copy.address;
 	}
 	return (*this);
@@ -54,16 +53,14 @@ Socket::~Socket() { }
 ** ------------------------------- ACCESSORS --------------------------------
 */
 int					Socket::getServerSock(void) const { return (serverSock); };
-int					Socket::getIsConnected(void) const { return (isConnected); };
 struct sockaddr_in	Socket::getAddress(void) const { return (address); };
-void				Socket::setIsConnected(int con) { isConnected = con; };
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
-void		Socket::check(int item, int error)
+void		Socket::check(int itemToTest, int error)
 {
-	if (item < 0)
+	if (itemToTest < 0)
 	{
 		switch(error)
 		{
@@ -79,8 +76,10 @@ void		Socket::check(int item, int error)
 			case LISTEN:
 				perror("Listen failed.");
 				break;
+			default:
+				perror("Problem detected.");
 		}
+		exit(EXIT_FAILURE);
 	}
-	exit(EXIT_FAILURE);
 }
 
