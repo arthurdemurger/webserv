@@ -6,23 +6,24 @@
 #    By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/15 11:46:45 by ademurge          #+#    #+#              #
-#    Updated: 2023/05/10 12:17:32 by ademurge         ###   ########.fr        #
+#    Updated: 2023/05/10 15:37:59 by ademurge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 		=	webserv
 
 CC			=	c++
-CPPFLAGS	=	-Wall -Wextra -Werror -std=c++98
+CPPFLAGS	=	-std=c++98
 RM			=	rm -rf
 
 OBJDIR		=	.obj
 
-SRC			=	src/main.cpp \
-				src/sockets/BindSocket.cpp \
+SRC			=	src/sockets/BindSocket.cpp \
 				src/sockets/ConnectSocket.cpp \
 				src/sockets/ListenSocket.cpp \
-				src/sockets/Socket.cpp
+				src/sockets/Socket.cpp \
+				src/server/Server.cpp \
+				src/main.cpp
 
 OBJ			=	$(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
 
