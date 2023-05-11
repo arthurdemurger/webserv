@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 16:47:02 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/11 12:20:43 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,21 @@
 
 #define ACCEPT 0
 #define READ 1
+#define BUF_SIZE 30000
 class Server
 {
 	private:
 		/*
 		** ------------------------------- Attributes --------------------------------
 		*/
-		ListenSocket	 *socket;
-		int					tmpSocket;
-		char				buffer[30000] = {0};
+		ListenSocket		*socket;
 
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		void	accepter();
-		void	handler() const;
-		void	responder() const;
+		void	accepter(int clientSocket);
+		void	handler(int clientSocket, char *buffer) const;
+		void	responder(int clientSocket) const;
 		Server();
 
 	public:

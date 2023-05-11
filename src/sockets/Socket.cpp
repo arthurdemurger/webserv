@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 16:43:49 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/11 11:50:13 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ Socket::Socket(int domain, int service, int protocol, int port,  u_long interfac
 	address.sin_port = htons(port);
 	address.sin_addr.s_addr = htonl(interface);
 
-	if((serverSock = socket(domain, service , protocol)) < 0)
+	if((serverSock = socket(domain, service, protocol)) < 0)
 		throw Socket::SocketException();
 }
 
