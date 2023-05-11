@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/11 12:20:43 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:05:15 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,15 @@ class Server
 		** ------------------------------- Attributes --------------------------------
 		*/
 		ListenSocket		*socket;
+		fd_set				read_fd_set;
+		fd_set				write_fd_set;
 
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		void	accepter(int clientSocket);
-		void	handler(int clientSocket, char *buffer) const;
-		void	responder(int clientSocket) const;
+		void	accepter(int &clientSocket, char *buffer);
+		void	handler(int &clientSocket, char *buffer) const;
+		void	responder(int &clientSocket) const;
 		Server();
 
 	public:

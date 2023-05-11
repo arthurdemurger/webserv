@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/11 12:21:05 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:06:31 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,29 +54,28 @@ ListenSocket	*Server::getSocket(void) const { return (socket); }
 ** ------------------------------- METHODS --------------------------------
 */
 
-void	Server::accepter(int clientSocket)
+void	Server::accepter(int &clientSocket, char *buffer)
 {
 	struct sockaddr_in	address = socket->getAddress();
 	int					addressLen = sizeof(address);
 
 	if((clientSocket = accept(socket->getServerSock(), (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
 		throw Server::AcceptException();
-}
-
-void	Server::handler(int clientSocket, char *buffer) const
-{
-	int	n;
-
-	if ((n = read(clientSocket, (void *) buffer, BUF_SIZE)) < 0)
+	if (read(clientSocket, buffer, BUF_SIZE) < 0)
 		throw Server::ReadException();
 	std::cout << "'" << buffer << "'" << std::endl;
+	}
+
+void	Server::handler(int &clientSocket, char *buffer) const
+{
+	std::cout << "'" << buffer << "'" << std::endl;
+	responder(clientSocket);
 }
 
-void	Server::responder(int clientSocket) const
+void	Server::responder(int &clientSocket) const
 {
-	std::string hello = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
+	std::string hello = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n<!doctype html><html><head><title>This is the title of the webpage!</title></head><body><p>This is an example paragraph. Anything in the <strong>body</strong> tag will appear on the page, just like this <strong>p</strong> tag and its contents.</p></body></html>";
 	write(clientSocket, hello.c_str(), hello.size());
-	// responder();
 }
 
 void	Server::launcher(void)
@@ -84,41 +83,45 @@ void	Server::launcher(void)
 	char	buffer[BUF_SIZE];
 	int		clientSocket;
 	int		max_fd = 0;
-	fd_set	curr_sockets, ready_sockets;
+	fd_set	read_fd_tmp, write_fd_tmp;
 
 	max_fd = socket->getServerSock();
 
-	FD_ZERO(&curr_sockets);
-	FD_SET(socket->getServerSock(), &curr_sockets);
+	FD_ZERO(&read_fd_set);
+	FD_ZERO(&write_fd_set);
+	FD_SET(socket->getServerSock(), &read_fd_set);
 	while (true)
 	{
-		std::cout << "waiting..." << std::endl;
+	 	std::cout << "waiting..." << std::endl;
 
-		ready_sockets = curr_sockets;
-		if (select(FD_SETSIZE, &ready_sockets, NULL, NULL, NULL) < 0)
+		read_fd_tmp = read_fd_set;
+		write_fd_tmp = write_fd_set;
+		if (select(max_fd + 1, &read_fd_tmp, &write_fd_tmp, NULL, NULL) < 0)
 		{
 			perror("select error");
 			exit(EXIT_FAILURE);
 		}
 		for (int i = 0; i <= max_fd; i++)
 		{
-			if (FD_ISSET(i, &ready_sockets))
+			if (FD_ISSET(i, &read_fd_tmp))
 			{
 				if (i == socket->getServerSock())
 				{
-					accepter(clientSocket);
-					FD_SET(clientSocket, &curr_sockets);
+					accepter(clientSocket, buffer);
+					FD_SET(clientSocket, &read_fd_set);
 					if (clientSocket > max_fd)
 						max_fd = clientSocket;
 				}
 				else
 				{
 					handler(i, buffer);
-					FD_CLR(i, &curr_sockets);
+					FD_CLR(i, &read_fd_set);
 				}
 			}
 		}
-
+			// accepter(clientSocket);
+			// handler(clientSocket, buffer);
+			// responder(clientSocket);
 		std::cout << "done..." << std::endl;
 		close (clientSocket);
 	}
