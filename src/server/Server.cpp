@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/12 12:26:00 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/12 12:28:23 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 Server::Server(int domain, int service, int protocol, int port, u_long interface, int bklg)
 {
 	_server_sock = new ListenSocket(domain, service, protocol, port, interface, bklg);
-	_fd = _server_sock->getServerFd();
+	_server_fd = _server_sock->getServerFd();
 }
 
 Server::Server(const Server &copy)
