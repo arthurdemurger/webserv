@@ -1,13 +1,11 @@
-#ifndef PARSECONF
-# define PARSECONF
+#ifndef CONFIG_HPP
+# define CONFIG_HPP
 
-# include <iostream>
-# include <fstream>
-# include <string>
-# include <vector>
-# include "Server.hpp"
+# include "Parsing.hpp"
 
-class ParseConf
+class   Server;
+
+class Config
 {
 private:
     std::ifstream               _ifs;
@@ -16,11 +14,11 @@ private:
     std::vector<int>            _vec_start_block;
     std::vector<int>            _vec_end_block;
     std::vector<std::string>    _vec_config;
-    std::vector<Server>    _vec_server;
+    std::vector<Server>         _vec_server;
 
 public:
-    ParseConf();
-    ~ParseConf();
+    Config();
+    ~Config();
 
     const std::vector<std::string>    &getVecServConf() const;
     const int   &getServerNb() const;
@@ -33,9 +31,7 @@ public:
     void        ServerBlockEnd();
     void        PopulateServer();
 
-    // void        ParseServer(std::string &ServerBlock, Server &Server);
-    void        FindListenDir(std::string &ServerBlock, Server &Server);
-    void        ServerBlockErase(std::string &ServerBlock);
+    // void        PrintServer(Server &rhs);
 };
 
 #endif

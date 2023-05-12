@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ParseConf.cpp                                :+:      :+:    :+:   */
+/*   Config.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,24 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ParseConf.hpp"
+#include "./inc/Parsing.hpp"
 
-ParseConf::ParseConf() {}
+Config::Config() {}
 
-ParseConf::~ParseConf() {}
+Config::~Config() {}
 
-const std::vector<std::string>    &ParseConf::getVecServConf() const
+const std::vector<std::string>    &Config::getVecServConf() const
 {
     return (this->_vec_config);
 }
 
-const int   &ParseConf::getServerNb() const
+const int   &Config::getServerNb() const
 {
     return (this->_server_nb);
 }
 
 /* Populate the server vector based on each respective server block  */
-void    ParseConf::PopulateServer()
+void    Config::PopulateServer()
 {
     int i;
 
@@ -35,11 +35,20 @@ void    ParseConf::PopulateServer()
     while (i < this->_server_nb)
     {
         this->_vec_server.push_back(Server(this->_vec_config[i]));
+        // PrintServer(this->_vec_server[i]);
         i++;
     }
 }
 
-void    ParseConf::ServerBlockEnd()
+// void    Config::PrintServer(Server &rhs)
+// {
+//     for (std::vector<int>::iterator it = rhs.getPort().begin(); it != rhs.getPort().end(); ++it)
+//     {
+//         std::cout << "port: " << *it << std::endl;
+//     }
+// }
+
+void    Config::ServerBlockEnd()
 {
     int i;
 
@@ -58,7 +67,7 @@ void    ParseConf::ServerBlockEnd()
 }
 
 /* Populate the config vector with the different server blocks */
-void    ParseConf::PopulateVecConfig()
+void    Config::PopulateVecConfig()
 {
     int i;
 
@@ -73,7 +82,7 @@ void    ParseConf::PopulateVecConfig()
 }
 
 /* Count the # of different server blocks in the content string */
-void    ParseConf::ServerCount()
+void    Config::ServerCount()
 {
     std::size_t pos;
     std::string substr = "server {";
@@ -91,11 +100,11 @@ void    ParseConf::ServerCount()
         std::cout << "Error: no server block in config. file\n";
         exit(EXIT_FAILURE);
     }
-    std::cout << "server nb: " << this->_server_nb << std::endl;
+    // std::cout << "server nb: " << this->_server_nb << std::endl;
 }
 
 /* Read the whole config file into the string content */
-std::string ParseConf::ConfigReading(std::string &path)
+std::string Config::ConfigReading(std::string &path)
 {
     std::ifstream ifs(path);
     if (ifs.fail())
@@ -108,7 +117,7 @@ std::string ParseConf::ConfigReading(std::string &path)
     return (content);
 }
 
-void    ParseConf::ConfigParsing(std::string path)
+void    Config::ConfigParsing(std::string path)
 {
     this->_content = ConfigReading(path);
     ServerCount();

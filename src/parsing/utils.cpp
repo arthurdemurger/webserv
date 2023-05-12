@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/10 10:24:56 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/12 13:37:58 by hdony            ###   ########.fr       */
+/*   Created: 2023/05/12 11:24:14 by hdony             #+#    #+#             */
+/*   Updated: 2023/05/12 11:41:21 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./inc/Parsing.hpp"
+#include "./inc/utils.hpp"
 
-int main(int ac, char *argv[])
+void    RemoveTab(std::string &key)
 {
-    Config config_parse_instance;
-    if (ac == 1 || ac == 2)
+    int i = 0;
+    int j = 0;
+    while (key[j])
     {
-        if (ac == 1)
-        {
-            config_parse_instance.ConfigParsing("../../config/default.conf");
-        }
-        else
-        {
-            config_parse_instance.ConfigParsing(argv[1]);
-        }
+        if (key[i] == '\t')
+            i++;
+        j++;
     }
-    return (0);
+    key.erase(0, i);
 }
