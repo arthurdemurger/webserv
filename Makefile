@@ -6,7 +6,7 @@
 #    By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/15 11:46:45 by ademurge          #+#    #+#              #
-#    Updated: 2023/05/10 15:37:59 by ademurge         ###   ########.fr        #
+#    Updated: 2023/05/12 12:26:55 by ademurge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,9 @@ SRC			=	src/sockets/BindSocket.cpp \
 				src/sockets/ListenSocket.cpp \
 				src/sockets/Socket.cpp \
 				src/server/Server.cpp \
+				src/request/Client.cpp \
+				src/request/Response.cpp \
+				src/request/Request.cpp \
 				src/main.cpp
 
 OBJ			=	$(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
