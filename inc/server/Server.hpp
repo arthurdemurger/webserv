@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/12 12:08:41 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/12 15:20:57 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,6 @@
 #include "../request/Client.hpp"
 #include <unistd.h>
 #include <map>
-
-#define ACCEPT 0
-#define READ 1
-#define BUF_SIZE 30000
 
 class Client;
 
@@ -40,8 +36,10 @@ class Server
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		void	accepter(int &clientSocket, char *buffer);
-		void	handler(int &clientSocket, char *buffer) const;
+		int		accepter(void);
+		void	addClient(int socket, int &max_fd);
+		void	changeSet(int fd, fd_set &dest_set, fd_set &src_set);
+
 		Server();
 
 	public:
@@ -60,8 +58,7 @@ class Server
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		void	addClient(int socket);
-		void	addToSet(int set, int fd);
+
 		void	launcher();
 
 		/*

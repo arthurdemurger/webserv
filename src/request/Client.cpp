@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 11:20:19 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/12 12:14:32 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/12 14:37:19 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,14 @@ void	Client::setSocket(int sock_fd) { _socket_fd = sock_fd; }
 void	Client::addRequest()
 {
 	_request.parse(_socket_fd);
+	std::cout << _request.getMethod() << std::endl;
+	std::cout << _request.getPath() << std::endl;
+	// std::cout << _request.getHeaders() << std::endl;
+	std::cout << _request.getBody() << std::endl;
+}
+
+void	Client::sendResponse()
+{
+	std::string response = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n<!doctype html><html><head><title>This is the title of the webpage!</title></head><body><p>This is an example paragraph. Anything in the <strong>body</strong> tag will appear on the page, just like this <strong>p</strong> tag and its contents.</p></body></html>";
+	write(_socket_fd, response.c_str(), response.size());
 }

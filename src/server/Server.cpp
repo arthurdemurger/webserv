@@ -6,12 +6,11 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/12 12:28:23 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/12 15:20:38 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/server/Server.hpp"
-
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
@@ -45,7 +44,6 @@ const Server &Server::operator=(const Server &copy)
 	return (*this);
 }
 
-
 /*
 ** ------------------------------- ACCESSOR --------------------------------
 */
@@ -54,21 +52,35 @@ ListenSocket	*Server::getSocket(void) const { return (_server_sock); }
 /*
 ** ------------------------------- METHODS --------------------------------
 */
-void	Server::accepter(int &clientSocket, char *buffer)
+
+/* Private Methods */
+
+void	Server::addClient(int socket, int &max_fd)
 {
+	_clients.insert(std::pair<int, Client>(socket, Client()));
+	_clients[socket].setSocket(socket);
+	if (socket > max_fd)
+		max_fd = socket;
+}
+
+void	Server::changeSet(int fd, fd_set &dest_set, fd_set &src_set)
+{
+	FD_CLR(fd, &src_set);
+	FD_SET(fd, &dest_set);
+}
+
+int	Server::accepter(void)
+{
+	int					clientSocket;
 	struct sockaddr_in	address = _server_sock->getAddress();
 	int					addressLen = sizeof(address);
 
 	if((clientSocket = accept(_server_sock->getServerFd(), (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
 		throw Server::AcceptException();
+	return (clientSocket);
 }
 
-void	Server::handler(int &clientSocket, char *buffer) const
-{
-	std::cout << "'" << buffer << "'" << std::endl;
-	std::string hello = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n<!doctype html><html><head><title>This is the title of the webpage!</title></head><body><p>This is an example paragraph. Anything in the <strong>body</strong> tag will appear on the page, just like this <strong>p</strong> tag and its contents.</p></body></html>";
-	write(clientSocket, hello.c_str(), hello.size());
-}
+/* Public Methods */
 
 void	Server::launcher(void)
 {
@@ -85,7 +97,7 @@ void	Server::launcher(void)
 	FD_SET(_server_fd, &_read_set);
 	while (true)
 	{
-	 	std::cout << "waiting..." << std::endl;
+	 	std::cout << "########## WAITING ##########" << std::endl;
 
 		read_set_cpy = _read_set;
 		write_set_cpy = _write_set;
@@ -96,31 +108,31 @@ void	Server::launcher(void)
 			throw Server::SelectException();
 		}
 
-		for (int i = 0; i <= max_fd; i++)
+		for (int i = 0; i <= max_fd; ++i)
 		{
 			if (FD_ISSET(i, &read_set_cpy))
 			{
 				if (i == _server_fd)
 				{
-					tmp_sock = i;
-					accepter(tmp_sock, buffer);
+					std::cout << "1" << std::endl;
+					tmp_sock = accepter();
 					FD_SET(tmp_sock, &_read_set);
-					addClient(tmp_sock);
+					addClient(tmp_sock, max_fd);
 				}
 				else
 				{
+					std::cout << "2" << std::endl;
 					_clients[i].addRequest();
-					FD_CLR(i, &_read_set);
-					FD_SET(i, &_write_set);
+					changeSet(i, _write_set, _read_set);
 				}
 			}
 			else if (FD_ISSET(i, &write_set_cpy))
 			{
+				std::cout << "3" << std::endl;
 				_clients[i].sendResponse();
+				changeSet(i, _read_set, _write_set);
 			}
 		}
-
-		std::cout << "done..." << std::endl;
-		close (tmp_sock);
+		std::cout << "########## DONE    ##########" << std::endl << std::endl;
 	}
 }
