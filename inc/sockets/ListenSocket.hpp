@@ -19,8 +19,8 @@
 class ListenSocket : public BindSocket
 {
 	private:
-		int	backlog;
-		int	isListening;
+		int	_backlog;
+		int	_isListening;
 
 		ListenSocket();
 	public:

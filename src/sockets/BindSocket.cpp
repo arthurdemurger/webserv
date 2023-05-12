@@ -31,8 +31,8 @@ const BindSocket	&BindSocket::operator=(const BindSocket &copy)
 {
 	if (this != &copy)
 	{
-		serverSock = copy.getServerSock();
-		address = copy.getAddress();
+		_server_fd = copy.getServerFd();
+		_address = copy.getAddress();
 	}
 	return (*this);
 }
@@ -52,7 +52,7 @@ BindSocket::~BindSocket() { }
 
 int	BindSocket::connect_to_ntwk(void)
 {
-	return (bind(serverSock, (struct sockaddr *) &address, sizeof(address)));
+	return (bind(_server_fd, (struct sockaddr *) &_address, sizeof(_address)));
 }
 
 

@@ -6,19 +6,16 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/11 11:18:44 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/12 12:14:55 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/request/Request.hpp"
+#include "../../inc/request/Request.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-Request::Request(std::string request)
-{
-	parser(request);
-}
+Request::Request() { }
 
 Request::Request(const Request &copy)
 {
@@ -37,10 +34,10 @@ Request	&Request::operator=(const Request &copy)
 {
 	if (this != &copy)
 	{
-		method = copy.method;
-		path = copy.path;
-		headers = copy.headers;
-		body = copy.body;
+		_method = copy._method;
+		_path = copy._path;
+		_headers = copy._headers;
+		_body = copy._body;
 	}
 	return (*this);
 }
@@ -48,7 +45,10 @@ Request	&Request::operator=(const Request &copy)
 /*
 ** ------------------------------- METHODS --------------------------------
 */
-void	Request::parser(std::string request)
+void	Request::parse(int fd)
 {
-	(void) request;
+	/*	Une requête est prête à être lue dans le fd donnée en argument.
+		Il faut donc récupérer toutes les infos nécessaires de la requête et les sauvegarder
+		dans les différents attributs de cette classe.
+	*/
 }

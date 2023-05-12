@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/11 15:05:15 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/12 12:08:41 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,32 @@
 
 #include "../sockets/ListenSocket.hpp"
 #include "netinet/in.h"
+#include "../request/Client.hpp"
 #include <unistd.h>
+#include <map>
 
 #define ACCEPT 0
 #define READ 1
 #define BUF_SIZE 30000
+
+class Client;
+
 class Server
 {
 	private:
 		/*
 		** ------------------------------- Attributes --------------------------------
 		*/
-		ListenSocket		*socket;
-		fd_set				read_fd_set;
-		fd_set				write_fd_set;
-
+		ListenSocket			*_server_sock;
+		int						_server_fd;
+		fd_set					_read_set;
+		fd_set					_write_set;
+		std::map<int, Client>	_clients;
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
 		void	accepter(int &clientSocket, char *buffer);
 		void	handler(int &clientSocket, char *buffer) const;
-		void	responder(int &clientSocket) const;
 		Server();
 
 	public:
@@ -55,7 +60,9 @@ class Server
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		void launcher();
+		void	addClient(int socket);
+		void	addToSet(int set, int fd);
+		void	launcher();
 
 		/*
 		** ------------------------------- Exceptions --------------------------------
@@ -69,6 +76,11 @@ class Server
 		{
 			public:
 				virtual const char *what() const throw() { return "Accept failed."; };
+		};
+		class SelectException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw() { return "Select failed."; };
 		};
 };
 

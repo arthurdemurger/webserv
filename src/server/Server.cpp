@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/11 15:06:31 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/12 12:26:00 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 */
 Server::Server(int domain, int service, int protocol, int port, u_long interface, int bklg)
 {
-	socket = new ListenSocket(domain, service, protocol, port, interface, bklg);
+	_server_sock = new ListenSocket(domain, service, protocol, port, interface, bklg);
+	_fd = _server_sock->getServerFd();
 }
 
 Server::Server(const Server &copy)
@@ -29,7 +30,7 @@ Server::Server(const Server &copy)
 /*
 ** ------------------------------- DESTRUCTOR --------------------------------
 */
-Server::~Server() { delete socket; }
+Server::~Server() { delete _server_sock; }
 
 /*
 ** ------------------------------- OPERATOR OVERLOAD --------------------------------
@@ -38,8 +39,8 @@ const Server &Server::operator=(const Server &copy)
 {
 	if (this != &copy)
 	{
-		delete socket;
-		socket = copy.socket;
+		delete _server_sock;
+		_server_sock = copy._server_sock;
 	}
 	return (*this);
 }
@@ -48,32 +49,23 @@ const Server &Server::operator=(const Server &copy)
 /*
 ** ------------------------------- ACCESSOR --------------------------------
 */
-ListenSocket	*Server::getSocket(void) const { return (socket); }
+ListenSocket	*Server::getSocket(void) const { return (_server_sock); }
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
-
 void	Server::accepter(int &clientSocket, char *buffer)
 {
-	struct sockaddr_in	address = socket->getAddress();
+	struct sockaddr_in	address = _server_sock->getAddress();
 	int					addressLen = sizeof(address);
 
-	if((clientSocket = accept(socket->getServerSock(), (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
+	if((clientSocket = accept(_server_sock->getServerFd(), (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
 		throw Server::AcceptException();
-	if (read(clientSocket, buffer, BUF_SIZE) < 0)
-		throw Server::ReadException();
-	std::cout << "'" << buffer << "'" << std::endl;
-	}
+}
 
 void	Server::handler(int &clientSocket, char *buffer) const
 {
 	std::cout << "'" << buffer << "'" << std::endl;
-	responder(clientSocket);
-}
-
-void	Server::responder(int &clientSocket) const
-{
 	std::string hello = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n<!doctype html><html><head><title>This is the title of the webpage!</title></head><body><p>This is an example paragraph. Anything in the <strong>body</strong> tag will appear on the page, just like this <strong>p</strong> tag and its contents.</p></body></html>";
 	write(clientSocket, hello.c_str(), hello.size());
 }
@@ -81,48 +73,54 @@ void	Server::responder(int &clientSocket) const
 void	Server::launcher(void)
 {
 	char	buffer[BUF_SIZE];
-	int		clientSocket;
-	int		max_fd = 0;
-	fd_set	read_fd_tmp, write_fd_tmp;
+	fd_set	read_set_cpy;
+	fd_set	write_set_cpy;
+	int		max_fd;
+	int		tmp_sock;
 
-	max_fd = socket->getServerSock();
+	max_fd = _server_fd;
 
-	FD_ZERO(&read_fd_set);
-	FD_ZERO(&write_fd_set);
-	FD_SET(socket->getServerSock(), &read_fd_set);
+	FD_ZERO(&_read_set);
+	FD_ZERO(&_write_set);
+	FD_SET(_server_fd, &_read_set);
 	while (true)
 	{
 	 	std::cout << "waiting..." << std::endl;
 
-		read_fd_tmp = read_fd_set;
-		write_fd_tmp = write_fd_set;
-		if (select(max_fd + 1, &read_fd_tmp, &write_fd_tmp, NULL, NULL) < 0)
+		read_set_cpy = _read_set;
+		write_set_cpy = _write_set;
+
+		if (select(max_fd + 1, &read_set_cpy, &write_set_cpy, NULL, NULL) < 0)
 		{
 			perror("select error");
-			exit(EXIT_FAILURE);
+			throw Server::SelectException();
 		}
+
 		for (int i = 0; i <= max_fd; i++)
 		{
-			if (FD_ISSET(i, &read_fd_tmp))
+			if (FD_ISSET(i, &read_set_cpy))
 			{
-				if (i == socket->getServerSock())
+				if (i == _server_fd)
 				{
-					accepter(clientSocket, buffer);
-					FD_SET(clientSocket, &read_fd_set);
-					if (clientSocket > max_fd)
-						max_fd = clientSocket;
+					tmp_sock = i;
+					accepter(tmp_sock, buffer);
+					FD_SET(tmp_sock, &_read_set);
+					addClient(tmp_sock);
 				}
 				else
 				{
-					handler(i, buffer);
-					FD_CLR(i, &read_fd_set);
+					_clients[i].addRequest();
+					FD_CLR(i, &_read_set);
+					FD_SET(i, &_write_set);
 				}
 			}
+			else if (FD_ISSET(i, &write_set_cpy))
+			{
+				_clients[i].sendResponse();
+			}
 		}
-			// accepter(clientSocket);
-			// handler(clientSocket, buffer);
-			// responder(clientSocket);
+
 		std::cout << "done..." << std::endl;
-		close (clientSocket);
+		close (tmp_sock);
 	}
 }

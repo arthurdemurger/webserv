@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:50 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 16:48:42 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/12 11:55:27 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 class Socket
 {
 	protected:
-		int					serverSock;
-		struct sockaddr_in	address;
+		int					_server_fd;
+		struct sockaddr_in	_address;
 
 		Socket();
 	public:
@@ -45,7 +45,7 @@ class Socket
 		/*
 		** ------------------------------- Accessors --------------------------------
 		*/
-		int					getServerSock(void) const;
+		int					getServerFd(void) const;
 		struct sockaddr_in	getAddress(void) const;
 
 		/*
