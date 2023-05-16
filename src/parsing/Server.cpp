@@ -13,8 +13,6 @@
 #include "./inc/Parsing.hpp"
 
 Server::Server(std::string &ServerBlock) {
-    // std::string directives[6] = {"host", "server_name", "error_page", "root", "index", "location"};
-    // void (Server::*p[3])(std::string &rhs) = {&Server::setHostDir, &Server::setServerNameDir, &Server::setErrorPageDir};
     std::istringstream iss(ServerBlock);
     std::string line;
     getline(iss, line);
@@ -25,30 +23,58 @@ Server::Server(std::string &ServerBlock) {
         getline(iss_line, key, ' ');
         RemoveTab(key);
         getline(iss_line, value, ';');
-        if (!key.compare("listen"))
-            setPortMBS(key, value);
-        else if (!key.compare("host"))
-            setHostDir(value);
-        else if (!key.compare("server_name"))
-            setServerNameDir(value);
-        else if (!key.compare("error_page"))
-            setErrorPageDir(value);
-        else if (!key.compare("client_max_body_size"))
-            setPortMBS(key, value);
-        else if (!key.compare("root"))
-            this->_root = value;
-        else if (!key.compare("index"))
-            this->_index = value;
-        else if (!key.compare("location"))
-        {
-            getline(iss, location, '}');
-            this->_location.push_back(Location(location, value));
-        }
+        setter(key, value, iss, location);
     }
     PrintServer();
 }
 
+
+Server::Server(const Server &rhs)
+{
+    *this = rhs;
+}
+
+Server &Server::operator=(const Server &rhs)
+{
+    if (this != &rhs)
+    {
+        this->_port = rhs._port;
+        this->_host = rhs._host;
+        this->_server_name = rhs._server_name;
+        this->_error_page = rhs._error_page;
+        this->_client_max_body_size = rhs._client_max_body_size;
+        this->_root = rhs._root;
+        this->_index = rhs._index;
+        this->_location = rhs._location;
+    }
+    return (*this);
+}
+
 Server::~Server() {}
+
+void    Server::setter(std::string &key, std::string &value, std::istringstream &iss, std::string &location)
+{
+    if (!key.compare("listen"))
+         setPortMBS(key, value);
+    else if (!key.compare("host"))
+        setHostDir(value);
+    else if (!key.compare("server_name"))
+        setServerNameDir(value);
+    else if (!key.compare("error_page"))
+        setErrorPageDir(value);
+    else if (!key.compare("client_max_body_size"))
+        setPortMBS(key, value);
+    else if (!key.compare("root"))
+        this->_root = value;
+    else if (!key.compare("index"))
+        this->_index = value;
+    else if (!key.compare("location"))
+    {
+        getline(iss, location, '}');
+        this->_location.push_back(Location(location, value));
+    }
+}
+
 
 void    Server::PrintServer()
 {

@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:59:13 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/12 15:27:16 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/16 16:21:09 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,26 @@ Location::Location(std::string LocationBlock, std::string LocationType)
         else if (!key.compare("alias"))
             this->_alias = value;   
     }
+}
+
+Location::Location(const Location &rhs)
+{
+    *this = rhs;
+}
+
+Location    &Location::operator=(const Location &rhs)
+{
+    if (this != &rhs)
+    {
+        this->_location_type = rhs._location_type;
+        this->_root = rhs._root;
+        this->_autoindex = rhs._autoindex;
+        this->_allow_methods = rhs._allow_methods;
+        this->_index = rhs._index;
+        this->_return = rhs._return;
+        this->_alias = rhs._alias;
+    }
+    return (*this);
 }
 
 Location::~Location() {}

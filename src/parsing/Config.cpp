@@ -14,9 +14,28 @@
 
 Config::Config() {}
 
+Config::Config(const Config &rhs)
+{
+    *this = rhs;
+}
+
+Config  &Config::operator=(const Config &rhs)
+{
+    if (this != &rhs)
+    {
+        this->_content = rhs._content;
+        this->_server_nb = rhs._server_nb;
+        this->_vec_start_block = rhs._vec_start_block;
+        this->_vec_end_block = rhs._vec_end_block;
+        this->_vec_config = rhs._vec_config;
+        this->_vec_server = rhs._vec_server;
+    }
+    return (*this);
+}
+
 Config::~Config() {}
 
-const std::vector<std::string>    &Config::getVecServConf() const
+const   std::vector<std::string> &Config::getVecServConf() const
 {
     return (this->_vec_config);
 }
@@ -35,18 +54,9 @@ void    Config::PopulateServer()
     while (i < this->_server_nb)
     {
         this->_vec_server.push_back(Server(this->_vec_config[i]));
-        // PrintServer(this->_vec_server[i]);
         i++;
     }
 }
-
-// void    Config::PrintServer(Server &rhs)
-// {
-//     for (std::vector<int>::iterator it = rhs.getPort().begin(); it != rhs.getPort().end(); ++it)
-//     {
-//         std::cout << "port: " << *it << std::endl;
-//     }
-// }
 
 void    Config::ServerBlockEnd()
 {
