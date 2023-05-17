@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/17 11:26:02 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/17 12:04:11 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,22 +54,13 @@ ListenSocket	*Server::getSocket(void) const { return (_server_sock); }
 */
 
 /* Private Methods */
-
-void	Server::addClient(int socket, int &max_fd)
-{
-	_clients.insert(std::pair<int, Client>(socket, Client()));
-	_clients[socket].setSocket(socket);
-	if (socket > max_fd)
-		max_fd = socket;
-}
-
 void	Server::changeSet(int fd, fd_set &dest_set, fd_set &src_set)
 {
 	FD_CLR(fd, &src_set);
 	FD_SET(fd, &dest_set);
 }
 
-int	Server::accepter(void)
+void	Server::accepter(int &max_fd)
 {
 	int					clientSocket;
 	struct sockaddr_in	address = _server_sock->getAddress();
@@ -78,7 +69,10 @@ int	Server::accepter(void)
 	if((clientSocket = accept(_server_sock->getServerFd(), (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
 		throw Server::AcceptException();
 	fcntl(clientSocket, F_SETFL, O_NONBLOCK);
-	return (clientSocket);
+		_clients.insert(std::pair<int, Client>(socket, Client()));
+	_clients[socket].setSocket(socket);
+	if (socket > max_fd)
+		max_fd = socket;
 }
 
 /* Public Methods */
@@ -119,9 +113,7 @@ void	Server::launcher(void)
 				if (i == _server_fd)
 				{
 					std::cout << "1" << std::endl;
-					tmp_sock = accepter();
-					FD_SET(tmp_sock, &_read_set);
-					addClient(tmp_sock, max_fd);
+					tmp_sock = accepter(max_fd);
 				}
 				else if (_clients.count(i))
 				{
