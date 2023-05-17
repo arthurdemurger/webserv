@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/12 15:20:57 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/17 12:00:13 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "../request/Client.hpp"
 #include <unistd.h>
 #include <map>
+#include <fcntl.h>
 
 class Client;
 
@@ -36,8 +37,7 @@ class Server
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		int		accepter(void);
-		void	addClient(int socket, int &max_fd);
+		void	accepter(int &max_fd);
 		void	changeSet(int fd, fd_set &dest_set, fd_set &src_set);
 
 		Server();

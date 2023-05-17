@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 11:20:19 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/12 14:37:19 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/17 11:52:28 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int		Client::getSocket(void) const { return (_socket_fd); }
 
 Request		Client::getRequest(void) const { return (_request); }
 
+
 void	Client::setSocket(int sock_fd) { _socket_fd = sock_fd; }
 
 /*
@@ -55,11 +56,11 @@ void	Client::setSocket(int sock_fd) { _socket_fd = sock_fd; }
 
 void	Client::addRequest()
 {
-	_request.parse(_socket_fd);
-	std::cout << _request.getMethod() << std::endl;
-	std::cout << _request.getPath() << std::endl;
+	// _request.parse(_socket_fd);
+	// std::cout << _request.getMethod() << std::endl;
+	// std::cout << _request.getPath() << std::endl;
 	// std::cout << _request.getHeaders() << std::endl;
-	std::cout << _request.getBody() << std::endl;
+	// std::cout << _request.getBody() << std::endl;
 }
 
 void	Client::sendResponse()

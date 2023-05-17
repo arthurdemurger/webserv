@@ -15,6 +15,7 @@
 # define LISTENSOCKET_HPP
 
 #include "BindSocket.hpp"
+#include <fcntl.h>
 
 class ListenSocket : public BindSocket
 {

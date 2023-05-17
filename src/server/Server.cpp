@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/12 15:20:38 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/17 11:26:02 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int	Server::accepter(void)
 
 	if((clientSocket = accept(_server_sock->getServerFd(), (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
 		throw Server::AcceptException();
+	fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 	return (clientSocket);
 }
 
@@ -84,6 +85,7 @@ int	Server::accepter(void)
 
 void	Server::launcher(void)
 {
+	struct timeval	timeout;
 	char	buffer[BUF_SIZE];
 	fd_set	read_set_cpy;
 	fd_set	write_set_cpy;
@@ -97,8 +99,10 @@ void	Server::launcher(void)
 	FD_SET(_server_fd, &_read_set);
 	while (true)
 	{
-	 	std::cout << "########## WAITING ##########" << std::endl;
+		std::cout << "########## WAITING ##########" << std::endl;
 
+		timeout.tv_sec = 1;
+		timeout.tv_usec = 0;
 		read_set_cpy = _read_set;
 		write_set_cpy = _write_set;
 
@@ -119,14 +123,14 @@ void	Server::launcher(void)
 					FD_SET(tmp_sock, &_read_set);
 					addClient(tmp_sock, max_fd);
 				}
-				else
+				else if (_clients.count(i))
 				{
 					std::cout << "2" << std::endl;
 					_clients[i].addRequest();
 					changeSet(i, _write_set, _read_set);
 				}
 			}
-			else if (FD_ISSET(i, &write_set_cpy))
+			else if (FD_ISSET(i, &write_set_cpy) && _clients.count(i))
 			{
 				std::cout << "3" << std::endl;
 				_clients[i].sendResponse();

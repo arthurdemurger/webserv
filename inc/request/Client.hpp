@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:56:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/12 14:00:18 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/17 10:35:32 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ class Client
 		int			_socket_fd;
 		Request		_request;
 		Response	_response;
-
 		void		buildResponse();
+
 	public:
 		/*
 		** ------------------------------- COPLIEN --------------------------------
