@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.hpp                                         :+:      :+:    :+:   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 15:48:42 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/17 16:00:26 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,41 @@
 
 #include "../sockets/ListenSocket.hpp"
 #include "netinet/in.h"
+#include "../request/Client.hpp"
 #include <unistd.h>
+#include <map>
+#include <fcntl.h>
 
-#define ACCEPT 0
-#define READ 1
+#define RESET          "\x1B[0m"
+#define RED            "\x1B[31m"
+#define LIGHT_RED      "\x1B[91m"
+#define WHITE          "\x1B[37m"
+#define BLINK           "\x1b[5m"
+#define YELLOW         "\x1B[33m"
+#define LIGHT_BLUE     "\x1B[94m"
+#define CYAN           "\x1B[36m"
+#define DARK_GREY      "\x1B[90m"
+#define LIGHTMAGENTA   "\x1B[95m"
+
+class Client;
+
 class Server
 {
 	private:
 		/*
 		** ------------------------------- Attributes --------------------------------
 		*/
-		ListenSocket	 *socket;
-		int					tmpSocket;
-		char				buffer[30000] = {0};
-
+		ListenSocket			*_server_sock;
+		int						_server_fd;
+		fd_set					_read_set;
+		fd_set					_write_set;
+		std::map<int, Client>	_clients;
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		void	accepter();
-		void	handler();
-		void	responder();
-		void	check(int itemToCheck, int error);
+		void	accepter(int &max_fd);
+		void	changeSet(int fd, fd_set &dest_set, fd_set &src_set);
+
 		Server();
 
 	public:
@@ -55,7 +69,27 @@ class Server
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		void launcher();
+
+		void	launcher();
+
+		/*
+		** ------------------------------- Exceptions --------------------------------
+		*/
+		class ReadException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw() { return "Read failed."; };
+		};
+		class AcceptException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw() { return "Accept failed."; };
+		};
+		class SelectException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw() { return "Select failed."; };
+		};
 };
 
 #endif

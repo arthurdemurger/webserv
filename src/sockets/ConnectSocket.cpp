@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 14:04:13 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/12 11:59:03 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ ConnectSocket::ConnectSocket(int domain, int service, int protocol, int port, u_
 	Socket(domain, service, protocol, port, interface)
 {
 	// Establish network connection
-	check(connect_to_ntwk(), CONNECT);
+	if (connect_to_ntwk() < 0)
+		throw ConnectSocket::ConnectException();
 }
 
 ConnectSocket::ConnectSocket(const ConnectSocket &copy) : Socket(copy) { }
@@ -31,8 +32,8 @@ const ConnectSocket	&ConnectSocket::operator=(const ConnectSocket &copy)
 {
 	if (this != &copy)
 	{
-		serverSock = copy.getServerSock();
-		address = copy.getAddress();
+		_server_fd = copy.getServerFd();
+		_address = copy.getAddress();
 	}
 	return (*this);
 }
@@ -52,7 +53,7 @@ ConnectSocket::~ConnectSocket() { }
 
 int	ConnectSocket::connect_to_ntwk(void)
 {
-	return (connect(serverSock, (struct sockaddr *) &address, sizeof(address)));
+	return (connect(_server_fd, (struct sockaddr *) &_address, sizeof(_address)));
 }
 
 

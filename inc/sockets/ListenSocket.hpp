@@ -15,12 +15,13 @@
 # define LISTENSOCKET_HPP
 
 #include "BindSocket.hpp"
+#include <fcntl.h>
 
 class ListenSocket : public BindSocket
 {
 	private:
-		int	backlog;
-		int	isListening;
+		int	_backlog;
+		int	_isListening;
 
 		ListenSocket();
 	public:
@@ -45,7 +46,16 @@ class ListenSocket : public BindSocket
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		int				listening(void);
+			class ListenException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw() { return "Listen failed."; };
+		};
+
+		/*
+		** ------------------------------- Methods --------------------------------
+		*/
+		int				listening(void) const;
 };
 
 # endif

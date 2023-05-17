@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 15:38:19 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/17 16:04:49 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@
 #include "server/Server.hpp"
 
 /* Define constants */
-# define PORT 8080
+# define PORT 80
 
 #endif

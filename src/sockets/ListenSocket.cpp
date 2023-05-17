@@ -16,12 +16,15 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 ListenSocket::ListenSocket(int domain, int service, int protocol, int port, u_long interface, int bklg) :
-	BindSocket(domain, service, protocol, port, interface), backlog(bklg)
+	BindSocket(domain, service, protocol, port, interface), _backlog(bklg)
 {
-	check((isListening = listening()), LISTEN);
+	if ((_isListening = listening()) < 0)
+		throw ListenSocket::ListenException();
+	if (fcntl(_server_fd, F_SETFL, O_NONBLOCK) < 0)
+		perror("fcntl failed.");
 }
 
-ListenSocket::ListenSocket(const ListenSocket &copy) : BindSocket(copy), backlog(copy.backlog) { }
+ListenSocket::ListenSocket(const ListenSocket &copy) : BindSocket(copy), _backlog(copy._backlog) { }
 
 /*
 ** ------------------------------- OPERATOR OVERLOAD --------------------------------
@@ -30,10 +33,10 @@ const ListenSocket	&ListenSocket::operator=(const ListenSocket &copy)
 {
 	if (this != &copy)
 	{
-		serverSock = copy.getServerSock();
-		address = copy.getAddress();
-		backlog = copy.getBacklog();
-		isListening = copy.getIsListening();
+		_server_fd = copy.getServerFd();
+		_address = copy.getAddress();
+		_backlog = copy.getBacklog();
+		_isListening = copy.getIsListening();
 	}
 	return (*this);
 }
@@ -46,15 +49,15 @@ ListenSocket::~ListenSocket() { }
 /*
 ** ------------------------------- ACCESSORS --------------------------------
 */
-int					ListenSocket::getBacklog(void) const { return (backlog); }
-int					ListenSocket::getIsListening(void) const { return (isListening); }
+int					ListenSocket::getBacklog(void) const { return (_backlog); }
+int					ListenSocket::getIsListening(void) const { return (_isListening); }
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
 
-int	ListenSocket::listening(void)
+int	ListenSocket::listening(void) const
 {
-	return (listen(getServerSock(), backlog));
+	return (listen(getServerFd(), _backlog));
 }
 
