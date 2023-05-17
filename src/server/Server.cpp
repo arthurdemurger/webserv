@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/17 12:04:11 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/17 14:10:25 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,20 @@ void	Server::changeSet(int fd, fd_set &dest_set, fd_set &src_set)
 
 void	Server::accepter(int &max_fd)
 {
-	int					clientSocket;
+	int					new_socket;
 	struct sockaddr_in	address = _server_sock->getAddress();
 	int					addressLen = sizeof(address);
 
-	if((clientSocket = accept(_server_sock->getServerFd(), (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
+	if((new_socket = accept(_server_sock->getServerFd(), (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
 		throw Server::AcceptException();
-	fcntl(clientSocket, F_SETFL, O_NONBLOCK);
-		_clients.insert(std::pair<int, Client>(socket, Client()));
-	_clients[socket].setSocket(socket);
-	if (socket > max_fd)
-		max_fd = socket;
+	// fcntl(new_socket, F_SETFL, O_NONBLOCK);
+	if (_clients.count(new_socket) != 0)
+		_clients.erase(new_socket);
+	_clients.insert(std::pair<int, Client>(new_socket, Client()));
+	_clients[new_socket].setSocket(new_socket);
+	if (new_socket > max_fd)
+		max_fd = new_socket;
+	FD_SET(new_socket, &_read_set);
 }
 
 /* Public Methods */
@@ -84,7 +87,6 @@ void	Server::launcher(void)
 	fd_set	read_set_cpy;
 	fd_set	write_set_cpy;
 	int		max_fd;
-	int		tmp_sock;
 
 	max_fd = _server_fd;
 
@@ -106,14 +108,14 @@ void	Server::launcher(void)
 			throw Server::SelectException();
 		}
 
-		for (int i = 0; i <= max_fd; ++i)
+		for (int i = 1; i <= max_fd; ++i)
 		{
 			if (FD_ISSET(i, &read_set_cpy))
 			{
 				if (i == _server_fd)
 				{
 					std::cout << "1" << std::endl;
-					tmp_sock = accepter(max_fd);
+					accepter(max_fd);
 				}
 				else if (_clients.count(i))
 				{
@@ -126,6 +128,9 @@ void	Server::launcher(void)
 			{
 				std::cout << "3" << std::endl;
 				_clients[i].sendResponse();
+				// FD_CLR(i, &_read_set);
+				// FD_CLR(i, &_write_set);
+				// close(i);
 				changeSet(i, _read_set, _write_set);
 			}
 		}
