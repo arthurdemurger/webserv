@@ -1,50 +1,58 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Socket.cpp                                         :+:      :+:    :+:   */
+/*   BindSocket.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/09 17:06:00 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/10 11:12:19 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Socket.hpp"
+#include "../../inc/sockets/BindSocket.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-Socket::Socket(int domain, int service, int protocol, int port,  u_long interface)
+BindSocket::BindSocket(int domain, int service, int protocol, int port, u_long interface) :
+	Socket(domain, service, protocol, port, interface)
 {
-	address.sin_family = domain;
-	address.sin_port = htons(port);
-	address.sin_addr.s_addr = htonl(interface);
+	if (connect_to_ntwk() < 0)
+		throw BindSocket::BindException();
+}
 
-	// Establish connection
-	check((serverSock = socket(domain, service , protocol)), "socket failed.");
-	// Bind
+BindSocket::BindSocket(const BindSocket &copy) : Socket(copy) { }
+
+/*
+** ------------------------------- OPERATOR OVERLOAD --------------------------------
+*/
+const BindSocket	&BindSocket::operator=(const BindSocket &copy)
+{
+	if (this != &copy)
+	{
+		_server_fd = copy.getServerFd();
+		_address = copy.getAddress();
+	}
+	return (*this);
 }
 
 /*
 ** ------------------------------- DESTRUCTOR --------------------------------
 */
-Socket::~Socket() { }
+BindSocket::~BindSocket() { }
 
 /*
 ** ------------------------------- ACCESSORS --------------------------------
 */
-int					Socket::getServerSock(void) const { return (serverSock); };
-int					Socket::getConnection(void) const { return (connection); };
-struct sockaddr_in	Socket::getAddress(void) const { return (address); };
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
-void		Socket::check(int item, char *message)
+
+int	BindSocket::connect_to_ntwk(void)
 {
-	if (item < 0)
-		perror(message);
-	exit(EXIT_FAILURE);
+	return (bind(_server_fd, (struct sockaddr *) &_address, sizeof(_address)));
 }
+
 

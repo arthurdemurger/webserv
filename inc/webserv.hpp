@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/10 12:12:06 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/11 13:23:57 by ademurge         ###   ########.fr       */
+/*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
+/*   Updated: 2023/05/12 14:03:01 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/webserv.hpp"
+#ifndef WEBSERV_HPP
 
-int main(void)
-{
-	try
-	{
-		Server serv(AF_INET, SOCK_STREAM, 0, PORT, INADDR_ANY, 10);
+#define WEBSERV_HPP
 
+/* Some utils libraries */
+#include <iostream>
 
-		serv.launcher();
-	}
-	catch (const std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
+/* Sockets headers */
+#include "sockets/Socket.hpp"
+#include "sockets/BindSocket.hpp"
+#include "sockets/ConnectSocket.hpp"
+#include "sockets/ListenSocket.hpp"
 
-	return (0);
-}
+#include "server/Server.hpp"
+
+/* Define constants */
+# define PORT 8080
+
+#endif

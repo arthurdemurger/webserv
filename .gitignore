@@ -1,0 +1,7 @@
+webserv
+a.out
+*.dSYM
+*.swp
+*.DStore
+*.o
+.vscode/*
