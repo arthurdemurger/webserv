@@ -1,31 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   webserv.hpp                                        :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/17 16:57:45 by hdony            ###   ########.fr       */
+/*   Created: 2023/05/19 11:17:14 by hdony             #+#    #+#             */
+/*   Updated: 2023/05/19 11:23:20 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WEBSERV_HPP
+#include "../../inc/request/Request.hpp"
 
-#define WEBSERV_HPP
-
-/* Some utils libraries */
-#include <iostream>
-
-/* Sockets headers */
-#include "sockets/Socket.hpp"
-#include "sockets/BindSocket.hpp"
-#include "sockets/ConnectSocket.hpp"
-#include "sockets/ListenSocket.hpp"
-
-#include "server/Server.hpp"
-
-/* Define constants */
-# define PORT 8080
-
-#endif
+int main(int ac, char *argv[])
+{
+    Request instance;
+    instance.parse(5);
+    return (0);
+}

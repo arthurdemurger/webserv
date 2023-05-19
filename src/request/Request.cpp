@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/17 14:03:02 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/19 12:21:54 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,36 +53,94 @@ std::unordered_map<std::string, std::string>	Request::getHeaders()const { return
 /*
 ** ------------------------------- METHODS --------------------------------
 */
+
+/*	Une requête est prête à être lue dans le fd donnée en argument.
+	Il faut donc récupérer toutes les infos nécessaires de la requête et les sauvegarder
+	dans les différents attributs de cette classe.
+*/
 void	Request::parse(int fd)
 {
-	/*	Une requête est prête à être lue dans le fd donnée en argument.
-		Il faut donc récupérer toutes les infos nécessaires de la requête et les sauvegarder
-		dans les différents attributs de cette classe.
-	*/
-	// std::string			line;
-	// std::stringstream	ss;
-	// char				buf[BUF_SIZE];
-	// int					n;
+	(void)fd;
+	std::ifstream		ifs;
+	std::stringstream	buffer;
+	std::string			line;
+	int					i;
 
-	// // Lecture de la première ligne de la requête
-	// n = read(fd, buf, BUF_SIZE);
-	// std::string data(buf, n);
-	// while (n > 0 && data.find("\r\n\r\n") == std::string::npos)
-	// {
-	// 	n = read(fd, buf, sizeof(buf));
-	// 	data.append(buf, n);
-	// }
-	// ss.str(line);
-	// ss >> _method >> _path;
+	i = 0;
+	ifs.open("request.txt");
 
-	// // Lecture des headers
-	// while (getline(ss, line) && line != "\r") {
-	//   std::size_t pos = line.find(": ");
-	//   std::string key = line.substr(0, pos);
-	//   std::string value = line.substr(pos + 2);
-	//   _headers[key] = value;
-	// }
+	while (getline(ifs, line))
+	{
+		if (i == 0)
+			parse_request_line(line);
+		else if (i > 0 && !line.empty())
+			parse_request_headers(line);
+		else
+		{
+			buffer << ifs.rdbuf();
+			this->_body = buffer.str();
+			break;
+		}
+		i++;
+	}
+	print_request();
+}
 
-	// // Lecture du corps de la requête
-	// getline(ss, _body);
+void	Request::parse_request_line(std::string &line)
+{
+	std::istringstream	iss(line);
+	std::string			str;
+	int					i;
+
+	i = 0;
+	while (getline(iss, str, ' '))
+	{
+		if (i == 0)
+			this->_method = str;
+		else if (i == 1)
+			this->_path = str;
+		i++;
+	}
+}
+
+void	Request::parse_request_headers(std::string &line)
+{
+	std::istringstream	iss(line);
+	std::string			key, value;
+	
+	while (getline(iss, key, ':'))
+	{
+		getline(iss, value);
+		trim_value(value);
+		_headers[key] = value;
+	}
+}
+
+void	Request::trim_value(std::string &value)
+{
+	int						i;
+
+	i = 0;
+	for (std::string::iterator	it = value.begin(); it != value.end(); ++it)
+	{
+		if (*it == ' ')
+			i++;	
+	}
+	value.erase(0, i);
+}
+
+void	Request::print_request()
+{
+	std::cout << "REQUEST LINE START\n";
+	std::cout << "method: " << this->_method << std::endl;
+	std::cout << "path: " << this->_path << std::endl;
+	std::cout << "\n";
+	std::cout << "REQUEST HEADERS START\n";
+	for (std::unordered_map<std::string, std::string>::iterator it = _headers.begin(); it != _headers.end(); ++it)
+	{
+		std::cout << it->first << ": " << it->second << std::endl;
+	}
+	std::cout << "\n";
+	std::cout << "REQUEST BODY START\n";
+	std::cout << this->_body << std::endl;
 }
