@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 11:10:48 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/19 11:21:59 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,17 +87,17 @@ void	Server::accepter(int &max_fd)
 
 void	Server::launcher(void)
 {
-	struct timeval	timeout;
 	char	buffer[BUF_SIZE];
 	fd_set	read_set_cpy;
 	fd_set	write_set_cpy;
-	int		max_fd;
+	int		max_fd = _server_fd;
 
-	max_fd = _server_fd;
-
+	// set the fd_sets for reading and writing sockets
 	FD_ZERO(&_read_set);
 	FD_ZERO(&_write_set);
 	FD_SET(_server_fd, &_read_set);
+
+	/* The main loop that runs continuously to the user uses ^C */
 	while (true)
 	{
 		std::cout << "########## WAITING ##########" << std::endl;
@@ -105,6 +105,7 @@ void	Server::launcher(void)
 		read_set_cpy = _read_set;
 		write_set_cpy = _write_set;
 
+		/* Launch the select and check its status. We use two fd_set, one for reading and one for writing */
 		if (select(max_fd + 1, &read_set_cpy, &write_set_cpy, NULL, NULL) < 0)
 		{
 			perror("select error");
@@ -112,13 +113,18 @@ void	Server::launcher(void)
 			throw Server::SelectException();
 		}
 
+		/* If there is activity on the server socket, then there is a new connection to the server.
+		   So we add it to the clients map and use the accept() system function */
 		if (FD_ISSET(_server_fd, &read_set_cpy))
 			accepter(max_fd);
 
+		/* We loop on all client sockets and check their activity */
 		for (int i = 0; i < _clients.size(); ++i)
 		{
 			int	sock = _clients[i].getSocket();
 
+			/* We check the activity on the read_set.
+			   if there is some, we recover the request and we change the fd_set of the client socket */
 			if (FD_ISSET(sock, &read_set_cpy))
 			{
 					std::cout << RED << "Read request [socket " << sock << "]" << RESET << std::endl;
@@ -132,6 +138,9 @@ void	Server::launcher(void)
 					}
 					FD_SET(sock, &_write_set);
 			}
+
+			/* We check the write_set.
+			   If we can write, then we send the answer to the request, then we close the connection. */
 			if (FD_ISSET(sock, &write_set_cpy))
 			{
 				_clients[sock].sendResponse();
