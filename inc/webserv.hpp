@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/17 16:57:45 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/19 12:27:29 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@
 #include "server/Server.hpp"
 
 /* Define constants */
-# define PORT 8080
+# define PORT 80
 
 #endif

@@ -2,6 +2,6 @@ webserv
 a.out
 *.dSYM
 *.swp
-*.DStore
+*.DS_Store
 *.o
 .vscode/*

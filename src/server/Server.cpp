@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/17 14:10:25 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/19 11:27:23 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,70 +68,89 @@ void	Server::accepter(int &max_fd)
 
 	if((new_socket = accept(_server_sock->getServerFd(), (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
 		throw Server::AcceptException();
-	// fcntl(new_socket, F_SETFL, O_NONBLOCK);
+	std::cout << YELLOW << "Accept new connection | socket : " << new_socket << RESET << std::endl;
+
+	FD_SET(new_socket, &_read_set);
+	FD_SET(new_socket, &_write_set);
+
+
+	if (new_socket > max_fd)
+		max_fd = new_socket;
+
 	if (_clients.count(new_socket) != 0)
 		_clients.erase(new_socket);
 	_clients.insert(std::pair<int, Client>(new_socket, Client()));
 	_clients[new_socket].setSocket(new_socket);
-	if (new_socket > max_fd)
-		max_fd = new_socket;
-	FD_SET(new_socket, &_read_set);
 }
 
 /* Public Methods */
 
 void	Server::launcher(void)
 {
-	struct timeval	timeout;
 	char	buffer[BUF_SIZE];
 	fd_set	read_set_cpy;
 	fd_set	write_set_cpy;
-	int		max_fd;
+	int		max_fd = _server_fd;
 
-	max_fd = _server_fd;
-
+	// set the fd_sets for reading and writing sockets
 	FD_ZERO(&_read_set);
 	FD_ZERO(&_write_set);
 	FD_SET(_server_fd, &_read_set);
+
+	/* The main loop that runs continuously to the user uses ^C */
 	while (true)
 	{
 		std::cout << "########## WAITING ##########" << std::endl;
 
-		timeout.tv_sec = 1;
-		timeout.tv_usec = 0;
 		read_set_cpy = _read_set;
 		write_set_cpy = _write_set;
 
+		/* Launch the select and check its status. We use two fd_set, one for reading and one for writing */
 		if (select(max_fd + 1, &read_set_cpy, &write_set_cpy, NULL, NULL) < 0)
 		{
 			perror("select error");
+			close (_server_fd);
 			throw Server::SelectException();
 		}
 
-		for (int i = 1; i <= max_fd; ++i)
+		/* If there is activity on the server socket, then there is a new connection to the server.
+		   So we add it to the clients map and use the accept() system function */
+		if (FD_ISSET(_server_fd, &read_set_cpy))
+			accepter(max_fd);
+
+		/* We loop on all client sockets and check their activity */
+		for (int i = 0; i < _clients.size(); ++i)
 		{
-			if (FD_ISSET(i, &read_set_cpy))
+			int	sock = _clients[i].getSocket();
+
+			/* We check the activity on the read_set.
+			   if there is some, we recover the request and we change the fd_set of the client socket */
+			if (FD_ISSET(sock, &read_set_cpy))
 			{
-				if (i == _server_fd)
-				{
-					std::cout << "1" << std::endl;
-					accepter(max_fd);
-				}
-				else if (_clients.count(i))
-				{
-					std::cout << "2" << std::endl;
-					_clients[i].addRequest();
-					changeSet(i, _write_set, _read_set);
-				}
+					std::cout << RED << "Read request [socket " << sock << "]" << RESET << std::endl;
+					if (!_clients[sock].addRequest())
+					{
+						close(sock);
+						FD_CLR(sock, &_read_set);
+						FD_CLR(sock, &_write_set);
+						_clients.erase(sock);
+						--i;
+					}
+					FD_SET(sock, &_write_set);
 			}
-			else if (FD_ISSET(i, &write_set_cpy) && _clients.count(i))
+
+			/* We check the write_set.
+			   If we can write, then we send the answer to the request, then we close the connection. */
+			if (FD_ISSET(sock, &write_set_cpy))
 			{
-				std::cout << "3" << std::endl;
-				_clients[i].sendResponse();
-				// FD_CLR(i, &_read_set);
-				// FD_CLR(i, &_write_set);
-				// close(i);
-				changeSet(i, _read_set, _write_set);
+				_clients[sock].sendResponse();
+				std::cout << CYAN << "response sent [socket " << sock << "]" << RESET << std::endl;
+
+				close(sock);
+				FD_CLR(sock, &_read_set);
+				FD_CLR(sock, &_write_set);
+				_clients.erase(sock);
+				std::cout << LIGHTMAGENTA << "connection removed [socket " << sock << "]" << RESET << std::endl;
 			}
 		}
 		std::cout << "########## DONE    ##########" << std::endl << std::endl;
