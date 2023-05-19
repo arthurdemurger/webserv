@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   webserv.hpp                                        :+:      :+:    :+:   */
+/*   Parsing.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 15:24:51 by hdony            ###   ########.fr       */
+/*   Created: 2023/05/16 16:21:30 by hdony             #+#    #+#             */
+/*   Updated: 2023/05/16 16:21:31 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WEBSERV_HPP
+#ifndef PARSING_HPP
+# define PARSING_HPP
 
-#define WEBSERV_HPP
+# include <iostream>
+# include <fstream>
+# include <string>
+# include <vector>
+# include <map>
+# include <sstream>
 
-/* Some utils libraries */
-#include <iostream>
-
-/* Sockets headers */
-#include "sockets/Socket.hpp"
-#include "sockets/BindSocket.hpp"
-#include "sockets/ConnectSocket.hpp"
-#include "sockets/ListenSocket.hpp"
-
-#include "server/Server.hpp"
-
-/* Define constants */
-# define PORT 81
+# include "Config.hpp"
+# include "Server.hpp"
+# include "Location.hpp"
+# include "utils.hpp"
 
 #endif

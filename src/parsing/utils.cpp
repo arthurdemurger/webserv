@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   webserv.hpp                                        :+:      :+:    :+:   */
+/*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 15:24:51 by hdony            ###   ########.fr       */
+/*   Created: 2023/05/12 11:24:14 by hdony             #+#    #+#             */
+/*   Updated: 2023/05/12 11:41:21 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WEBSERV_HPP
+#include "./inc/utils.hpp"
 
-#define WEBSERV_HPP
-
-/* Some utils libraries */
-#include <iostream>
-
-/* Sockets headers */
-#include "sockets/Socket.hpp"
-#include "sockets/BindSocket.hpp"
-#include "sockets/ConnectSocket.hpp"
-#include "sockets/ListenSocket.hpp"
-
-#include "server/Server.hpp"
-
-/* Define constants */
-# define PORT 81
-
-#endif
+void    RemoveTab(std::string &key)
+{
+    int i = 0;
+    int j = 0;
+    while (key[j])
+    {
+        if (key[i] == '\t')
+            i++;
+        j++;
+    }
+    key.erase(0, i);
+}

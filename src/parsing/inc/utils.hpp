@@ -1,31 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   webserv.hpp                                        :+:      :+:    :+:   */
+/*   utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 15:24:51 by hdony            ###   ########.fr       */
+/*   Created: 2023/05/12 11:38:20 by hdony             #+#    #+#             */
+/*   Updated: 2023/05/12 11:39:22 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WEBSERV_HPP
+#ifndef UTILS_HPP
+# define UTILS_HPP
 
-#define WEBSERV_HPP
-
-/* Some utils libraries */
 #include <iostream>
 
-/* Sockets headers */
-#include "sockets/Socket.hpp"
-#include "sockets/BindSocket.hpp"
-#include "sockets/ConnectSocket.hpp"
-#include "sockets/ListenSocket.hpp"
-
-#include "server/Server.hpp"
-
-/* Define constants */
-# define PORT 81
+void    RemoveTab(std::string &key);
 
 #endif

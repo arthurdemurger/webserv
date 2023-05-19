@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   webserv.hpp                                        :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 15:24:51 by hdony            ###   ########.fr       */
+/*   Created: 2023/05/10 10:24:56 by hdony             #+#    #+#             */
+/*   Updated: 2023/05/16 17:20:01 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WEBSERV_HPP
+#include "./inc/Parsing.hpp"
 
-#define WEBSERV_HPP
-
-/* Some utils libraries */
-#include <iostream>
-
-/* Sockets headers */
-#include "sockets/Socket.hpp"
-#include "sockets/BindSocket.hpp"
-#include "sockets/ConnectSocket.hpp"
-#include "sockets/ListenSocket.hpp"
-
-#include "server/Server.hpp"
-
-/* Define constants */
-# define PORT 81
-
-#endif
+int main(int ac, char *argv[])
+{
+    Config config_inst;
+    if (ac == 1 || ac == 2)
+    {
+        if (ac == 1)
+            config_inst.ConfigParsing("../../config/default.conf");
+        else
+            config_inst.ConfigParsing(argv[1]);
+    }
+    return (0);
+}
