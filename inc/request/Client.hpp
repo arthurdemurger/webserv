@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:56:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/17 10:35:32 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/19 11:24:05 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <unistd.h>
 #include "Request.hpp"
 #include "Response.hpp"
+#include <sys/types.h>
+#include <sys/socket.h>
 
 class Request;
 class Response;
@@ -49,7 +51,7 @@ class Client
 		/*
 		** ------------------------------- METHODS --------------------------------
 		*/
-		void	addRequest();
+		int		addRequest();
 		void	sendResponse();
 };
 

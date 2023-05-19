@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/17 12:00:13 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/19 11:25:10 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,17 @@
 #include <unistd.h>
 #include <map>
 #include <fcntl.h>
+
+#define RESET          "\x1B[0m"
+#define RED            "\x1B[31m"
+#define LIGHT_RED      "\x1B[91m"
+#define WHITE          "\x1B[37m"
+#define BLINK           "\x1b[5m"
+#define YELLOW         "\x1B[33m"
+#define LIGHT_BLUE     "\x1B[94m"
+#define CYAN           "\x1B[36m"
+#define DARK_GREY      "\x1B[90m"
+#define LIGHTMAGENTA   "\x1B[95m"
 
 class Client;
 
