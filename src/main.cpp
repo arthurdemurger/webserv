@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:12:06 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/11 13:23:57 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/19 15:05:54 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int main(void)
 	try
 	{
 		Server serv(AF_INET, SOCK_STREAM, 0, PORT, INADDR_ANY, 10);
-
 
 		serv.launcher();
 	}

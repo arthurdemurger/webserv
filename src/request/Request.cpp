@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 11:25:46 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/19 14:19:18 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,6 @@ std::unordered_map<std::string, std::string>	Request::getHeaders()const { return
 */
 int	Request::parse(int fd)
 {
-	/*	Une requête est prête à être lue dans le fd donnée en argument.
-		Il faut donc récupérer toutes les infos nécessaires de la requête et les sauvegarder
-		dans les différents attributs de cette classe.
-	*/
 	char				buf[BUF_SIZE];
 	int					n;
 

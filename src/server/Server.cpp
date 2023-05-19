@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 11:27:23 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/19 15:05:19 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,6 @@ ListenSocket	*Server::getSocket(void) const { return (_server_sock); }
 */
 
 /* Private Methods */
-void	Server::changeSet(int fd, fd_set &dest_set, fd_set &src_set)
-{
-	FD_CLR(fd, &src_set);
-	FD_SET(fd, &dest_set);
-}
-
 void	Server::accepter(int &max_fd)
 {
 	int					new_socket;
@@ -76,6 +70,9 @@ void	Server::accepter(int &max_fd)
 
 	if (new_socket > max_fd)
 		max_fd = new_socket;
+
+	if (fcntl(new_socket, F_SETFL, O_NONBLOCK) < 0)
+		throw Server::FcntlException();
 
 	if (_clients.count(new_socket) != 0)
 		_clients.erase(new_socket);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*	                                                                        */
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 11:20:19 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 11:29:00 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/19 13:20:12 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,11 @@ Client	&Client::operator=(const Client &copy)
 /*
 ** ------------------------------- ACCESSOR --------------------------------
 */
-int		Client::getSocket(void) const { return (_socket_fd); }
+int			Client::getSocket(void) const { return (_socket_fd); }
 
 Request		Client::getRequest(void) const { return (_request); }
 
-
-void	Client::setSocket(int sock_fd) { _socket_fd = sock_fd; }
+void		Client::setSocket(int sock_fd) { _socket_fd = sock_fd; }
 
 /*
 ** ------------------------------- METHODS --------------------------------
@@ -65,9 +64,22 @@ int	Client::addRequest()
 
 void	Client::sendResponse()
 {
-	std::string response =	"HTTP/1.1 200 OK\n"
-							"Content-Type: text/html\n\n"
-							"<!doctype html><html><head><title>This is the title of the webpage!</title></head>"
-							"<body><p>This is an example paragraph. Anything in the <strong>body</strong> tag will appear on the page, just like this <strong>p</strong> tag and its contents.</p></body></html>";
+	std::ifstream file("html/index.html");
+	std::string response;
+
+	response =  "HTTP/1.1 200 OK\n"
+				"Content-Type: text/html\n\n";
+
+	if (file.is_open())
+	{
+		std::string line;
+		while (std::getline(file, line))
+			response += line + '\n';
+		file.close();
+	}
+	else
+	{
+		std::cerr << "Erreur lors de l'ouverture du fichier : html/index.html" << std::endl;
+	}
 	size_t bytesSend = send(_socket_fd, response.c_str(), response.length(), 0);
 }
