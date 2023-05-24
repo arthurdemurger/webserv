@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 14:04:02 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 17:15:22 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	Request::parse(int fd)
 		i++;
 	}
 	_isParsed = true;
+	print_request();
 	return (1);
 }
 
