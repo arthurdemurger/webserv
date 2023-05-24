@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:50 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 16:08:56 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 17:34:27 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <fcntl.h>
-
-#define SOCKET 0
-#define BIND 1
-#define CONNECT 2
-#define LISTEN 3
 
 class Socket
 {

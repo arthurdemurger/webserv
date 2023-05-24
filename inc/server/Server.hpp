@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 16:06:00 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 17:37:23 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 #define SERVER_HPP
 
-#include "./Socket.hpp"
-#include "../request/Client.hpp"
+#include "Config.hpp"
+#include "Socket.hpp"
+#include "client/Client.hpp"
 
 #include <unistd.h>
 #include <map>
@@ -46,6 +47,8 @@ class Server
 		fd_set					_read_set;
 		fd_set					_write_set;
 		std::map<int, Client>	_clients;
+		Config					_config;
+
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/

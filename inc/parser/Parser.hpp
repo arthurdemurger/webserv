@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Config.hpp                                         :+:      :+:    :+:   */
+/*   Parser.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/24 17:33:37 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 17:41:03 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-/* Classe avec toute la config d'un serveur : port, location, ... */
+/* Classe qui va parser le config file et instancier tous les serveurs du launchers. */
 
-#ifndef CONFIG_HPP
+#ifndef PARSER_HPP
 
-#define CONFIG_HPP
+#define PARSER_HPP
 
-class Config
+class Parser
 {
 	private:
 		/*
@@ -28,10 +28,10 @@ class Config
 		/*
 		** ------------------------------- Canonical form --------------------------------
 		*/
-		Config();
-		Config(const Config &rhs);
-		Config &operator=(const Config &rhs);
-		~Config();
+		Parser();
+		Parser(const Parser &rhs);
+		Parser &operator=(const Parser &rhs);
+		~Parser();
 
 };
 

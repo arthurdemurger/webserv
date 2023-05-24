@@ -1,38 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Config.hpp                                         :+:      :+:    :+:   */
+/*   Launcher.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/24 17:33:37 by ademurge         ###   ########.fr       */
+/*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
+/*   Updated: 2023/05/24 17:41:59 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef LAUNCHER_HPP
 
-/* Classe avec toute la config d'un serveur : port, location, ... */
+#define LAUNCHER_HPP
 
-#ifndef CONFIG_HPP
+#include <map>
+#include <vector>
+#include <iostream>
+#include "server/Server.hpp"
+#include "parser/Parser.hpp"
 
-#define CONFIG_HPP
+class Server;
+class Parser;
 
-class Config
+class Launcher
 {
 	private:
-		/*
-		** ------------------------------- Attributes --------------------------------
-		*/
+		Parser							_parser;
+		std::map<std::string, Server>	_servers;
+		std::vector<int>				_serv_socks;
+		std::vector<int>				_read_pool;
+		std::vector<int>				_write_pool;
 
 	public:
-		/*
-		** ------------------------------- Canonical form --------------------------------
-		*/
-		Config();
-		Config(const Config &rhs);
-		Config &operator=(const Config &rhs);
-		~Config();
-
+		Launcher(void);
+		~Launcher(void);
 };
 
-#endif
+#endif // LAUNCHER_HPP
