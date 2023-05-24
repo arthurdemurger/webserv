@@ -53,6 +53,18 @@ class ListenSocket : public BindSocket
 		};
 
 		/*
+		** ------------------------------- Exceptions --------------------------------
+		*/
+		class FcntlException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw()
+				{
+					perror("fcntl");
+					return ("Server closed because of an error");
+				};
+		};
+		/*
 		** ------------------------------- Methods --------------------------------
 		*/
 		int				listening(void) const;

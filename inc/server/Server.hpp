@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 11:25:10 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 12:02:13 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ class Server
 		*/
 		ListenSocket			*_server_sock;
 		int						_server_fd;
+		int						_max_fd;
 		fd_set					_read_set;
 		fd_set					_write_set;
 		std::map<int, Client>	_clients;
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		void	accepter(int &max_fd);
-		void	changeSet(int fd, fd_set &dest_set, fd_set &src_set);
+		void	accepter();
 
 		Server();
 
@@ -78,17 +78,38 @@ class Server
 		class ReadException : public std::exception
 		{
 			public:
-				virtual const char *what() const throw() { return "Read failed."; };
+				virtual const char *what() const throw()
+				{
+					perror("read");
+					return ("Server closed because of an error");
+				};
 		};
 		class AcceptException : public std::exception
 		{
 			public:
-				virtual const char *what() const throw() { return "Accept failed."; };
+				virtual const char *what() const throw()
+				{
+					perror("accept");
+					return ("Server closed because of an error");
+				};
 		};
 		class SelectException : public std::exception
 		{
 			public:
-				virtual const char *what() const throw() { return "Select failed."; };
+				virtual const char *what() const throw()
+				{
+					perror("select");
+					return ("Server closed because of an error");
+				};
+		};
+		class FcntlException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw()
+				{
+					perror("fcntl");
+					return ("Server closed because of an error");
+				};
 		};
 };
 

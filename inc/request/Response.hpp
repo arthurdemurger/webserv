@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/12 12:22:33 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/19 14:12:27 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 class Response
 {
 	private:
+		std::string	_version;
+		std::string	_status_code;
+		std::string	_date;
+		std::string	_content_type;
+		std::string	_content_length;
+		std::string _body;
 
 	public:
 		/*
@@ -29,6 +35,5 @@ class Response
 		Response(const Response &copy);
 		Response &operator=(const Response &copy);
 };
-
 
 #endif //RESPONSE_HPP

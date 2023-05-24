@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 15:12:07 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/24 15:19:49 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ std::map<std::string, std::string>				Request::getHeaders()const { return (_head
 int	Request::parse(int fd)
 {
 	std::stringstream	ss, buffer;
-	char				buff[30000];
+	char				buff[BUF_SIZE];
 	std::string			line;
 	std::string			request;
 	int					i, n;
@@ -66,12 +66,14 @@ int	Request::parse(int fd)
 	this->_status = "200";
 	fcntl(fd, F_SETFL, O_NONBLOCK);
 	n = read(fd, buff, BUF_SIZE);
-    std::string data(buff, n);
-    while (n > 0)
-    {
-     	n = read(fd, buff, BUF_SIZE);
-     	data += buff;
-    }
+	std::string data(buff, n);
+	while (n > 0)
+	{
+		n = read(fd, buff, BUF_SIZE);
+		data += buff;
+	}
+	if (!n)
+		return (0);
 	ss << data;
 	std::cout << data << std::endl;
 	std::cout << "2\n";
@@ -89,7 +91,6 @@ int	Request::parse(int fd)
 		}
 		i++;
 	}
-	print_request();
 	return (1);
 }
 
@@ -117,7 +118,7 @@ void	Request::parse_request_headers(std::string &line)
 {
 	std::istringstream	iss(line);
 	std::string			key, value;
-	
+
 	while (getline(iss, key, ':'))
 	{
 		getline(iss, value);
@@ -135,7 +136,7 @@ void	Request::trim_value(std::string &value)
 	for (std::string::iterator	it = value.begin(); it != value.end(); ++it)
 	{
 		if (*it == ' ')
-			i++;	
+			i++;
 	}
 	value.erase(0, i);
 }

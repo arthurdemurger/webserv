@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:56:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 11:24:05 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 11:59:29 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include "Response.hpp"
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <fstream>
 
 class Request;
 class Response;
@@ -37,6 +38,7 @@ class Client
 		** ------------------------------- COPLIEN --------------------------------
 		*/
 		Client();
+		Client(int socket);
 		~Client();
 		Client(const Client &copy);
 		Client	&operator=(const Client &copy);

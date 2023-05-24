@@ -20,8 +20,8 @@ ListenSocket::ListenSocket(int domain, int service, int protocol, int port, u_lo
 {
 	if ((_isListening = listening()) < 0)
 		throw ListenSocket::ListenException();
-	// if (fcntl(_server_fd, F_SETFL, O_NONBLOCK) < 0)
-	// 	perror("fcntl failed.");
+	if (fcntl(_server_fd, F_SETFL, O_NONBLOCK) < 0)
+		throw ListenSocket::FcntlException();
 }
 
 ListenSocket::ListenSocket(const ListenSocket &copy) : BindSocket(copy), _backlog(copy._backlog) { }
