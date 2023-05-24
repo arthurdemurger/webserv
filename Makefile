@@ -6,7 +6,7 @@
 #    By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/15 11:46:45 by ademurge          #+#    #+#              #
-#    Updated: 2023/05/19 17:03:57 by ademurge         ###   ########.fr        #
+#    Updated: 2023/05/24 16:10:03 by ademurge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,12 +34,8 @@ RM			=	rm -rf
 # Files
 OBJDIR		=	.obj
 
-SRC_SERV	=	src/server/Server.cpp
-
-SRC_SOCK	=	src/sockets/BindSocket.cpp \
-				src/sockets/ConnectSocket.cpp \
-				src/sockets/ListenSocket.cpp \
-				src/sockets/Socket.cpp
+SRC_SERV	=	src/server/Server.cpp \
+				src/server/Socket.cpp
 
 SRC_REQUEST =	src/request/Client.cpp \
 				src/request/Response.cpp \

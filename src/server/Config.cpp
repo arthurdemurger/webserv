@@ -73,7 +73,7 @@ void	Config::ServerBlockEnd()
 				this->_vec_end_block.push_back(i + 1);
 			}
 		}
-	} 
+	}
 }
 
 /* Populate the config vector with the different server blocks */

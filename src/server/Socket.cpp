@@ -1,63 +1,73 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BindSocket.cpp                                  :+:      :+:    :+:   */
+/*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 11:12:19 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:09:09 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/sockets/ListenSocket.hpp"
+#include "../../inc/server/Socket.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-ListenSocket::ListenSocket(int domain, int service, int protocol, int port, u_long interface, int bklg) :
-	BindSocket(domain, service, protocol, port, interface), _backlog(bklg)
+Socket::Socket(void) { }
+
+Socket::Socket(int domain, int service, int protocol, int port,  u_long interface, int backlog)
 {
-	if ((_isListening = listening()) < 0)
-		throw ListenSocket::ListenException();
+	_address.sin_family = domain;
+	_address.sin_port = htons(port);
+	_address.sin_addr.s_addr = htonl(interface);
+
+	if((_server_fd = socket(domain, service, protocol)) < 0)
+		throw Socket::SocketException();
+	const int enable = 1;
+	if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+		throw Socket::SocketException();
+	if (bind(_server_fd, (struct sockaddr *) &_address, sizeof(_address)) < 0)
+		throw Socket::BindException();
+	if (listen(getServerFd(), backlog) < 0)
+		throw Socket::ListenException();
 	if (fcntl(_server_fd, F_SETFL, O_NONBLOCK) < 0)
-		throw ListenSocket::FcntlException();
+		throw Socket::FcntlException();
 }
 
-ListenSocket::ListenSocket(const ListenSocket &copy) : BindSocket(copy), _backlog(copy._backlog) { }
+Socket::Socket(const Socket &copy)
+{
+	*this = copy;
+}
 
 /*
 ** ------------------------------- OPERATOR OVERLOAD --------------------------------
 */
-const ListenSocket	&ListenSocket::operator=(const ListenSocket &copy)
+const Socket	&Socket::operator=(const Socket &copy)
 {
 	if (this != &copy)
 	{
-		_server_fd = copy.getServerFd();
-		_address = copy.getAddress();
-		_backlog = copy.getBacklog();
-		_isListening = copy.getIsListening();
+		_server_fd = copy._server_fd;
+		_address = copy._address;
+		_backlog = copy._backlog;
 	}
 	return (*this);
 }
 
+
 /*
 ** ------------------------------- DESTRUCTOR --------------------------------
 */
-ListenSocket::~ListenSocket() { }
+Socket::~Socket() { }
 
 /*
 ** ------------------------------- ACCESSORS --------------------------------
 */
-int					ListenSocket::getBacklog(void) const { return (_backlog); }
-int					ListenSocket::getIsListening(void) const { return (_isListening); }
+int					Socket::getServerFd(void) const { return (_server_fd); };
+struct sockaddr_in	Socket::getAddress(void) const { return (_address); };
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
-
-int	ListenSocket::listening(void) const
-{
-	return (listen(getServerFd(), _backlog));
-}
 

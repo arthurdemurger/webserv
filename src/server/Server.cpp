@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 14:59:54 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:06:37 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 */
 Server::Server(int domain, int service, int protocol, int port, u_long interface, int bklg)
 {
-	_server_sock = new ListenSocket(domain, service, protocol, port, interface, bklg);
-	_server_fd = _server_sock->getServerFd();
+	_server_sock = Socket(domain, service, protocol, port, interface, bklg);
+	_server_fd = _server_sock.getServerFd();
 	_max_fd = _server_fd;
 }
 
@@ -30,7 +30,7 @@ Server::Server(const Server &copy)
 /*
 ** ------------------------------- DESTRUCTOR --------------------------------
 */
-Server::~Server() { delete _server_sock; }
+Server::~Server() { }
 
 /*
 ** ------------------------------- OPERATOR OVERLOAD --------------------------------
@@ -39,7 +39,6 @@ const Server &Server::operator=(const Server &copy)
 {
 	if (this != &copy)
 	{
-		delete _server_sock;
 		_server_sock = copy._server_sock;
 	}
 	return (*this);
@@ -48,7 +47,7 @@ const Server &Server::operator=(const Server &copy)
 /*
 ** ------------------------------- ACCESSOR --------------------------------
 */
-ListenSocket	*Server::getSocket(void) const { return (_server_sock); }
+Socket	Server::getSocket(void) const { return (_server_sock); }
 
 /*
 ** ------------------------------- METHODS --------------------------------
@@ -58,10 +57,10 @@ ListenSocket	*Server::getSocket(void) const { return (_server_sock); }
 void	Server::accepter()
 {
 	int					new_socket;
-	struct sockaddr_in	address = _server_sock->getAddress();
+	struct sockaddr_in	address = _server_sock.getAddress();
 	int					addressLen = sizeof(address);
 
-	if((new_socket = accept(_server_sock->getServerFd(), (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
+	if((new_socket = accept(_server_sock.getServerFd(), (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
 		throw Server::AcceptException();
 	std::cout << YELLOW << "Accept new connection | socket : " << new_socket << RESET << std::endl;
 

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 14:23:58 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:06:00 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 #define SERVER_HPP
 
-#include "../sockets/ListenSocket.hpp"
-#include "netinet/in.h"
+#include "./Socket.hpp"
 #include "../request/Client.hpp"
+
 #include <unistd.h>
 #include <map>
 #include <fcntl.h>
@@ -32,7 +32,7 @@
 #define DARK_GREY      "\x1B[90m"
 #define LIGHTMAGENTA   "\x1B[95m"
 
-class Client;
+class Socket;
 
 class Server
 {
@@ -40,7 +40,7 @@ class Server
 		/*
 		** ------------------------------- Attributes --------------------------------
 		*/
-		ListenSocket			*_server_sock;
+		Socket					_server_sock;
 		int						_server_fd;
 		int						_max_fd;
 		fd_set					_read_set;
@@ -65,7 +65,7 @@ class Server
 		/*
 		** ------------------------------- Accessor --------------------------------
 		*/
-		ListenSocket	*getSocket(void) const;
+		Socket	getSocket(void) const;
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/

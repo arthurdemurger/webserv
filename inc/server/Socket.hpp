@@ -1,73 +1,80 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BindSocket.hpp                                  :+:      :+:    :+:   */
+/*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:50 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/10 11:12:57 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:08:56 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LISTENSOCKET_HPP
+#ifndef SOCKET_HPP
 
-# define LISTENSOCKET_HPP
+# define SOCKET_HPP
 
-#include "BindSocket.hpp"
+#include <iostream>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include <fcntl.h>
 
-class ListenSocket : public BindSocket
+#define SOCKET 0
+#define BIND 1
+#define CONNECT 2
+#define LISTEN 3
+
+class Socket
 {
 	private:
-		int	_backlog;
-		int	_isListening;
+		int					_server_fd;
+		struct sockaddr_in	_address;
+		int					_backlog;
 
-		ListenSocket();
 	public:
 		/*
 		** ------------------------------- Canonical form --------------------------------
 		*/
-		ListenSocket(int domain, int service, int protocol, int port, u_long interface, int bklg);
-		ListenSocket(const ListenSocket &copy);
-		~ListenSocket();
+		Socket(int domain, int service, int protocol, int port, u_long interface, int backlog);
+		Socket();
+		~Socket();
+		Socket(const Socket &copy);
 
 		/*
 		** ------------------------------- Operator overload --------------------------------
 		*/
-		const ListenSocket	&operator=(const ListenSocket &copy);
+		const Socket	&operator=(const Socket &copy);
 
 		/*
 		** ------------------------------- Accessors --------------------------------
 		*/
-		int					getBacklog(void) const;
-		int					getIsListening(void) const;
-
-		/*
-		** ------------------------------- Methods --------------------------------
-		*/
-			class ListenException : public std::exception
-		{
-			public:
-				virtual const char *what() const throw() { return "Listen failed."; };
-		};
+		int					getServerFd(void) const;
+		struct sockaddr_in	getAddress(void) const;
 
 		/*
 		** ------------------------------- Exceptions --------------------------------
 		*/
+		class SocketException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw() { return "Socket failed."; };
+		};
+		class BindException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw() { return "Bind failed."; };
+		};
+		class ListenException : public std::exception
+		{
+			public:
+				virtual const char *what() const throw() { return "Listen failed."; };
+		};
 		class FcntlException : public std::exception
 		{
 			public:
-				virtual const char *what() const throw()
-				{
-					perror("fcntl");
-					return ("Server closed because of an error");
-				};
+				virtual const char *what() const throw() { return "fcntl failed."; };
 		};
-		/*
-		** ------------------------------- Methods --------------------------------
-		*/
-		int				listening(void) const;
+
 };
 
 # endif

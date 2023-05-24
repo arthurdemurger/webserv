@@ -6,14 +6,14 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/24 15:30:11 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:42:36 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIG_HPP
 # define CONFIG_HPP
 
-# include "Parsing.hpp"
+#include "Parsing.hpp"
 
 class   Server;
 

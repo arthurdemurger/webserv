@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/22 09:43:34 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:07:46 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@
 #include <iostream>
 
 /* Sockets headers */
-#include "sockets/Socket.hpp"
-#include "sockets/BindSocket.hpp"
-#include "sockets/ConnectSocket.hpp"
-#include "sockets/ListenSocket.hpp"
-
 #include "server/Server.hpp"
 
 /* Define constants */
