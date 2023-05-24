@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 15:26:22 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/24 15:12:07 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ std::map<std::string, std::string>				Request::getHeaders()const { return (_head
 
 int	Request::parse(int fd)
 {
-	// std::ifstream		ifs;
 	std::stringstream	ss, buffer;
 	char				buff[30000];
 	std::string			line;
@@ -64,6 +63,7 @@ int	Request::parse(int fd)
 	int					i, n;
 
 	i = 0;
+	this->_status = "200";
 	fcntl(fd, F_SETFL, O_NONBLOCK);
 	n = read(fd, buff, BUF_SIZE);
     std::string data(buff, n);
@@ -74,6 +74,7 @@ int	Request::parse(int fd)
     }
 	ss << data;
 	std::cout << data << std::endl;
+	std::cout << "2\n";
 	while (getline(ss, line))
 	{
 		if (i == 0)
@@ -104,7 +105,10 @@ void	Request::parse_request_line(std::string &line)
 		if (i == 0)
 			this->_method = str;
 		else if (i == 1)
+		{
 			this->_path = str;
+			check_path();
+		}
 		i++;
 	}
 }
@@ -134,6 +138,29 @@ void	Request::trim_value(std::string &value)
 			i++;	
 	}
 	value.erase(0, i);
+}
+
+void	Request::check_path()
+{
+	std::cout << "3\n";
+	int	ret;
+	std::string	html_path = "../../html/";
+	// for (std::string::iterator it = _path.begin(); it != _path.end(); ++it)
+	// {
+	// 	std::cout << ":: " << *it << std::endl;
+	// }
+	if (!this->_path.compare("/"))
+	{
+		html_path = "../../html/index.html";
+		return ;
+	}
+	html_path.append(this->_path);
+	std::cout << "full path: " << html_path << std::endl;
+	if ( (ret = open(this->_path.c_str(), O_RDONLY)) < 0)
+	{
+		std::cout << "Invalid path requested\n";
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	Request::print_request()

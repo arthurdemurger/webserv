@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 11:27:23 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 14:26:48 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	Server::launcher(void)
 		   So we add it to the clients map and use the accept() system function */
 		if (FD_ISSET(_server_fd, &read_set_cpy))
 			accepter(max_fd);
-
+		std::cout << "1\n";
 		/* We loop on all client sockets and check their activity */
 		for (int i = 0; i < _clients.size(); ++i)
 		{

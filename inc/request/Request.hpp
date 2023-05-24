@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 15:15:46 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/24 14:13:06 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ class Request
 	private:
 		std::string										_method;
 		std::string										_path;
+		std::string										_http_version;
 		std::map<std::string, std::string>				_headers;
 		std::string										_body;
+		std::string										_status;
 
 	public:
 		/*
@@ -57,6 +59,7 @@ class Request
 		void	parse_request_headers(std::string &line);
 		void	trim_value(std::string &value);
 		void	print_request();
+		void	check_path();
 };
 
 #endif
