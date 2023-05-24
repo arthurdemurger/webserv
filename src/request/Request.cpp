@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 12:46:34 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 14:04:02 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-Request::Request() { }
+Request::Request() : _isParsed(false) { }
 
 Request::Request(const Request &copy)
 {
@@ -49,6 +49,7 @@ std::string										Request::getMethod() const { return (_method); };
 std::string										Request::getBody()   const { return (_body); };
 std::string										Request::getPath()   const { return (_path); };
 std::map<std::string, std::string>				Request::getHeaders()const { return (_headers); };
+bool											Request::getIsParsed()   const { return (_isParsed); };
 
 /*
 ** ------------------------------- METHODS --------------------------------
@@ -87,6 +88,7 @@ int	Request::parse(int fd)
 		}
 		i++;
 	}
+	_isParsed = true;
 	return (1);
 }
 

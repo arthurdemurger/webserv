@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 12:02:13 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 14:23:58 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ class Server
 				virtual const char *what() const throw()
 				{
 					perror("read");
-					return ("Server closed because of an error");
+					return ("");
 				};
 		};
 		class AcceptException : public std::exception
@@ -90,7 +90,7 @@ class Server
 				virtual const char *what() const throw()
 				{
 					perror("accept");
-					return ("Server closed because of an error");
+					return ("");
 				};
 		};
 		class SelectException : public std::exception
@@ -99,7 +99,7 @@ class Server
 				virtual const char *what() const throw()
 				{
 					perror("select");
-					return ("Server closed because of an error");
+					return ("");
 				};
 		};
 		class FcntlException : public std::exception
@@ -108,7 +108,7 @@ class Server
 				virtual const char *what() const throw()
 				{
 					perror("fcntl");
-					return ("Server closed because of an error");
+					return ("");
 				};
 		};
 };

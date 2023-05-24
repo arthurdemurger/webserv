@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 15:15:46 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/24 14:05:26 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class Request
 		std::string										_path;
 		std::map<std::string, std::string>				_headers;
 		std::string										_body;
+		bool											_isParsed;
 
 	public:
 		/*
@@ -48,6 +49,7 @@ class Request
 		std::string										getBody() const;
 		std::string										getPath() const;
 		std::map<std::string, std::string>				getHeaders() const;
+		bool											getIsParsed() const;
 
 		/*
 		** ------------------------------- METHODS --------------------------------

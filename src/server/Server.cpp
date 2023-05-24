@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 12:33:29 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 14:59:54 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,14 +139,16 @@ void	Server::launcher(void)
 				If we can write, then we send the answer to the request, then we close the connection. */
 			if (FD_ISSET(sock, &write_set_cpy))
 			{
-				_clients[sock].sendResponse();
-				std::cout << CYAN << "response sent [socket " << sock << "]" << RESET << std::endl;
-
-				close(sock);
-				FD_CLR(sock, &_read_set);
-				FD_CLR(sock, &_write_set);
-				_clients.erase(sock);
-				std::cout << LIGHTMAGENTA << "connection removed [socket " << sock << "]" << RESET << std::endl;
+				// if (_clients[sock].isRequestParsed())
+				// {
+					_clients[sock].sendResponse();
+					std::cout << CYAN << "response sent [socket " << sock << "]" << RESET << std::endl;
+					close(sock);
+					FD_CLR(sock, &_read_set);
+					FD_CLR(sock, &_write_set);
+					_clients.erase(sock);
+					std::cout << LIGHTMAGENTA << "connection removed [socket " << sock << "]" << RESET << std::endl;
+				// }
 			}
 		}
 		std::cout << "########## DONE    ##########" << std::endl << std::endl;

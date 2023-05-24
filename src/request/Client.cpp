@@ -49,6 +49,8 @@ int			Client::getSocket(void) const { return (_socket_fd); }
 
 Request		Client::getRequest(void) const { return (_request); }
 
+bool		Client::isRequestParsed(void) const { return (_request.getIsParsed()); }
+
 void		Client::setSocket(int sock_fd) { _socket_fd = sock_fd; }
 
 /*
@@ -64,8 +66,10 @@ int	Client::addRequest()
 	// std::cout << _request.getBody() << std::endl;
 }
 
-void	Client::sendResponse()
+void	Client::sendResponse(void)
 {
+	// _response.buildResponse(_request);
+
 	std::ifstream file("html/index.html");
 	std::string response;
 
