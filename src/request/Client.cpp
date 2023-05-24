@@ -17,6 +17,8 @@
 */
 Client::Client(void) { }
 
+Client::Client(int socket) : _socket_fd(socket) { }
+
 Client::Client(const Client &copy)
 {
 	*this = copy;

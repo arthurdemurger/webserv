@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 15:07:44 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/24 12:02:13 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ class Server
 		*/
 		ListenSocket			*_server_sock;
 		int						_server_fd;
+		int						_max_fd;
 		fd_set					_read_set;
 		fd_set					_write_set;
 		std::map<int, Client>	_clients;
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		void	accepter(int &max_fd);
-		void	changeSet(int fd, fd_set &dest_set, fd_set &src_set);
+		void	accepter();
 
 		Server();
 
