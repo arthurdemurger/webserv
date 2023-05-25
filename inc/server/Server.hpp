@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 15:11:43 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 16:14:36 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class Server
 		*/
 		Server();
 		Server(const Server &copy);
-		const Server &operator=(const Server &copy);
+		Server &operator=(const Server &copy);
 		~Server();
 
 		/*

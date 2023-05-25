@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/24 17:41:03 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 16:16:54 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ class Parser
 		Parser(const Parser &rhs);
 		Parser &operator=(const Parser &rhs);
 		~Parser();
-
 };
 
 #endif
