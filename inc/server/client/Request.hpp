@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 16:26:05 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/25 14:52:34 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,9 @@ class Request
 	private:
 		std::string										_method;
 		std::string										_path;
-		std::string										_http_version;
 		std::map<std::string, std::string>				_headers;
 		std::string										_body;
-		std::string										_status;
+		bool											_isParsed;
 
 	public:
 		/*
@@ -52,7 +51,6 @@ class Request
 		void	parse_request_headers(std::string &line);
 		void	trim_value(std::string &value);
 		void	print_request();
-		void	check_path();
 };
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 16:26:26 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/25 15:13:47 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ int	Request::parse(int fd)
 	int					i, n;
 
 	i = 0;
-	this->_status = "200";
-	fcntl(fd, F_SETFL, O_NONBLOCK);
 	n = read(fd, buff, BUF_SIZE);
 	std::string data(buff, n);
 	while (n > 0)
@@ -76,8 +74,6 @@ int	Request::parse(int fd)
 	if (!n)
 		return (0);
 	ss << data;
-	std::cout << data << std::endl;
-	std::cout << "2\n";
 	while (getline(ss, line))
 	{
 		if (i == 0)
@@ -109,10 +105,7 @@ void	Request::parse_request_line(std::string &line)
 		if (i == 0)
 			this->_method = str;
 		else if (i == 1)
-		{
 			this->_path = str;
-			check_path();
-		}
 		i++;
 	}
 }
@@ -142,29 +135,6 @@ void	Request::trim_value(std::string &value)
 			i++;
 	}
 	value.erase(0, i);
-}
-
-void	Request::check_path()
-{
-	std::cout << "3\n";
-	int	ret;
-	std::string	html_path = "../../html/";
-	// for (std::string::iterator it = _path.begin(); it != _path.end(); ++it)
-	// {
-	// 	std::cout << ":: " << *it << std::endl;
-	// }
-	if (!this->_path.compare("/"))
-	{
-		html_path = "../../html/index.html";
-		return ;
-	}
-	html_path.append(this->_path);
-	std::cout << "full path: " << html_path << std::endl;
-	if ( (ret = open(this->_path.c_str(), O_RDONLY)) < 0)
-	{
-		std::cout << "Invalid path requested\n";
-		exit(EXIT_FAILURE);
-	}
 }
 
 void	Request::print_request()

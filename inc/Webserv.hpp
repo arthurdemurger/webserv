@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Webserv.hpp                                        :+:      :+:    :+:   */
+/*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 16:26:13 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/25 15:14:19 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,17 @@
 // #include "Launcher.hpp"
 
 /* Define constants */
-# define PORT 8080
+# define PORT			80
+# define BUF_SIZE		30000
+# define RESET			"\x1B[0m"
+# define RED			"\x1B[31m"
+# define LIGHT_RED		"\x1B[91m"
+# define WHITE			"\x1B[37m"
+# define BLINK			"\x1b[5m"
+# define YELLOW			"\x1B[33m"
+# define LIGHT_BLUE		"\x1B[94m"
+# define CYAN			"\x1B[36m"
+# define DARK_GREY		"\x1B[90m"
+# define LIGHTMAGENTA	"\x1B[95m"
 
 #endif
