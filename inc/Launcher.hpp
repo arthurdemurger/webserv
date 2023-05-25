@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 16:12:37 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 16:28:13 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ class Launcher
 		void	add_request(int &client_sock);
 		void	send_response(int client_sock);
 	public:
-
-		Launcher(void);
+		Launcher(std::string conf_filename);
 		~Launcher(void);
 		Launcher(const Launcher &copy);
 		Launcher &operator=(const Launcher &copy);
