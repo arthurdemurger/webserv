@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:50 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 17:34:27 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 09:52:50 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,7 @@
 
 # define SOCKET_HPP
 
-#include <iostream>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <fcntl.h>
+#include "../Webserv.hpp"
 
 class Socket
 {

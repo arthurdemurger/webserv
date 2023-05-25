@@ -6,23 +6,13 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 14:05:26 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 11:15:24 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REQUEST_HPP
 
 #define REQUEST_HPP
-
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <string>
-#include <map>
-#include <unistd.h>
-#include <fcntl.h>
-
-# define BUF_SIZE 5
 
 class Request
 {

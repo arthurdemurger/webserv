@@ -6,11 +6,11 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:12:06 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/19 15:05:54 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 09:52:15 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/webserv.hpp"
+#include "../inc/Webserv.hpp"
 
 int main(void)
 {

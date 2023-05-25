@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 16:09:09 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 10:08:06 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ Socket::Socket(int domain, int service, int protocol, int port,  u_long interfac
 		throw Socket::SocketException();
 	if (bind(_server_fd, (struct sockaddr *) &_address, sizeof(_address)) < 0)
 		throw Socket::BindException();
-	if (listen(getServerFd(), backlog) < 0)
+	if (listen(_server_fd, backlog) < 0)
 		throw Socket::ListenException();
 	if (fcntl(_server_fd, F_SETFL, O_NONBLOCK) < 0)
 		throw Socket::FcntlException();
