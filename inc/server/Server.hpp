@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 13:01:15 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 14:56:29 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,8 @@
 
 #define SERVER_HPP
 
-#include "Config.hpp"
-#include "Socket.hpp"
-#include "client/Client.hpp"
 #include "../Webserv.hpp"
-
+// #include "Socket.hpp"
 class Socket;
 
 class Server
@@ -28,16 +25,15 @@ class Server
 		** ------------------------------- Attributes --------------------------------
 		*/
 		std::string				_name;
+		Config					_config;
 		Socket					_socket;
 		int						_serv_fd;
 		std::vector<int>		_read_set;
 		std::vector<int>		_write_set;
-		Config					_config;
 
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		Server();
 
 	public:
 		/*
@@ -93,5 +89,6 @@ class Server
 				};
 		};
 };
+
 
 #endif

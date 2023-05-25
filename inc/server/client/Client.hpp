@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:56:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 13:19:32 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 14:56:50 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 # define CLIENT_HPP
 
-#include "Request.hpp"
-#include "Response.hpp"
 #include "../../Webserv.hpp"
 
-class Request;
 class Response;
+class Request;
 
 class Client
 {

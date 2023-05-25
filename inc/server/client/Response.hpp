@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 13:19:24 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 14:52:38 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 # define RESPONSE_HPP
 
 #include "../../Webserv.hpp"
-#include "Request.hpp"
 
 class Request;
 

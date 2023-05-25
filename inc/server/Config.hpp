@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/24 17:33:37 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 14:53:26 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #ifndef CONFIG_HPP
 
 #define CONFIG_HPP
+
+#include "../Webserv.hpp"
 
 class Config
 {

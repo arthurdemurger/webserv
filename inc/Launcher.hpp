@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 13:12:04 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 14:55:50 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 #define LAUNCHER_HPP
 
 #include "Webserv.hpp"
-#include "server/Server.hpp"
-#include "parser/Parser.hpp"
 
 class Client;
 class Parser;
