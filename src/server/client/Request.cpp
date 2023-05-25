@@ -6,11 +6,11 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 17:15:22 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 15:13:47 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/request/Request.hpp"
+#include "../../../inc/server/client/Request.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 14:56:29 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 15:11:43 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 #define SERVER_HPP
 
-#include "../Webserv.hpp"
-// #include "Socket.hpp"
+#include "Socket.hpp"
+
 class Socket;
 
 class Server
