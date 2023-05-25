@@ -6,16 +6,16 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 15:19:49 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/25 16:26:26 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/request/Request.hpp"
+#include "../../../inc/server/client/Request.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-Request::Request() { }
+Request::Request() : _isParsed(false) { }
 
 Request::Request(const Request &copy)
 {
@@ -49,6 +49,7 @@ std::string										Request::getMethod() const { return (_method); };
 std::string										Request::getBody()   const { return (_body); };
 std::string										Request::getPath()   const { return (_path); };
 std::map<std::string, std::string>				Request::getHeaders()const { return (_headers); };
+bool											Request::getIsParsed()   const { return (_isParsed); };
 
 /*
 ** ------------------------------- METHODS --------------------------------
@@ -91,6 +92,8 @@ int	Request::parse(int fd)
 		}
 		i++;
 	}
+	_isParsed = true;
+	print_request();
 	return (1);
 }
 

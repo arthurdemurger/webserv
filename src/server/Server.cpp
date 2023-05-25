@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 15:18:30 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/25 16:26:56 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,9 @@
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-Server::Server(int domain, int service, int protocol, int port, u_long interface, int bklg)
+Server::Server()
 {
-	_server_sock = new ListenSocket(domain, service, protocol, port, interface, bklg);
-	_server_fd = _server_sock->getServerFd();
-	_max_fd = _server_fd;
+
 }
 
 Server::Server(const Server &copy)
@@ -30,17 +28,20 @@ Server::Server(const Server &copy)
 /*
 ** ------------------------------- DESTRUCTOR --------------------------------
 */
-Server::~Server() { delete _server_sock; }
+Server::~Server() { }
 
 /*
 ** ------------------------------- OPERATOR OVERLOAD --------------------------------
 */
-const Server &Server::operator=(const Server &copy)
+Server &Server::operator=(const Server &copy)
 {
 	if (this != &copy)
 	{
-		delete _server_sock;
-		_server_sock = copy._server_sock;
+		_socket = copy._socket;
+		_serv_fd = copy._serv_fd;
+		_read_set = copy._read_set;
+		_write_set = copy._write_set;
+		_config = copy._config;
 	}
 	return (*this);
 }
@@ -48,36 +49,19 @@ const Server &Server::operator=(const Server &copy)
 /*
 ** ------------------------------- ACCESSOR --------------------------------
 */
-ListenSocket	*Server::getSocket(void) const { return (_server_sock); }
+Config					Server::get_config(void) const { return (_config); }
+int						Server::get_fd(void) const { return (_serv_fd); }
+std::string				Server::get_name(void) const { return (_name); }
+std::vector<int>		Server::get_read_set(void) const { return (_read_set); }
+Socket					Server::get_socket(void) const { return (_socket); }
+std::vector<int>		Server::get_write_set(void) const { return (_write_set); }
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
 
 /* Private Methods */
-void	Server::accepter()
-{
-	int					new_socket;
-	struct sockaddr_in	address = _server_sock->getAddress();
-	int					addressLen = sizeof(address);
 
-	if((new_socket = accept(_server_sock->getServerFd(), (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
-		throw Server::AcceptException();
-	std::cout << YELLOW << "Accept new connection | socket : " << new_socket << RESET << std::endl;
-
-	FD_SET(new_socket, &_read_set);
-	FD_SET(new_socket, &_write_set);
-
-	if (new_socket > _max_fd)
-		_max_fd = new_socket;
-
-	if (fcntl(new_socket, F_SETFL, O_NONBLOCK) < 0)
-		throw Server::FcntlException();
-
-	if (_clients.count(new_socket))
-		_clients.erase(new_socket);
-	_clients.insert(std::pair<int, Client>(new_socket, Client(new_socket)));
-}
 
 /* Public Methods */
 

@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/request/Client.hpp"
+#include "../../../inc/server/client/Client.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 Client::Client(void) { }
 
-Client::Client(int socket) : _socket_fd(socket) { }
+Client::Client(int socket, int server_fd) : _serv_fd(server_fd), _sock(socket) { }
 
 Client::Client(const Client &copy)
 {
@@ -37,7 +37,8 @@ Client	&Client::operator=(const Client &copy)
 	if (this != &copy)
 	{
 		_request = copy._request;
-		_socket_fd = copy._socket_fd;
+		_sock = copy._sock;
+		_serv_fd = copy._serv_fd;
 	}
 	return (*this);
 }
@@ -45,27 +46,33 @@ Client	&Client::operator=(const Client &copy)
 /*
 ** ------------------------------- ACCESSOR --------------------------------
 */
-int			Client::getSocket(void) const { return (_socket_fd); }
+int			Client::get_socket(void) const { return (_sock); }
 
-Request		Client::getRequest(void) const { return (_request); }
+int			Client::get_server_fd(void) const { return (_serv_fd); }
 
-void		Client::setSocket(int sock_fd) { _socket_fd = sock_fd; }
+Request		Client::get_request(void) const { return (_request); }
+
+void		Client::set_socket(int sock_fd) { _sock = sock_fd; }
+
+bool		Client::is_request_parsed(void) const { return (_request.getIsParsed()); }
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
 
-int	Client::addRequest()
+int	Client::add_request()
 {
-	return (_request.parse(_socket_fd));
+	return (_request.parse(_sock));
 	// std::cout << _request.getMethod() << std::endl;
 	// std::cout << _request.getPath() << std::endl;
 	// std::cout << _request.getHeaders() << std::endl;
 	// std::cout << _request.getBody() << std::endl;
 }
 
-void	Client::sendResponse()
+void	Client::send_response(void)
 {
+	// _response.buildResponse(_request);
+
 	std::ifstream file("html/index.html");
 	std::string response;
 
@@ -83,5 +90,5 @@ void	Client::sendResponse()
 	{
 		std::cerr << "Erreur lors de l'ouverture du fichier : html/index.html" << std::endl;
 	}
-	size_t bytesSend = send(_socket_fd, response.c_str(), response.length(), 0);
+	size_t bytesSend = send(_sock, response.c_str(), response.length(), 0);
 }

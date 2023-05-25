@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/24 14:13:06 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/25 16:26:05 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,7 @@
 
 #define REQUEST_HPP
 
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <string>
-#include <map>
-#include <unistd.h>
-#include <fcntl.h>
-
-# define BUF_SIZE 5
+#include "../../Webserv.hpp"
 
 class Request
 {
@@ -50,6 +42,7 @@ class Request
 		std::string										getBody() const;
 		std::string										getPath() const;
 		std::map<std::string, std::string>				getHeaders() const;
+		bool											getIsParsed() const;
 
 		/*
 		** ------------------------------- METHODS --------------------------------

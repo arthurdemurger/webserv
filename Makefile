@@ -6,7 +6,7 @@
 #    By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/15 11:46:45 by ademurge          #+#    #+#              #
-#    Updated: 2023/05/19 17:03:57 by ademurge         ###   ########.fr        #
+#    Updated: 2023/05/25 16:15:50 by ademurge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,26 +34,20 @@ RM			=	rm -rf
 # Files
 OBJDIR		=	.obj
 
-SRC_SERV	=	src/server/Server.cpp
+SRC			=	src/server/Server.cpp \
+				src/server/Socket.cpp \
+				src/server/Config.cpp \
+				src/server/client/Client.cpp \
+				src/server/client/Request.cpp \
+				src/server/client/Response.cpp \
+				src/parser/Parser.cpp \
+				src/Launcher.cpp \
+				src/main.cpp
 
-SRC_SOCK	=	src/sockets/BindSocket.cpp \
-				src/sockets/ConnectSocket.cpp \
-				src/sockets/ListenSocket.cpp \
-				src/sockets/Socket.cpp
-
-SRC_REQUEST =	src/request/Client.cpp \
-				src/request/Response.cpp \
-				src/request/Request.cpp
-
-SRC_MAIN	=	src/main.cpp
-
-OBJ_SERV	=	$(addprefix $(OBJDIR)/, $(SRC_SERV:.cpp=.o))
-OBJ_SOCK	=	$(addprefix $(OBJDIR)/, $(SRC_SOCK:.cpp=.o))
-OBJ_REQUEST	=	$(addprefix $(OBJDIR)/, $(SRC_REQUEST:.cpp=.o))
-OBJ_MAIN	=	$(addprefix $(OBJDIR)/, $(SRC_MAIN:.cpp=.o))
+OBJ	=	$(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
 
 # Progress counter
-TOTAL_FILES		=	$(words $(SRC_SERV) $(SRC_SOCK) $(SRC_REQUEST) $(SRC_MAIN))
+TOTAL_FILES		=	$(words $(SRC))
 CURRENT_FILE	=	0
 PERCENTAGE		=	0
 
@@ -71,8 +65,8 @@ endef
 # Rules
 all: $(NAME)
 
-$(NAME): $(OBJ_SERV) $(OBJ_REQUEST) $(OBJ_SOCK) $(OBJ_MAIN)
-	@$(CC) $(CPPFLAGS) $(OBJ_SERV) $(OBJ_REQUEST) $(OBJ_SOCK) $(OBJ_MAIN) -o $(NAME)
+$(NAME): $(OBJ)
+	@$(CC) $(CPPFLAGS) $(OBJ) -o $(NAME)
 	@echo "$(GREEN)... executable compiled$(RESET)"
 
 $(OBJDIR)/%.o: %.cpp
