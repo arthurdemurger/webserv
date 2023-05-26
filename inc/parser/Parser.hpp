@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/26 11:52:42 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 15:40:17 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 #define PARSER_HPP
 
-# include "../server/Server.hpp"
+# include "../server/Config.hpp"
 
 class Server;
 
@@ -31,8 +31,8 @@ class Parser
 		int							_server_nb;
     	std::vector<int>            _start_block;
     	std::vector<int>            _end_block;
-    	std::vector<std::string>    _config;
-    	std::vector<Server>    		_server;
+    	std::vector<std::string>    _config_block;
+    	std::vector<Config>    		_config;
 
 	public:
 		/*
@@ -47,12 +47,17 @@ class Parser
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		std::string reading(std::string path);
-		void    	server_count();
-		void   		split_blocks();
-		void		block_end();
-		void		populate_server();
-		
+		std::string 		reading(std::string path);
+		void    			server_count();
+		void   				split_blocks();
+		void				block_end();
+		void				populate_server();
+		std::vector<Config>	&build_server_config();
+
+		/*
+		** ------------------------------- Accessors --------------------------------
+		*/
+		const std::vector<Config>	&	getConfig() const;
 };
 
 #endif

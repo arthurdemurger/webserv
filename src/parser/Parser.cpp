@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:41:07 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 12:01:52 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 15:40:53 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,9 @@ Parser::Parser(std::string path)
 	server_count();
 	//split the different sever blocks in a vector of string
 	split_blocks();
-	//insert the server object in the vector
-    //from the vector build Config obj w. respective server params
-    //One Server object needs one Config object 
-	
+    //build Config object for each server block
+    build_server_config();
+    
 }
 
 Parser::Parser(const Parser &copy)
@@ -62,7 +61,7 @@ std::string Parser::reading(std::string path)
     std::ifstream ifs(path);
     if (ifs.fail())
     {
-        std::cout << "Error: open file\n";
+        std::cout << "Error: " << strerror(errno);
         exit (EXIT_FAILURE);
     }
     std::string content((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
@@ -120,20 +119,26 @@ void    Parser::split_blocks()
     while (i < this->_server_nb)
     {
         std::cout << "block " << i << ": " << this->_content.substr(this->_start_block[i], this->_end_block[i]) << std::endl;
-        this->_config.push_back(this->_content.substr(this->_start_block[i], this->_end_block[i]));
+        this->_config_block.push_back(this->_content.substr(this->_start_block[i], this->_end_block[i]));
         i++;
     }
 }
 
-/* Populate the server vector based on each respective server block  */
-void    Parser::populate_server()
+/* Populate the config vector with the different server param */
+std::vector<Config>   &Parser::build_server_config()
 {
     int i;
 
     i = 0;
     while (i < this->_server_nb)
     {
-        this->_server.push_back(Server(this->_config[i]));
+        this->_config.push_back(Config((this->_config_block[i])));
         i++;
     }
+    return (this->_config);
+}
+
+const std::vector<Config> &Parser::getConfig() const
+{
+    return (this->_config);
 }

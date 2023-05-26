@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+         #
+#    By: hdony <hdony@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/15 11:46:45 by ademurge          #+#    #+#              #
-#    Updated: 2023/05/25 16:15:50 by ademurge         ###   ########.fr        #
+#    Updated: 2023/05/26 14:57:56 by hdony            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,8 @@ OBJDIR		=	.obj
 SRC			=	src/server/Server.cpp \
 				src/server/Socket.cpp \
 				src/server/Config.cpp \
+				src/server/Location.cpp \
+				src/server/Utils.cpp \
 				src/server/client/Client.cpp \
 				src/server/client/Request.cpp \
 				src/server/client/Response.cpp \

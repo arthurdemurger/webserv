@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/25 16:55:42 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 14:52:50 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #define CONFIG_HPP
 
 #include "../Webserv.hpp"
+#include "Location.hpp"
+#include "Utils.hpp"
 
 class Config
 {
@@ -25,16 +27,41 @@ class Config
 		/*
 		** ------------------------------- Attributes --------------------------------
 		*/
+		std::vector<int>            _port;
+		std::string                 _host;
+		std::vector<std::string>    _server_name;
+		std::map<int, std::string>  _error_page;
+		int                         _client_max_body_size;
+		std::string                 _root;
+		std::string                 _index;
+		std::vector<Location>       _location;
 
 	public:
 		/*
 		** ------------------------------- Canonical form --------------------------------
 		*/
 		Config();
-		Config(std::string path);
+		Config(std::string server_block);
 		Config(const Config &rhs);
 		Config &operator=(const Config &rhs);
 		~Config();
+
+		/*
+		** ------------------------------- Accessors --------------------------------
+		*/
+		void    setPortMBS(std::string &key, std::string &rhs);
+		void    setHostDir(std::string &rhs);
+		void    setServerNameDir(std::string &rhs);
+		void    setErrorPageDir(std::string &rhs);
+		void    setClientMaxBodySize(std::string &rhs);
+		void    setRootDir(std::string &value);
+
+
+		/*
+		** ------------------------------- Methods --------------------------------
+		*/
+		void    setter(std::string &key, std::string &value, std::istringstream &iss, std::string &location);
+		void    print_server();
 
 };
 
