@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 12:02:44 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 12:36:49 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,8 @@ class Server
 		*/
 		std::string				_name;
 		Config					_config;
-		Socket					_socket;
-		int						_serv_fd;
-		std::vector<int>		_read_set;
-		std::vector<int>		_write_set;
+		std::vector<Socket>		_sockets;
+		std::vector<int>		_fds;
 
 		/*
 		** ------------------------------- Methods --------------------------------
@@ -49,16 +47,14 @@ class Server
 		** ------------------------------- Accessor --------------------------------
 		*/
 		Config					get_config(void) const;
-		int						get_fd(void) const;
+		std::vector<int>		get_fds(void) const;
 		std::string				get_name(void) const;
-		std::vector<int>		get_read_set(void) const;
-		Socket					get_socket(void) const;
-		std::vector<int>		get_write_set(void) const;
+		std::vector<Socket>		get_sockets(void) const;
 
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-
+		void					activate(int protocol, int port, int backlog);
 		/*
 		** ------------------------------- Exceptions --------------------------------
 		*/

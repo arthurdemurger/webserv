@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 11:53:38 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 12:36:42 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include "server/Server.hpp"
 #include "server/client/Client.hpp"
 #include "parser/Parser.hpp"
-
 
 class Launcher
 {
@@ -36,9 +35,11 @@ class Launcher
 		void	accepter(int sock);
 		void	add_request(int &client_sock);
 		void	send_response(int client_sock);
-		
-	public:
+		void	add_serv_to_set(void);
+		void	add_to_set(int fd, fd_set &set);
+		void	remove_from_set(int fd, fd_set &set);
 
+	public:
 		Launcher(std::string conf_filename);
 		~Launcher(void);
 		Launcher(const Launcher &copy);

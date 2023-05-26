@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 11:54:35 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 12:36:57 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 #include "../../Webserv.hpp"
 #include "Request.hpp"
-
 
 class Response
 {

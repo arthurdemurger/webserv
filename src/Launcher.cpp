@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 12:25:24 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 12:37:23 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 Launcher::Launcher(std::string conf_filename)
 {
 	if (conf_filename.empty())
-		this->conf_filename = "../config/default.conf";
-	else
-		this->conf_filename = conf_filename;
+		conf_filename = "../config/default.conf";
+
+	setup();
 
 	FD_ZERO(&_read_pool);
 	FD_ZERO(&_write_pool);
@@ -63,8 +63,11 @@ std::map<int, Server>	&Launcher::getServer()
 */
 void	Launcher::setup(void)
 {
-	Parser(this->conf_filename);
-	
+	/* Fonction qui va parser le config_file et setup tous les serveurs (le port, le nom, etc)*/
+	Server serv;
+
+	serv.activate(AF_INET, SOCK_STREAM, 0, PORT, INADDR_ANY, 10);
+	_servers[serv.get_fd()] = serv;
 }
 
 void	Launcher::accepter(int server_sock)
@@ -113,6 +116,33 @@ void	Launcher::add_request(int &client_sock)
 	}
 }
 
+void	Launcher::add_serv_to_set(void)
+{
+	std::map<int, Server>::iterator	it = _servers.begin();
+
+	while (it != _servers.end())
+	{
+		int server_sock = it->second.get_fd();
+		FD_SET(server_sock, &_read_pool);
+		if (_max_fd < server_sock)
+			_max_fd = server_sock;
+	}
+}
+
+void	Launcher::remove_from_set(int fd, fd_set &set)
+{
+	FD_CLR(fd, &set);
+	if (_max_fd == fd)
+		_max_fd--;
+}
+
+void	Launcher::add_to_set(int fd, fd_set &set)
+{
+	FD_SET(fd, &set);
+	if (_max_fd < fd)
+		_max_fd = fd;
+}
+
 void	Launcher::run(void)
 {
 	//set up server
@@ -121,17 +151,16 @@ void	Launcher::run(void)
 
 	_max_fd = 0;
 
+	for (std::map<int, Server>::iterator it = _servers.begin(); it != _servers.end(); it++)
+		add_to_set(it->second.get_fd(), _read_pool);
 	while (true)
 	{
 		std::cout << "########## WAITING ##########" << std::endl;
 
 		read_pool_cpy = _read_pool;
 		write_pool_cpy = _write_pool;
-		int	serv_sock;
-
 		if (select(_max_fd + 1, &read_pool_cpy, &write_pool_cpy, NULL, NULL) < 0)
 			throw Launcher::SelectException();
-
 		for (int sock = 0; sock <= _max_fd; ++sock)
 		{
 			if (FD_ISSET(sock, &read_pool_cpy) && _servers.count(sock))
