@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 15:19:30 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 15:44:32 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "server/Server.hpp"
 #include "server/client/Client.hpp"
 #include "parser/Parser.hpp"
+
 
 class Launcher
 {
@@ -42,7 +43,7 @@ class Launcher
 		Launcher(const Launcher &copy);
 		Launcher &operator=(const Launcher &copy);
 
-		void	setup(void);
+		void	setup(std::string conf_filename);
 		void	run(void);
 
 		class SelectException : public std::exception

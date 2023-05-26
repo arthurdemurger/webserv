@@ -1,30 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/10 12:12:06 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 12:37:28 by hdony            ###   ########.fr       */
+/*   Created: 2023/05/12 11:38:20 by hdony             #+#    #+#             */
+/*   Updated: 2023/05/12 11:39:22 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Webserv.hpp"
-#include "../inc/Launcher.hpp"
-int main(int ac, char **av)
-{
-	if (ac <= 2)
-	{
-		std::string conf_filename = "";
+#ifndef UTILS_HPP
+# define UTILS_HPP
 
-		if (ac == 2)
-			conf_filename = av[1];
+#include <iostream>
 
-		Launcher	launcher(conf_filename);
+void    RemoveTab(std::string &key);
 
-		launcher.run();
-		return (EXIT_SUCCESS);
-	}
-	return (EXIT_FAILURE);
-}
+#endif

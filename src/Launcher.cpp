@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 15:29:47 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 15:45:13 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 Launcher::Launcher(std::string conf_filename)
 {
 	if (conf_filename.empty())
-		conf_filename = "../config/default.conf";
+		conf_filename = "config/default.conf";
 
-	setup();
+	setup(conf_filename);
 
 	FD_ZERO(&_read_pool);
 	FD_ZERO(&_write_pool);
@@ -62,11 +62,10 @@ Launcher	&Launcher::operator=(const Launcher &copy)
 	}
 	return (*this);
 }
-
 /*
 ** ------------------------------- METHODS --------------------------------
 */
-void	Launcher::setup(void)
+void	Launcher::setup(std::string conf_filename)
 {
 	/* Fonction qui va parser le config_file et setup tous les serveurs (le port, le nom, etc)*/
 	Server serv1;
