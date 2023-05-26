@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 11:34:18 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 12:25:24 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,7 @@ std::map<int, Server>	&Launcher::getServer()
 void	Launcher::setup(void)
 {
 	Parser(this->conf_filename);
-	// parsing du config file
-	// build Server obj w. respective parameters
+	
 }
 
 void	Launcher::accepter(int server_sock)

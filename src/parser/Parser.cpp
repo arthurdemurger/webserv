@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:41:07 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 11:36:53 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 12:01:52 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,21 @@ void    Parser::split_blocks()
     block_end();
     while (i < this->_server_nb)
     {
-        // std::cout << "block " << i << ": " << this->_content.substr(this->_vec__start_block[i], this->_vec__end_block[i]) << std::endl;
+        std::cout << "block " << i << ": " << this->_content.substr(this->_start_block[i], this->_end_block[i]) << std::endl;
         this->_config.push_back(this->_content.substr(this->_start_block[i], this->_end_block[i]));
+        i++;
+    }
+}
+
+/* Populate the server vector based on each respective server block  */
+void    Parser::populate_server()
+{
+    int i;
+
+    i = 0;
+    while (i < this->_server_nb)
+    {
+        this->_server.push_back(Server(this->_config[i]));
         i++;
     }
 }

@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 11:25:47 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 12:02:44 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 #define SERVER_HPP
 
+#include "../Webserv.hpp"
 #include "Socket.hpp"
-// class	Socket;
+#include "Config.hpp"
 
 class Server
 {
@@ -39,6 +40,7 @@ class Server
 		** ------------------------------- Canonical form --------------------------------
 		*/
 		Server();
+		Server(std::string config);
 		Server(const Server &copy);
 		Server &operator=(const Server &copy);
 		~Server();

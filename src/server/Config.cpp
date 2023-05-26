@@ -6,24 +6,35 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 17:02:25 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 12:20:35 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/server/Config.hpp"
+#include "../../inc/Webserv.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 Config::Config() {}
 
-Config::Config(std::string path)
+Config::Config(std::string server_block)
 {
-	
-	//read the config file
-	//count the server blocks
-	//split the different sever blocks in a vector of string
-	//the servers are already in map so loop through map
+	//parse the config file
+	std::istringstream iss(server_block);
+    std::string line;
+    getline(iss, line);
+    // while (getline(iss, line))
+    // {
+    //     std::istringstream iss_line(line);
+    //     std::string key, value, location;
+    //     getline(iss_line, key, ' ');
+    //     RemoveTab(key);
+    //     getline(iss_line, value, ';');
+    //     setter(key, value, iss, location);
+    // }
+    // PrintServer();
+	// populate server value
 }
 
 Config::Config(const Config &copy)

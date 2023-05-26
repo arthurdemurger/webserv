@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 10:58:33 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 11:53:38 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 #define LAUNCHER_HPP
 
+#include "Webserv.hpp"
 #include "server/Server.hpp"
 #include "server/client/Client.hpp"
+#include "parser/Parser.hpp"
 
 
 class Launcher

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:56:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 15:03:14 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:54:15 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 # define CLIENT_HPP
 
+#include "../../Webserv.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
 
