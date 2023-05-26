@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   webserv.hpp                                        :+:      :+:    :+:   */
+/*   Webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 15:14:19 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:29:28 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@
 
 /* Sockets headers */
 // #include "server/client/Client.hpp"
-#include "server/client/Request.hpp"
-#include "server/client/Response.hpp"
-#include "server/Config.hpp"
-#include "server/Socket.hpp"
-#include "parser/Parser.hpp"
+// #include "server/client/Request.hpp"
+// #include "server/client/Response.hpp"
+// #include "server/Config.hpp"
+// #include "server/Socket.hpp"
+// #include "parser/Parser.hpp"
 // #include "Launcher.hpp"
 
 /* Define constants */
