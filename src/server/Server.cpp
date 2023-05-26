@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 11:38:34 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 15:21:09 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ Config				Server::get_config(void) const { return (_config); }
 std::vector<int>	Server::get_fds(void) const { return (_fds); }
 std::string			Server::get_name(void) const { return (_name); }
 std::vector<Socket>	Server::get_sockets(void) const { return (_sockets); }
+void				Server::set_name(std::string const &name) { _name = name; }
 
 /*
 ** ------------------------------- METHODS --------------------------------

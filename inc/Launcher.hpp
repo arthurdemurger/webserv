@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 12:30:44 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 15:19:30 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ class Launcher
 		int								_max_fd;
 
 		void	accepter(int sock);
-		void	add_request(int &client_sock, Client client);
-		void	send_response(int client_sock, Client client);
+		void	handle_request(int &client_sock, Client client);
+		void	handle_response(int client_sock, Client client);
 		void	add_serv_to_set(void);
 		void	add_to_set(int fd, fd_set &set);
 		void	remove_from_set(int fd, fd_set &set);

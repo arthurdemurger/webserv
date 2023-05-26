@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 12:48:33 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 15:29:47 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,53 +69,60 @@ Launcher	&Launcher::operator=(const Launcher &copy)
 void	Launcher::setup(void)
 {
 	/* Fonction qui va parser le config_file et setup tous les serveurs (le port, le nom, etc)*/
-	Server serv;
+	Server serv1;
+	Server serv2;
 
-	serv.activate(0, PORT, 10);
-	_servers[serv.get_fds().front()] = new Server(serv);
+	serv1.activate(0, 80, 10);
+	serv1.activate(0, 81, 10);
+	serv2.activate(0, 82, 10);
+
+	serv1.set_name("server 1");
+	serv2.set_name("server 2");
+	Server	*pointer1 = new Server(serv1);
+	Server	*pointer2 = new Server(serv2);
+	_servers[serv1.get_fds().front()] = pointer1;
+	_servers[serv1.get_fds().back()] = pointer1;
+	_servers[serv2.get_fds().front()] = pointer2;
 }
 
 void	Launcher::accepter(int server_sock)
 {
-	int	new_client;
+	int					new_client;
 	struct sockaddr_in	address = _servers[server_sock]->get_sockets()[server_sock].getAddress();
 	int					addressLen = sizeof(address);
 
 	if((new_client = accept(server_sock, (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
 		throw Server::AcceptException();
 
-	std::cout << YELLOW << "Accept new connection | server '" << server_sock <<  "' => socket : " << new_client << RESET << std::endl;
-	FD_SET(new_client, &_read_pool);
-	FD_SET(new_client, &_write_pool);
+	std::cout << YELLOW << "Accept new connection | server '" << _servers[server_sock]->get_name() <<  "' => socket : " << new_client << RESET << std::endl;
+	add_to_set(new_client, _read_pool);
+	add_to_set(new_client, _write_pool);
 	if (fcntl(new_client, F_SETFL, O_NONBLOCK) < 0)
 		throw Server::FcntlException();
-	if (_clients.count(new_client))
-		_clients.erase(new_client);
+	_clients.erase(new_client);
 	_clients[new_client] = Client(new_client, server_sock);
-	if (new_client > _max_fd)
-		_max_fd = new_client;
 }
 
-void	Launcher::send_response(int client_sock, Client client)
+void	Launcher::handle_response(int client_sock, Client client)
 {
 	_clients[client_sock].send_response();
 	std::cout << CYAN << "response sent | server '" << client.get_server_fd() <<  "' => socket : " << client_sock << RESET << std::endl;
 	close(client_sock);
-	FD_CLR(client_sock, &_read_pool);
-	FD_CLR(client_sock, &_write_pool);
+	remove_from_set(client_sock, _read_pool);
+	remove_from_set(client_sock, _write_pool);
 	_clients.erase(client_sock);
 	std::cout << LIGHTMAGENTA << "connection removed | server '" << client.get_server_fd() <<  "' => socket : " << client_sock << RESET << std::endl;
 }
 
-void	Launcher::add_request(int &client_sock, Client client)
+void	Launcher::handle_request(int &client_sock, Client client)
 {
 	std::cout << RED << "Read request | server '" << client.get_server_fd() <<  "' => socket : " << client_sock << RESET << std::endl;
-	FD_SET(client_sock, &_write_pool);
+	add_to_set(client_sock, _write_pool);
 	if (!_clients[client_sock].add_request())
 	{
 		close(client_sock);
-		FD_CLR(client_sock, &_read_pool);
-		FD_CLR(client_sock, &_write_pool);
+		remove_from_set(client_sock, _read_pool);
+		remove_from_set(client_sock, _write_pool);
 		_clients.erase(client_sock);
 		--client_sock;
 	}
@@ -152,7 +159,6 @@ void	Launcher::run(void)
 
 	_max_fd = 0;
 
-
 	add_serv_to_set();
 	while (true)
 	{
@@ -167,9 +173,9 @@ void	Launcher::run(void)
 			if (FD_ISSET(sock, &read_pool_cpy) && _servers.count(sock))
 				accepter(sock);
 			else if (FD_ISSET(sock, &read_pool_cpy) && _clients.count(sock))
-				add_request(sock, _clients[sock]);
+				handle_request(sock, _clients[sock]);
 			else if (FD_ISSET(sock, &write_pool_cpy) && _clients.count(sock))
-				send_response(sock, _clients[sock]);
+				handle_response(sock, _clients[sock]);
 		}
 		std::cout << "########## DONE    ##########" << std::endl << std::endl;
 	}
