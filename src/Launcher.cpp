@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 12:32:41 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 12:48:33 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ Launcher	&Launcher::operator=(const Launcher &copy)
 			if (it->second)
 				delete (it->second);
 
-		_servers = copy._servers; // PAS CORRECT, JE DOIS INSTANCIER DE NOUVEAUX SERVEURS À CHAQUE FOIS, À REFAIRE !
+		std::map<int, Server *>	map = copy._servers;
+
+		for (std::map<int, Server *>::iterator it = map.begin(); it != map.end(); it++)
+			_servers[it->first] = new Server(*(map[it->first]));
 		_parser = copy._parser;
 		_read_pool = copy._read_pool;
 		_write_pool = copy._write_pool;
