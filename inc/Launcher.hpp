@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 16:28:13 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 09:48:49 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ class Launcher
 		void	accepter(int sock);
 		void	add_request(int &client_sock);
 		void	send_response(int client_sock);
+		void	add_serv_to_set(void);
+		void	add_to_set(int fd, fd_set &set);
+		void	remove_from_set(int fd, fd_set &set);
+
 	public:
 		Launcher(std::string conf_filename);
 		~Launcher(void);
