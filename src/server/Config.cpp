@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 16:14:23 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 17:02:25 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-Config::Config()
-{
+Config::Config() {}
 
+Config::Config(std::string path)
+{
+	
+	//read the config file
+	//count the server blocks
+	//split the different sever blocks in a vector of string
+	//the servers are already in map so loop through map
 }
 
 Config::Config(const Config &copy)

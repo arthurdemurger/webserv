@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/25 14:53:26 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 16:55:42 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class Config
 		** ------------------------------- Canonical form --------------------------------
 		*/
 		Config();
+		Config(std::string path);
 		Config(const Config &rhs);
 		Config &operator=(const Config &rhs);
 		~Config();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Launcher.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 16:12:37 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 10:58:33 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,31 @@
 
 class Launcher
 {
+	protected:
+		std::map<int, Server>			_servers;
+	
 	private:
 		Parser							_parser;
-		std::map<int, Server>			_servers;
 		std::map<int, Client>			_clients;
 		fd_set							_read_pool;
 		fd_set							_write_pool;
 		int								_max_fd;
+		std::string						conf_filename;
 
 		void	accepter(int sock);
 		void	add_request(int &client_sock);
 		void	send_response(int client_sock);
+		
 	public:
 
-		Launcher(void);
+		Launcher(std::string conf_filename);
 		~Launcher(void);
 		Launcher(const Launcher &copy);
 		Launcher &operator=(const Launcher &copy);
 
 		void	setup(void);
 		void	run(void);
+		std::map<int, Server>	&getServer();
 
 		class SelectException : public std::exception
 		{

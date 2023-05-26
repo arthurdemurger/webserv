@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Launcher.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 13:14:09 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:34:18 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,15 @@
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-Launcher::Launcher(void)
+Launcher::Launcher(std::string conf_filename)
 {
+	if (conf_filename.empty())
+		this->conf_filename = "../config/default.conf";
+	else
+		this->conf_filename = conf_filename;
+
 	FD_ZERO(&_read_pool);
 	FD_ZERO(&_write_pool);
-
 }
 
 Launcher::Launcher(const Launcher &copy)
@@ -48,11 +52,20 @@ Launcher	&Launcher::operator=(const Launcher &copy)
 }
 
 /*
+** ------------------------------- GETTER/ACCESSOR --------------------------------
+*/
+std::map<int, Server>	&Launcher::getServer()
+{
+	return (this->_servers);
+}
+/*
 ** ------------------------------- METHODS --------------------------------
 */
 void	Launcher::setup(void)
 {
-	/* Fonction qui va parser le config_file et setup tous les serveurs (le port, le nom, etc)*/
+	Parser(this->conf_filename);
+	// parsing du config file
+	// build Server obj w. respective parameters
 }
 
 void	Launcher::accepter(int server_sock)
@@ -103,6 +116,7 @@ void	Launcher::add_request(int &client_sock)
 
 void	Launcher::run(void)
 {
+	//set up server
 	fd_set	read_pool_cpy;
 	fd_set	write_pool_cpy;
 

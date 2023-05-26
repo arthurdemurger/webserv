@@ -3,17 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:12:06 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 16:13:34 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/25 16:50:16 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Webserv.hpp"
+#include "../inc/Launcher.hpp"
 
 int main(int ac, char **av)
 {
-	
-	return (0);
+	if (ac <= 2)
+	{
+		std::string conf_filename = "";
+
+		if (ac == 2)
+			conf_filename == av[1];
+
+		Launcher	launcher(conf_filename);
+
+		launcher.run();
+		return (EXIT_SUCCESS);
+	}
+	return (EXIT_FAILURE);
 }
