@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 11:30:09 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 12:30:44 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@ class Launcher
 {
 	private:
 		Parser							_parser;
-		std::map<int, Server>			_servers;
+		std::map<int, Server *>			_servers;
 		std::map<int, Client>			_clients;
 		fd_set							_read_pool;
 		fd_set							_write_pool;
 		int								_max_fd;
 
 		void	accepter(int sock);
-		void	add_request(int &client_sock);
-		void	send_response(int client_sock);
+		void	add_request(int &client_sock, Client client);
+		void	send_response(int client_sock, Client client);
 		void	add_serv_to_set(void);
 		void	add_to_set(int fd, fd_set &set);
 		void	remove_from_set(int fd, fd_set &set);
