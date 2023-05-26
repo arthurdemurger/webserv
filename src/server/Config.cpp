@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 14:56:15 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 17:58:08 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Config::Config(std::string server_block)
         getline(iss_line, value, ';');
         setter(key, value, iss, location);
     }
-    print_server();
+    // print_server();
 }
 
 Config::Config(const Config &copy)
@@ -108,7 +108,7 @@ void    Config::print_server()
     for (std::map<int, std::string>::iterator it = this->_error_page.begin(); it != this->_error_page.end(); ++it)
     {
         std::cout << "Error code: " << it->first << std::endl;
-        std::cout << "Error page: " << it->second << std::endl;   
+        std::cout << "Error page: " << it->second << std::endl;
     }
     std::cout << "CMBS: " << this->_client_max_body_size << std::endl;
     std::cout << "root: " << this->_root << std::endl;
@@ -144,7 +144,7 @@ void    Config::setPortMBS(std::string &key, std::string &value)
     if (i != value.size())
     {
         std::cout << "Error: listen directive format\n";
-        exit(EXIT_FAILURE);   
+        exit(EXIT_FAILURE);
     }
     if (!key.compare("listen"))
     {
@@ -222,3 +222,6 @@ void    Config::setErrorPageDir(std::string &value)
     }
     this->_error_page.insert(std::pair<int, std::string>(key, val));
 }
+
+std::string			Config::get_name(void) const { return (_server_name[0]); }
+std::vector<int>	Config::get_ports(void) const { return (_port); }

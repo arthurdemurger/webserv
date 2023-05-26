@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:41:07 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 15:40:53 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/26 17:58:38 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ Parser::Parser(std::string path)
 	split_blocks();
     //build Config object for each server block
     build_server_config();
-    
 }
 
 Parser::Parser(const Parser &copy)
@@ -106,7 +105,7 @@ void    Parser::block_end()
                 this->_end_block.push_back(i + 1);
             }
         }
-    } 
+    }
 }
 
 /* Populate the config vector with the different server blocks */
@@ -118,7 +117,7 @@ void    Parser::split_blocks()
     block_end();
     while (i < this->_server_nb)
     {
-        std::cout << "block " << i << ": " << this->_content.substr(this->_start_block[i], this->_end_block[i]) << std::endl;
+        // std::cout << "block " << i << ": " << this->_content.substr(this->_start_block[i], this->_end_block[i]) << std::endl;
         this->_config_block.push_back(this->_content.substr(this->_start_block[i], this->_end_block[i]));
         i++;
     }

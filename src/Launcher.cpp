@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 15:56:39 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 18:02:09 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,20 @@ Launcher	&Launcher::operator=(const Launcher &copy)
 */
 void	Launcher::setup(void)
 {
-	/* Fonction qui va parser le config_file et setup tous les serveurs (le port, le nom, etc)*/
-	// Parser	parser(_config_file);
+	std::vector<Server>	servers;
+	Parser	parser(_config_file);
+	std::vector<Config> configs = parser.getConfig();
 
-	// std::vector<Config> vec = parser.getConfig();
+	for (std::vector<Config>::iterator it = configs.begin(); it != configs.end(); it++)
+	{
+		Server				serv;
+		std::vector<int>	fds;
 
-	// for (std::vector<Config>::iterator it = vec.begin(); it != vec.end(); it++)
-	// 	_servers.insert(std::pair())
+		serv.configure(*it);
+		fds = serv.get_fds();
+		for (std::vector<int>::iterator ite = fds.begin(); ite != fds.end(); ite++)
+			_servers[(*ite)] = new Server(serv);
+	}
 }
 
 void	Launcher::accepter(int server_sock)
@@ -97,17 +104,17 @@ void	Launcher::accepter(int server_sock)
 void	Launcher::handle_response(int client_sock, Client client)
 {
 	_clients[client_sock].send_response();
-	std::cout << CYAN << "response sent | server '" << client.get_server_fd() <<  "' => socket : " << client_sock << RESET << std::endl;
+	std::cout << CYAN << "response sent | server '" << _servers[client.get_server_fd()]->get_name() <<  "' => socket : " << client_sock << RESET << std::endl;
 	close(client_sock);
 	remove_from_set(client_sock, _read_pool);
 	remove_from_set(client_sock, _write_pool);
 	_clients.erase(client_sock);
-	std::cout << LIGHTMAGENTA << "connection removed | server '" << client.get_server_fd() <<  "' => socket : " << client_sock << RESET << std::endl;
+	std::cout << LIGHTMAGENTA << "connection removed | server '" << _servers[client.get_server_fd()]->get_name() <<  "' => socket : " << client_sock << RESET << std::endl;
 }
 
 void	Launcher::handle_request(int &client_sock, Client client)
 {
-	std::cout << RED << "Read request | server '" << client.get_server_fd() <<  "' => socket : " << client_sock << RESET << std::endl;
+	std::cout << RED << "Read request | server '" << _servers[client.get_server_fd()]->get_name() <<  "' => socket : " << client_sock << RESET << std::endl;
 	add_to_set(client_sock, _write_pool);
 	if (!_clients[client_sock].add_request())
 	{
@@ -119,7 +126,7 @@ void	Launcher::handle_request(int &client_sock, Client client)
 	}
 }
 
-void	Launcher::add_serv_to_set(void)
+void	Launcher::add_serv_to_sets(void)
 {
 	for (std::map<int, Server *>::iterator i = _servers.begin(); i != _servers.end(); i++)
 	{
@@ -150,7 +157,7 @@ void	Launcher::run(void)
 
 	_max_fd = 0;
 	setup();
-	add_serv_to_set();
+	add_serv_to_sets();
 	while (true)
 	{
 		std::cout << "########## WAITING ##########" << std::endl;

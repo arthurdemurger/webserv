@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 15:45:30 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 18:04:27 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ Config				Server::get_config(void) const { return (_config); }
 std::vector<int>	Server::get_fds(void) const { return (_fds); }
 std::string			Server::get_name(void) const { return (_name); }
 std::vector<Socket>	Server::get_sockets(void) const { return (_sockets); }
-void				Server::set_name(std::string const &name) { _name = name; }
+void				Server::set_config(Config const &conf) { _config = conf; }
 
 /*
 ** ------------------------------- METHODS --------------------------------
@@ -63,4 +63,14 @@ void	Server::activate(int protocol, int port, int backlog)
 {
 	_sockets.push_back(Socket(AF_INET, SOCK_STREAM, protocol, port, INADDR_ANY, backlog));
 	_fds.push_back(_sockets.back().getServerFd());
+}
+
+void	Server::configure(Config const &conf)
+{
+	_config = conf;
+	_name = _config.get_name();
+	std::vector<int> ports = _config.get_ports();
+
+	for (std::vector<int>::iterator it = ports.begin(); it != ports.end(); it++)
+		activate(0, (*it), 10);
 }

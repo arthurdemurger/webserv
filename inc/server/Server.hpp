@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 15:53:58 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:46:08 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,13 @@ class Server
 		std::vector<Socket>		get_sockets(void) const;
 
 		void					set_name(std::string const &name);
+		void					set_config(Config const &conf);
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
 		void					activate(int protocol, int port, int backlog);
+		void					configure(Config const &conf);
+
 		/*
 		** ------------------------------- Exceptions --------------------------------
 		*/
