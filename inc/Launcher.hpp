@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 15:44:32 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/26 15:48:48 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class Launcher
 		fd_set							_read_pool;
 		fd_set							_write_pool;
 		int								_max_fd;
+		std::string						_config_file;
 
 		void	accepter(int sock);
 		void	handle_request(int &client_sock, Client client);
@@ -36,6 +37,7 @@ class Launcher
 		void	add_serv_to_set(void);
 		void	add_to_set(int fd, fd_set &set);
 		void	remove_from_set(int fd, fd_set &set);
+		void	setup();
 
 	public:
 		Launcher(std::string conf_filename);
@@ -43,7 +45,6 @@ class Launcher
 		Launcher(const Launcher &copy);
 		Launcher &operator=(const Launcher &copy);
 
-		void	setup(std::string conf_filename);
 		void	run(void);
 
 		class SelectException : public std::exception
