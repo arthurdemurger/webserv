@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 14:16:54 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/30 14:24:49 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@ Request	&Request::operator=(const Request &copy)
 /*
 ** ------------------------------- ACCESSORS --------------------------------
 */
-std::string										Request::getMethod() const { return (_method); };
-std::string										Request::getBody()   const { return (_body); };
-std::string										Request::getPath()   const { return (_path); };
-std::map<std::string, std::string>				Request::getHeaders()const { return (_headers); };
-bool											Request::getIsParsed()   const { return (_isParsed); };
+std::string										Request::get_method() const { return (_method); };
+std::string										Request::get_body()   const { return (_body); };
+std::string										Request::get_path()   const { return (_path); };
+std::map<std::string, std::string>				Request::get_headers()const { return (_headers); };
+bool											Request::get_is_parsed()   const { return (_isParsed); };
 
 /*
 ** ------------------------------- METHODS --------------------------------

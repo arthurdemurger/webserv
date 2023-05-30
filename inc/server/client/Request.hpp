@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 12:49:52 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/30 14:25:09 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ class Request
 		/*
 		** ------------------------------- ACCESSORS --------------------------------
 		*/
-		std::string										getMethod() const;
-		std::string										getBody() const;
-		std::string										getPath() const;
-		std::map<std::string, std::string>				getHeaders() const;
-		bool											getIsParsed() const;
+		std::string										get_method() const;
+		std::string										get_body() const;
+		std::string										get_path() const;
+		std::map<std::string, std::string>				get_headers() const;
+		bool											get_is_parsed() const;
 
 		/*
 		** ------------------------------- METHODS --------------------------------

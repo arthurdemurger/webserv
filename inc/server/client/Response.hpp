@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 12:36:57 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/30 12:23:46 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ class Response
 		std::string	_date;
 		std::string	_content_type;
 		std::string	_content_length;
-		std::string _body;
-
+		std::string	_body;
+		std::string	_full_response;
 	public:
 		/*
 		** ------------------------------- COPLIEN --------------------------------
@@ -37,9 +37,15 @@ class Response
 		Response &operator=(const Response &copy);
 
 		/*
+		** ------------------------------- ACCESSORS --------------------------------
+		*/
+		std::string	get_full_response(void) const;
+
+		/*
 		** ------------------------------- METHOD --------------------------------
 		*/
-		void	buildResponse(Request &request);
+		std::string	build_get_method(Request &request);
+		void		build(Request &request);
 };
 
 #endif //RESPONSE_HPP

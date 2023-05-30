@@ -19,7 +19,6 @@ Client::Client(void) { }
 
 Client::Client(int socket, int server_fd, Config config) : _serv_fd(server_fd), _sock(socket), _conf(config) { }
 
-
 Client::Client(const Client &copy)
 {
 	*this = copy;
@@ -55,7 +54,7 @@ Request		Client::get_request(void) const { return (_request); }
 
 void		Client::set_socket(int sock_fd) { _sock = sock_fd; }
 
-bool		Client::is_request_parsed(void) const { return (_request.getIsParsed()); }
+bool		Client::is_request_parsed(void) const { return (_request.get_is_parsed()); }
 
 /*
 ** ------------------------------- METHODS --------------------------------
@@ -63,33 +62,15 @@ bool		Client::is_request_parsed(void) const { return (_request.getIsParsed()); }
 
 int	Client::add_request()
 {
-	return (_request.parse(_sock, _conf));
-	// std::cout << _request.getMethod() << std::endl;
-	// std::cout << _request.getPath() << std::endl;
-	// std::cout << _request.getHeaders() << std::endl;
-	// std::cout << _request.getBody() << std::endl;
+	if (!_request.parse(_sock))
+		return (0);// code ;
+	_response.build(_request);
+	return (1);
 }
 
 void	Client::send_response(void)
 {
-	// _response.buildResponse(_request);
-
-	std::ifstream file("html/index.html");
-	std::string response;
-
-	response =  "HTTP/1.1 200 OK\n"
-				"Content-Type: text/html\n\n";
-
-	if (file.is_open())
-	{
-		std::string line;
-		while (std::getline(file, line))
-			response += line + '\n';
-		file.close();
-	}
-	else
-	{
-		std::cerr << "Erreur lors de l'ouverture du fichier : html/index.html" << std::endl;
-	}
+	std::string	response = _response.get_full_response();
+	// _response.build_response(_request);
 	size_t bytesSend = send(_sock, response.c_str(), response.length(), 0);
 }
