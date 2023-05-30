@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Launcher.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 18:02:09 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/30 14:03:18 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,14 @@ Launcher	&Launcher::operator=(const Launcher &copy)
 /*
 ** ------------------------------- METHODS --------------------------------
 */
+
+/*
+for each Config block create a Server object and a vector of int for his fds
+then configure the Server object.
+once configuration is done, put server fd in fd of Launcher
+then loop through each fd (each server socket) and populate the map w. copy constructor
+w. server socket as the key
+*/
 void	Launcher::setup(void)
 {
 	std::vector<Server>	servers;
@@ -98,7 +106,7 @@ void	Launcher::accepter(int server_sock)
 	if (fcntl(new_client, F_SETFL, O_NONBLOCK) < 0)
 		throw Server::FcntlException();
 	_clients.erase(new_client);
-	_clients[new_client] = Client(new_client, server_sock);
+	_clients[new_client] = Client(new_client, server_sock, _servers[server_sock]->get_config());
 }
 
 void	Launcher::handle_response(int client_sock, Client client)
@@ -126,6 +134,10 @@ void	Launcher::handle_request(int &client_sock, Client client)
 	}
 }
 
+/*
+loop through map of servers, get all fds of eacher server into a vector of int
+then loop through this vector and add fd to read pool as there are server socket
+*/
 void	Launcher::add_serv_to_sets(void)
 {
 	for (std::map<int, Server *>::iterator i = _servers.begin(); i != _servers.end(); i++)

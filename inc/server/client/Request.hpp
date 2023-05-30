@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 14:52:34 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/30 12:49:52 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 #define REQUEST_HPP
 
 #include "../../Webserv.hpp"
+#include "../../../inc/server/Config.hpp"
 
 class Request
 {
 	private:
 		std::string										_method;
+		std::string										_status;
 		std::string										_path;
 		std::map<std::string, std::string>				_headers;
 		std::string										_body;
@@ -46,11 +48,13 @@ class Request
 		/*
 		** ------------------------------- METHODS --------------------------------
 		*/
-		int		parse(int fd);
-		void	parse_request_line(std::string &line);
+		int		parse(int fd, Config &config);
+		void	parse_request_line(std::string &line, Config &conf);
 		void	parse_request_headers(std::string &line);
 		void	trim_value(std::string &value);
 		void	print_request();
+		void	check_method();
+		void	check_path(Config &conf);
 };
 
 #endif

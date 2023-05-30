@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/26 17:51:53 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/30 13:44:02 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,9 @@ class Config
 		void    setClientMaxBodySize(std::string &rhs);
 		void    setRootDir(std::string &value);
 
-		std::string			get_name(void) const;
-		std::vector<int>	get_ports(void) const;
+		std::string				get_name(void) const;
+		std::vector<int>		get_ports(void) const;
+		std::vector<Location>	get_location(void) const;
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/

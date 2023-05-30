@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 17:58:08 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/30 13:44:33 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,3 +225,4 @@ void    Config::setErrorPageDir(std::string &value)
 
 std::string			Config::get_name(void) const { return (_server_name[0]); }
 std::vector<int>	Config::get_ports(void) const { return (_port); }
+std::vector<Location>	Config::get_location(void) const { return (_location); }

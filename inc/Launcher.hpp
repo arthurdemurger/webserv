@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Launcher.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 17:34:39 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/30 12:30:06 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@
 
 class Launcher
 {
+	protected:
+		std::map<int, Server *>			_servers;
+	
 	private:
 		Parser							_parser;
-		std::map<int, Server *>			_servers;
 		std::map<int, Client>			_clients;
 		fd_set							_read_pool;
 		fd_set							_write_pool;
