@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:56:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 12:36:53 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/30 12:44:11 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "../../Webserv.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
+#include "../Config.hpp"
 
 class Client
 {
@@ -25,14 +26,14 @@ class Client
 		int			_sock;
 		Request		_request;
 		Response	_response;
-		void		buildResponse();
+		Config		_conf;
 
 	public:
 		/*
 		** ------------------------------- COPLIEN --------------------------------
 		*/
 		Client();
-		Client(int socket, int server_fd);
+		Client(int socket, int server_fd, Config config);
 		~Client();
 		Client(const Client &copy);
 		Client	&operator=(const Client &copy);
