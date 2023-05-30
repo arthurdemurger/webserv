@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 18:02:09 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/30 12:44:01 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	Launcher::accepter(int server_sock)
 	if (fcntl(new_client, F_SETFL, O_NONBLOCK) < 0)
 		throw Server::FcntlException();
 	_clients.erase(new_client);
-	_clients[new_client] = Client(new_client, server_sock);
+	_clients[new_client] = Client(new_client, server_sock, _servers[server_sock]->get_config());
 }
 
 void	Launcher::handle_response(int client_sock, Client client)
