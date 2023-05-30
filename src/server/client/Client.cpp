@@ -62,7 +62,7 @@ bool		Client::is_request_parsed(void) const { return (_request.get_is_parsed());
 
 int	Client::add_request()
 {
-	if (!_request.parse(_sock))
+	if (!_request.parse(_sock, _conf))
 		return (0);// code ;
 	_response.build(_request);
 	return (1);
