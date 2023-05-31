@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 17:34:39 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/31 10:12:29 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class Launcher
 {
 	private:
 		Parser							_parser;
-		std::map<int, Server *>			_servers;
+		std::map<int, Server>			_servers;
 		std::map<int, Client>			_clients;
 		fd_set							_read_pool;
 		fd_set							_write_pool;

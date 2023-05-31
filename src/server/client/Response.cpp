@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 15:02:29 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/31 10:23:50 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,14 +85,14 @@ void	Response::build_get_method(Request &request)
 	std::string	response;
 
 	// ICI
-	// if (request.get_status() >= "400")
-	// 	build_error(request);
-	// else if (request.get_status() == "200")
-	// {
+	if (request.get_status() >= "400")
+		build_error(request);
+	else if (request.get_status() == "200")
+	{
 		_full_response = "HTTP/1.1 200 OK\n"
 				   "Content-Type: text/html\n\n";
 		_full_response += file_to_string("html/index.html");
-	// }
+	}
 }
 
 void	Response::build(Request &request)
@@ -102,5 +102,5 @@ void	Response::build(Request &request)
 		if (request.get_method() == "GET")
 			build_get_method(request);
 	}
-	// std::cout << request.get_method() << std::endl;
+	std::cout << request.get_method() << std::endl;
 }
