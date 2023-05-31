@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 14:25:09 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/31 10:29:35 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ class Request
 		/*
 		** ------------------------------- METHODS --------------------------------
 		*/
-		int		parse(int fd, Config &config);
-		void	parse_request_line(std::string &line, Config &conf);
+		int		parse(int fd, Config config);
+		void	parse_request_line(std::string &line, Config conf);
 		void	parse_request_headers(std::string &line);
 		void	trim_value(std::string &value);
 		void	print_request();
 		void	check_method();
-		void	check_path(Config &conf);
+		void	check_path(Config conf);
 };
 
 #endif

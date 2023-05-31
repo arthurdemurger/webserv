@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 12:30:06 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/31 10:27:00 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,9 @@
 
 class Launcher
 {
-	protected:
-		std::map<int, Server *>			_servers;
-	
 	private:
 		Parser							_parser;
+		std::map<int, Server>			_servers;
 		std::map<int, Client>			_clients;
 		fd_set							_read_pool;
 		fd_set							_write_pool;

@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 14:24:49 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/31 10:29:57 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ bool											Request::get_is_parsed()   const { return (_isParsed); };
 ** ------------------------------- METHODS --------------------------------
 */
 
-int	Request::parse(int fd, Config &conf)
+int	Request::parse(int fd, Config conf)
 {
 	std::stringstream	ss, buffer;
 	char				buff[BUF_SIZE];
@@ -63,6 +63,8 @@ int	Request::parse(int fd, Config &conf)
 	std::string			request;
 	int					i, n;
 
+	std::cout << "1\n";
+	// std::cout << "AND HERE:::" << conf.get_name() << std::endl;
 	i = 0;
 	this->_status = "200";
 	fcntl(fd, F_SETFL, O_NONBLOCK);
@@ -108,7 +110,7 @@ void	Request::check_method()
 	this->_status = "400";
 }
 
-void	Request::parse_request_line(std::string &line, Config &conf)
+void	Request::parse_request_line(std::string &line, Config conf)
 {
 	std::istringstream	iss(line);
 	std::string			str;
@@ -160,15 +162,18 @@ void	Request::trim_value(std::string &value)
 	value.erase(0, i);
 }
 
-void	Request::check_path(Config &conf)
+void	Request::check_path(Config conf)
 {
-	std::vector<Location> _loc	= conf.get_location();
-	for (std::vector<Location>::iterator it = _loc.begin(); it != _loc.end(); ++it)
-	{
-		std::cout << it->getLocationType() << std::endl;
-		if (! _path.compare(it->getLocationType()))
-			break ;
-	}
+	
+	// std::vector<Location> _loc	= conf.get_location();
+	// std::vector<Location>::iterator it = _loc.begin();
+	// std::cout << "HERE:::" << it->getLocationType() << std::endl;
+	// for (std::vector<Location>::iterator it = _loc.begin(); it != _loc.end(); ++it)
+	// {
+	// 	if (! _path.compare(it->getLocationType()))
+	// 		break ;
+	// }
+	
 	/*
 	if (it != _loc.end())
 	{

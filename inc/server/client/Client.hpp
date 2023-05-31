@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:56:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 14:32:03 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/31 10:30:25 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ class Client
 		*/
 		int		get_socket(void) const;
 		int		get_server_fd(void) const;
+		Config		get_conf(void) const;
 		Request	get_request(void) const;
 		void	set_socket(int sock_fd);
 		bool	is_request_parsed(void) const;
