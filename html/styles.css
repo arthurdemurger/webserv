@@ -7,7 +7,7 @@ body {
 	}
 
 	header {
-	color: #00008B;
+	color: #191970;
 	background-color: #B0C4DE;
 	padding: 20px;
 	}
@@ -34,13 +34,13 @@ body {
 	}
 
 	nav ul li {
-	color: #00008B;
+	color: #191970;
 	display: inline;
 	margin-right: 10px;
 	}
 
 	nav ul li a {
-	color: #00008B;
+	color: #191970;
 	transition: color 0.2s ease;
 	text-decoration: none;
 	}
@@ -58,7 +58,7 @@ body {
 	left: 0;
 	width: 100%;
 	background-color: #B0C4DE;
-	color: #00008B;
+	color: #191970;
 	padding: 20px;
 	text-align: center;
 	}
