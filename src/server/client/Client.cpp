@@ -17,10 +17,8 @@
 */
 Client::Client(void) { }
 
-Client::Client(int socket, int server_fd, Config config) : _serv_fd(server_fd), _sock(socket), _conf(config)
-{
-	std::cout << "HERE:::" << _conf.get_ports()[0] << std::endl;
-}
+Client::Client(int socket, int server_fd) : _serv_fd(server_fd), _sock(socket)
+{}
 
 Client::Client(const Client &copy)
 {
@@ -65,11 +63,10 @@ Config		Client::get_conf(void) const { return (_conf); }
 ** ------------------------------- METHODS --------------------------------
 */
 
-int	Client::add_request()
+int	Client::add_request(Config conf)
 {
-	std::cout << "11\n";
-	std::cout << "HERE:::" << _conf.get_ports()[0] << std::endl;
-	if (!_request.parse(_sock, _conf))
+	std::cout << "1:" << conf.get_name() << std::endl;
+	if (!_request.parse(_sock, conf))
 		return (0);// code ;
 	_response.build(_request);
 	return (1);

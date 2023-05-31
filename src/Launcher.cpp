@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/31 10:26:46 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/31 14:43:02 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	Launcher::accepter(int server_sock)
 	if (fcntl(new_client, F_SETFL, O_NONBLOCK) < 0)
 		throw Server::FcntlException();
 	_clients.erase(new_client);
-	_clients[new_client] = Client(new_client, server_sock, _servers[server_sock].get_config());
+	_clients[new_client] = Client(new_client, server_sock);
 }
 
 void	Launcher::handle_response(int client_sock, Client client)
@@ -104,7 +104,7 @@ void	Launcher::handle_request(int &client_sock, Client client)
 {
 	std::cout << RED << "Read request | server '" << _servers[client.get_server_fd()].get_name() <<  "' => socket : " << client_sock << RESET << std::endl;
 	add_to_set(client_sock, _write_pool);
-	if (!_clients[client_sock].add_request())
+	if (!client.add_request(_servers[client.get_server_fd()].get_config()))
 	{
 		close(client_sock);
 		remove_from_set(client_sock, _read_pool);

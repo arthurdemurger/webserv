@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/31 10:29:57 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/31 14:49:11 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int	Request::parse(int fd, Config conf)
 	std::string			request;
 	int					i, n;
 
-	std::cout << "1\n";
-	// std::cout << "AND HERE:::" << conf.get_name() << std::endl;
+	std::cout << "2:" << conf.get_name() << std::endl;
+	std::cout << "2:" << conf.get_ports().back() << std::endl;
 	i = 0;
 	this->_status = "200";
 	fcntl(fd, F_SETFL, O_NONBLOCK);
