@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/31 10:29:57 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/31 10:48:29 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int	Request::parse(int fd, Config conf)
 	// std::cout << "AND HERE:::" << conf.get_name() << std::endl;
 	i = 0;
 	this->_status = "200";
-	fcntl(fd, F_SETFL, O_NONBLOCK);
 	n = read(fd, buff, BUF_SIZE);
 	std::string data(buff, n);
 	while (n > 0)
@@ -164,7 +163,7 @@ void	Request::trim_value(std::string &value)
 
 void	Request::check_path(Config conf)
 {
-	
+
 	// std::vector<Location> _loc	= conf.get_location();
 	// std::vector<Location>::iterator it = _loc.begin();
 	// std::cout << "HERE:::" << it->getLocationType() << std::endl;
@@ -173,14 +172,14 @@ void	Request::check_path(Config conf)
 	// 	if (! _path.compare(it->getLocationType()))
 	// 		break ;
 	// }
-	
+
 	/*
 	if (it != _loc.end())
 	{
 		append the root to the path;
 		_path.append(_loc.getRoot());
 		first look for the root in the location block.
-		then look for the root in the server parameters 
+		then look for the root in the server parameters
 			open file()
 			set status to 200
 			if fail to open -> 404
@@ -194,7 +193,7 @@ void	Request::check_path(Config conf)
 		if fail to open -> 404
 		return ;
 	}*/
-	
+
 	//set status to 404;
 }
 
