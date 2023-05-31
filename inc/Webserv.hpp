@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 14:54:26 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/31 09:29:46 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@
 // #include "Launcher.hpp"
 
 /* Define constants */
-# define PORT			80
 # define BUF_SIZE		30000
 # define RESET			"\x1B[0m"
 # define RED			"\x1B[31m"
