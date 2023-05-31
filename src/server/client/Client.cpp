@@ -65,7 +65,7 @@ Config		Client::get_conf(void) const { return (_conf); }
 
 int	Client::add_request(Config conf)
 {
-	std::cout << "1:" << conf.get_name() << std::endl;
+	// std::cout << "1:" << conf.get_name() << std::endl;
 	if (!_request.parse(_sock, conf))
 		return (0);// code ;
 	_response.build(_request);

@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/31 10:37:21 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/31 15:10:45 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ void	Server::configure(Config conf)
 {
 	_config = conf;
 	_name = _config.get_name();
-	std::cout << "conf name: " << _name << std::endl;
 	std::vector<int> ports = _config.get_ports();
 
 	for (std::vector<int>::iterator it = ports.begin(); it != ports.end(); it++)

@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/30 13:44:02 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/31 15:20:46 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ class Config
 		/*
 		** ------------------------------- Attributes --------------------------------
 		*/
-		std::vector<int>            _port;
-		std::string                 _host;
-		std::vector<std::string>    _server_name;
-		std::map<int, std::string>  _error_page;
-		int                         _client_max_body_size;
-		std::string                 _root;
-		std::string                 _index;
-		std::vector<Location>       _location;
+		std::vector<int>			_port;
+		std::string					_host;
+		std::vector<std::string>	_server_name;
+		std::map<int, std::string>	_error_page;
+		int							_client_max_body_size;
+		std::string					_root;
+		std::string					_index;
+		std::vector<Location>		_location;
 
 	public:
 		/*
@@ -49,21 +49,23 @@ class Config
 		/*
 		** ------------------------------- Accessors --------------------------------
 		*/
-		void    setPortMBS(std::string &key, std::string &rhs);
-		void    setHostDir(std::string &rhs);
-		void    setServerNameDir(std::string &rhs);
-		void    setErrorPageDir(std::string &rhs);
-		void    setClientMaxBodySize(std::string &rhs);
-		void    setRootDir(std::string &value);
+		void	setPortMBS(std::string &key, std::string &rhs);
+		void	setHostDir(std::string &rhs);
+		void	setServerNameDir(std::string &rhs);
+		void	setErrorPageDir(std::string &rhs);
+		void	setClientMaxBodySize(std::string &rhs);
+		void	setRootDir(std::string &value);
 
 		std::string				get_name(void) const;
+		std::string				get_root(void) const;
+		std::string				get_index(void) const;
 		std::vector<int>		get_ports(void) const;
 		std::vector<Location>	get_location(void) const;
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		void    setter(std::string &key, std::string &value, std::istringstream &iss, std::string &location);
-		void    print_server();
+		void	setter(std::string &key, std::string &value, std::istringstream &iss, std::string &location);
+		void	print_server();
 
 };
 
