@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 11:58:57 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/30 14:59:36 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ class Request
 {
 	private:
 		std::string										_method;
+		std::string										_status;
 		std::string										_path;
 		std::map<std::string, std::string>				_headers;
 		std::string										_body;
@@ -37,11 +38,12 @@ class Request
 		/*
 		** ------------------------------- ACCESSORS --------------------------------
 		*/
-		std::string										get_method() const;
-		std::string										get_body() const;
-		std::string										get_path() const;
-		std::map<std::string, std::string>				get_headers() const;
-		bool											get_is_parsed() const;
+		std::string							get_method() const;
+		std::string							get_body() const;
+		std::string							get_path() const;
+		std::string							get_status() const;
+		std::map<std::string, std::string>	get_headers() const;
+		bool								get_is_parsed() const;
 
 		/*
 		** ------------------------------- METHODS --------------------------------

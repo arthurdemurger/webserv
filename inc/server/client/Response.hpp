@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 12:23:46 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/30 14:48:32 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ class Response
 		std::string	_content_length;
 		std::string	_body;
 		std::string	_full_response;
+
+		std::string	file_to_string(std::string filename) const;
 	public:
 		/*
 		** ------------------------------- COPLIEN --------------------------------
@@ -44,7 +46,8 @@ class Response
 		/*
 		** ------------------------------- METHOD --------------------------------
 		*/
-		std::string	build_get_method(Request &request);
+		void		build_get_method(Request &request);
+		void		build_error(Request &request);
 		void		build(Request &request);
 };
 

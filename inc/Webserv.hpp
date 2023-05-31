@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   webserv.hpp                                        :+:      :+:    :+:   */
+/*   Webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 12:37:41 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/30 14:54:26 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,5 @@
 # define CYAN			"\x1B[36m"
 # define DARK_GREY		"\x1B[90m"
 # define LIGHTMAGENTA	"\x1B[95m"
-
+# define ICI			std::cout << "ici" << std::endl;
 #endif
