@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 16:56:06 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 17:01:10 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	Launcher::setup(void)
 		for (std::vector<int>::iterator ite = fds.begin(); ite != fds.end(); ite++)
 			_servers[(*ite)] = serv;
 	}
+	add_serv_to_sets();
 }
 
 void	Launcher::add_serv_to_sets(void)
@@ -117,7 +118,6 @@ void	Launcher::accepter(int server_sock)
 
 void	Launcher::handle_response(int &client_sock, Client &client)
 {
-	// std::cout << "2 - " << client.is_request_parsed() << std::endl;
 	if (client.is_request_parsed())
 	{
 		std::cout << BKGD_GREEN << "[SEND RESPONSE]" << RESET << " " << GREEN << _servers[client.get_server_fd()].get_name() << " - client socket [" << client.get_socket() << "]" << RESET << std::endl;
@@ -163,9 +163,7 @@ void	Launcher::run(void)
 	fd_set	read_pool_cpy;
 	fd_set	write_pool_cpy;
 
-	_max_fd = 0;
 	setup();
-	add_serv_to_sets();
 	while (true)
 	{
 		std::cout << "########## WAITING ##########" << std::endl;
