@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Launcher.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 12:14:48 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 13:01:09 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ void	Launcher::add_to_set(int fd, fd_set &set)
 
 void	Launcher::accepter(int server_sock)
 {
-	std::cout << "1\n";
 	int					new_client;
 	struct sockaddr_in	address = _servers[server_sock].get_sockets()[server_sock].getAddress();
 	int					addressLen = sizeof(address);
@@ -105,35 +104,35 @@ void	Launcher::accepter(int server_sock)
 	if((new_client = accept(server_sock, (struct sockaddr *)&address, (socklen_t *) &addressLen)) < 0)
 		throw Server::AcceptException();
 
-	std::cout << YELLOW << "Accept new connection | server '" << _servers[server_sock].get_name() <<  "' => socket : " << new_client << RESET << std::endl;
 	add_to_set(new_client, _read_pool);
 	if (fcntl(new_client, F_SETFL, O_NONBLOCK) < 0)
 		throw Server::FcntlException();
 	_clients.erase(new_client);
 	_clients.insert(std::make_pair(new_client, Client(new_client, server_sock)));
+
+	std::cout << BKGD_YELLOW << "[ACCEPT CONNECTION]" << RESET << " " << YELLOW << _servers[_clients[new_client].get_server_fd()].get_name() << " - client socket [" << _clients[new_client].get_socket() << "]" << RESET << std::endl;
+
 }
 
-void	Launcher::handle_response(int &client_sock, Client client)
+void	Launcher::handle_response(int &client_sock, Client &client)
 {
-	std::cout << "2 - " << client.is_request_parsed() << std::endl;
+	// std::cout << "2 - " << client.is_request_parsed() << std::endl;
 	if (client.is_request_parsed())
 	{
+		std::cout << BKGD_GREEN << "[SEND RESPONSE]" << RESET << " " << GREEN << _servers[client.get_server_fd()].get_name() << " - client socket [" << client.get_socket() << "]" << RESET << std::endl;
 		_clients[client_sock].send_response();
-		std::cout << CYAN << "response sent | server '" << _servers[client.get_server_fd()].get_name() <<  "' => socket : " << client_sock << RESET << std::endl;
 		close(client_sock);
 		remove_from_set(client_sock, _read_pool);
 		remove_from_set(client_sock, _write_pool);
 		_clients.erase(client_sock);
-		std::cout << LIGHTMAGENTA << "connection removed | server '" << _servers[client.get_server_fd()].get_name() <<  "' => socket : " << client_sock << RESET << std::endl;
+		std::cout << BKGD_MAGENTA << "[CONNECTION REMOVED]" << RESET << " " << MAGENTA << _servers[client.get_server_fd()].get_name() << " - client socket [" << client.get_socket() << "]" << RESET << std::endl;
 	}
 }
 
-void	Launcher::handle_request(int &client_sock, Client client)
+void	Launcher::handle_request(int &client_sock, Client &client)
 {
-	std::cout << "3\n";
-	std::cout << RED << "Read request | server '" << _servers[client.get_server_fd()].get_name() <<  "' => socket : " << client_sock << RESET << std::endl;
+
 	client.add_request(_servers[client.get_server_fd()].get_config());
-	std::cout << "is parsed : " << client.get_request().get_is_parsed() << std::endl;
 	remove_from_set(client_sock, _read_pool);
 	add_to_set(client_sock, _write_pool);
 	// close(client_sock);
@@ -141,6 +140,7 @@ void	Launcher::handle_request(int &client_sock, Client client)
 	// remove_from_set(client_sock, _write_pool);
 	// _clients.erase(client_sock);
 	// --client_sock;
+	std::cout << BKGD_RED << "[READ REQUEST]" << RESET << " " << RED << _servers[client.get_server_fd()].get_name() << " - client socket [" << client.get_socket() << "] | is parsed : " << client.is_request_parsed() << RESET << std::endl;
 }
 
 void Launcher::print_fd(void)
@@ -191,8 +191,8 @@ void	Launcher::run(void)
 			else if (FD_ISSET(sock, &write_pool_cpy) && _clients.count(sock))
 				handle_response(sock, _clients[sock]);
 		}
-		print_fd();
-		sleep(5);
+		// print_fd();
+		// sleep(5);
 		std::cout << "########## DONE    ##########" << std::endl << std::endl;
 	}
 }

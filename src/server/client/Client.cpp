@@ -74,7 +74,7 @@ void	Client::send_response(void)
 {
 		std::string response = _response.get_full_response();
 
-		std::cout << "response : " << response << std::endl;
+		// std::cout << "response : " << response << std::endl;
 
 		size_t bytesSend = send(_sock, response.c_str(), response.length(), 0);
 }

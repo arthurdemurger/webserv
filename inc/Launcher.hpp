@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Launcher.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 11:12:33 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 12:39:58 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ class Launcher
 		std::string						_config_file;
 
 		void	accepter(int sock);
-		void	handle_request(int &client_sock, Client client);
-		void	handle_response(int &client_sock, Client client);
+		void	handle_request(int &client_sock, Client &client);
+		void	handle_response(int &client_sock, Client &client);
 		void	add_serv_to_sets(void);
 		void	add_to_set(int fd, fd_set &set);
 		void	remove_from_set(int fd, fd_set &set);

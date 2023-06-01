@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 10:36:42 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 13:03:20 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,15 @@ std::string	Response::build_get_method(Request &request)
 	{
 		response = 	"HTTP/1.1 200 OK\n"
 					"Content-Type: text/html\n\n";
-		response += file_to_string("html/index.html");
+		response += file_to_string(request.get_path());
 	}
 	return (response);
 }
 
 std::string	Response::build(Request &request)
 {
-	std::cout << "status : " << request.get_status() << std::endl;
-	std::cout << "method : " << request.get_method() << std::endl;
+	// std::cout << "status : " << request.get_status() << std::endl;
+	// std::cout << "method : " << request.get_method() << std::endl;
 	if (request.get_method() == "GET")
 		return (build_get_method(request));
 	return ("");
