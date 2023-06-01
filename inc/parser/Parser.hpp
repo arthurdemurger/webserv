@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/26 15:40:17 by hdony            ###   ########.fr       */
+/*   Updated: 2023/05/31 10:31:32 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class Parser
     	std::vector<int>            _start_block;
     	std::vector<int>            _end_block;
     	std::vector<std::string>    _config_block;
-    	std::vector<Config>    		_config;
+    	std::vector<Config>    	_config;
 
 	public:
 		/*
@@ -52,12 +52,12 @@ class Parser
 		void   				split_blocks();
 		void				block_end();
 		void				populate_server();
-		std::vector<Config>	&build_server_config();
+		std::vector<Config>	build_server_config();
 
 		/*
 		** ------------------------------- Accessors --------------------------------
 		*/
-		const std::vector<Config>	&	getConfig() const;
+		const std::vector<Config>	getConfig() const;
 };
 
 #endif

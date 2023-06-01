@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:56:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 12:44:11 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/31 14:38:29 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class Client
 		** ------------------------------- COPLIEN --------------------------------
 		*/
 		Client();
-		Client(int socket, int server_fd, Config config);
+		Client(int socket, int server_fd);
 		~Client();
 		Client(const Client &copy);
 		Client	&operator=(const Client &copy);
@@ -43,6 +43,7 @@ class Client
 		*/
 		int		get_socket(void) const;
 		int		get_server_fd(void) const;
+		Config	get_conf(void) const;
 		Request	get_request(void) const;
 		void	set_socket(int sock_fd);
 		bool	is_request_parsed(void) const;
@@ -50,7 +51,7 @@ class Client
 		/*
 		** ------------------------------- METHODS --------------------------------
 		*/
-		int		add_request();
+		int		add_request(Config conf);
 		void	send_response();
 };
 

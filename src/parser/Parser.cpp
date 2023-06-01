@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:41:07 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 17:58:38 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/31 10:31:55 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void    Parser::split_blocks()
 }
 
 /* Populate the config vector with the different server param */
-std::vector<Config>   &Parser::build_server_config()
+std::vector<Config>   Parser::build_server_config()
 {
     int i;
 
@@ -137,7 +137,7 @@ std::vector<Config>   &Parser::build_server_config()
     return (this->_config);
 }
 
-const std::vector<Config> &Parser::getConfig() const
+const std::vector<Config> Parser::getConfig() const
 {
     return (this->_config);
 }

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 14:59:36 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 10:02:30 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #define REQUEST_HPP
 
 #include "../../Webserv.hpp"
+#include "../../../inc/server/Config.hpp"
 
 class Request
 {
@@ -48,11 +49,13 @@ class Request
 		/*
 		** ------------------------------- METHODS --------------------------------
 		*/
-		int		parse(int fd);
-		void	parse_request_line(std::string &line);
+		int		parse(int fd, Config config);
+		void	parse_request_line(std::string &line, Config conf);
 		void	parse_request_headers(std::string &line);
 		void	trim_value(std::string &value);
 		void	print_request();
+		void	check_method();
+		void	check_path(Config conf);
 };
 
 #endif

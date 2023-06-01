@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/31 10:23:50 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 10:03:22 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,10 @@ void	Response::build_get_method(Request &request)
 
 void	Response::build(Request &request)
 {
-	if (request.get_is_parsed())
+	if (request.get_method() == "GET")
 	{
-		if (request.get_method() == "GET")
-			build_get_method(request);
+		std::cout << "ici\n" << std::endl;
+		_full_response = build_get_method(request);
 	}
 	std::cout << request.get_method() << std::endl;
 }

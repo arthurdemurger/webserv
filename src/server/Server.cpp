@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/26 18:04:27 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/05/31 15:10:45 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,28 @@ Config				Server::get_config(void) const { return (_config); }
 std::vector<int>	Server::get_fds(void) const { return (_fds); }
 std::string			Server::get_name(void) const { return (_name); }
 std::vector<Socket>	Server::get_sockets(void) const { return (_sockets); }
-void				Server::set_config(Config const &conf) { _config = conf; }
+void				Server::set_config(Config conf) { _config = conf; }
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
+
+/*
+for each port of the server object, create one socket object and populate vector of sockets
+then populate the fds vector w. the server socket
+*/
+
 void	Server::activate(int protocol, int port, int backlog)
 {
 	_sockets.push_back(Socket(AF_INET, SOCK_STREAM, protocol, port, INADDR_ANY, backlog));
 	_fds.push_back(_sockets.back().getServerFd());
 }
 
-void	Server::configure(Config const &conf)
+/*
+for each Config block, configure the server object by getting its ports
+then loop through vector of ports and call activate() for each port
+*/
+void	Server::configure(Config conf)
 {
 	_config = conf;
 	_name = _config.get_name();

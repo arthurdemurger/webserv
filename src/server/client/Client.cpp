@@ -17,7 +17,8 @@
 */
 Client::Client(void) { }
 
-Client::Client(int socket, int server_fd, Config config) : _serv_fd(server_fd), _sock(socket), _conf(config) { }
+Client::Client(int socket, int server_fd) : _serv_fd(server_fd), _sock(socket)
+{}
 
 Client::Client(const Client &copy)
 {
@@ -56,13 +57,16 @@ void		Client::set_socket(int sock_fd) { _sock = sock_fd; }
 
 bool		Client::is_request_parsed(void) const { return (_request.get_is_parsed()); }
 
+Config		Client::get_conf(void) const { return (_conf); }
+
 /*
 ** ------------------------------- METHODS --------------------------------
 */
 
-int	Client::add_request()
+int	Client::add_request(Config conf)
 {
-	if (!_request.parse(_sock))
+	// std::cout << "1:" << conf.get_name() << std::endl;
+	if (!_request.parse(_sock, conf))
 		return (0);// code ;
 	_response.build(_request);
 	return (1);
