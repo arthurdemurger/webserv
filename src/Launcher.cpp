@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 11:16:17 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 12:14:48 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void	Launcher::add_to_set(int fd, fd_set &set)
 
 void	Launcher::accepter(int server_sock)
 {
+	std::cout << "1\n";
 	int					new_client;
 	struct sockaddr_in	address = _servers[server_sock].get_sockets()[server_sock].getAddress();
 	int					addressLen = sizeof(address);
@@ -106,15 +107,15 @@ void	Launcher::accepter(int server_sock)
 
 	std::cout << YELLOW << "Accept new connection | server '" << _servers[server_sock].get_name() <<  "' => socket : " << new_client << RESET << std::endl;
 	add_to_set(new_client, _read_pool);
-	// add_to_set(new_client, _write_pool);
 	if (fcntl(new_client, F_SETFL, O_NONBLOCK) < 0)
 		throw Server::FcntlException();
-	// _clients.erase(new_client);
+	_clients.erase(new_client);
 	_clients.insert(std::make_pair(new_client, Client(new_client, server_sock)));
 }
 
 void	Launcher::handle_response(int &client_sock, Client client)
 {
+	std::cout << "2 - " << client.is_request_parsed() << std::endl;
 	if (client.is_request_parsed())
 	{
 		_clients[client_sock].send_response();
@@ -129,8 +130,10 @@ void	Launcher::handle_response(int &client_sock, Client client)
 
 void	Launcher::handle_request(int &client_sock, Client client)
 {
+	std::cout << "3\n";
 	std::cout << RED << "Read request | server '" << _servers[client.get_server_fd()].get_name() <<  "' => socket : " << client_sock << RESET << std::endl;
 	client.add_request(_servers[client.get_server_fd()].get_config());
+	std::cout << "is parsed : " << client.get_request().get_is_parsed() << std::endl;
 	remove_from_set(client_sock, _read_pool);
 	add_to_set(client_sock, _write_pool);
 	// close(client_sock);
@@ -142,13 +145,23 @@ void	Launcher::handle_request(int &client_sock, Client client)
 
 void Launcher::print_fd(void)
 {
+	std::vector<std::string> names;
+
 	for (std::map<int, Server>::iterator it = _servers.begin(); it != _servers.end(); it++)
 	{
-		std::vector<int> fds = it->second.get_fds();
-		for (std::vector<int>::iterator ite = fds.begin(); ite != fds.end(); ite++)
-			std::cout << "fd : " << (*ite) << std::endl;
+		if (std::find(names.begin(), names.end(), it->second.get_name()) == names.end())
+		{
+			names.push_back(it->second.get_name());
+			std::vector<int> fds = it->second.get_fds();
+			for (std::vector<int>::iterator ite = fds.begin(); ite != fds.end(); ite++)
+				std::cout << "server [" << it->first << "] - fd  :" << (*ite) << std::endl;
+		}
 	}
+	for (std::map<int, Client>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		std::cout << "client socket [" << it->second.get_socket() << "] - server : " << it->second.get_server_fd() << std::endl;
 }
+
+
 
 void	Launcher::run(void)
 {
@@ -158,24 +171,28 @@ void	Launcher::run(void)
 	_max_fd = 0;
 	setup();
 	add_serv_to_sets();
-	print_fd();
-	// while (true)
-	// {
-	// 	std::cout << "########## WAITING ##########" << std::endl;
+	while (true)
+	{
+		std::cout << "########## WAITING ##########" << std::endl;
 
-	// 	read_pool_cpy = _read_pool;
-	// 	write_pool_cpy = _write_pool;
-	// 	if (select(_max_fd + 1, &read_pool_cpy, &write_pool_cpy, NULL, NULL) < 0)
-	// 		throw Launcher::SelectException();
-	// 	for (int sock = 0; sock <= _max_fd; ++sock)
-	// 	{
-	// 		if (FD_ISSET(sock, &read_pool_cpy) && _servers.count(sock))
-	// 			accepter(sock);
-	// 		else if (FD_ISSET(sock, &read_pool_cpy) && _clients.count(sock))
-	// 			handle_request(sock, _clients[sock]);
-	// 		else if (FD_ISSET(sock, &write_pool_cpy) && _clients.count(sock))
-	// 			handle_response(sock, _clients[sock]);
-	// 	}
-	// 	std::cout << "########## DONE    ##########" << std::endl << std::endl;
-	// }
+		read_pool_cpy = _read_pool;
+		write_pool_cpy = _write_pool;
+		if (select(_max_fd + 1, &read_pool_cpy, &write_pool_cpy, NULL, NULL) < 0)
+			throw Launcher::SelectException();
+		for (int sock = 0; sock <= _max_fd; ++sock)
+		{
+			if (FD_ISSET(sock, &read_pool_cpy))
+			{
+				if (_servers.count(sock))
+					accepter(sock);
+				else if (_clients.count(sock))
+					handle_request(sock, _clients[sock]);
+			}
+			else if (FD_ISSET(sock, &write_pool_cpy) && _clients.count(sock))
+				handle_response(sock, _clients[sock]);
+		}
+		print_fd();
+		sleep(5);
+		std::cout << "########## DONE    ##########" << std::endl << std::endl;
+	}
 }
