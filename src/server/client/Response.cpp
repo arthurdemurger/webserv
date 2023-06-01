@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 13:03:20 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:13:30 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,32 @@ std::string	Response::file_to_string(std::string filename) const
 		file.close();
 	}
 	else
-	{
 		std::cerr << "Erreur lors de l'ouverture du fichier : " << filename << std::endl;
-	}
 	return (str);
 }
 
+std::string	Response::build_body(std::string filename)
+{
+	std::ifstream	file(filename);
+	std::string		str;
+
+	if (file.is_open())
+	{
+		std::string line;
+		while (std::getline(file, line))
+		{
+			size_t	pos;
+
+			// if ((pos = line.find("<head>")) != std::string::npos)
+			// 	line.insert(pos, "<style>" + file_to_string("html/styles.css") + "</style>");
+			str += line + '\n';
+		}
+		file.close();
+	}
+	else
+		std::cerr << "Erreur lors de l'ouverture du fichier : " << filename << std::endl;
+	return (str);
+}
 
 std::string	Response::build_error(Request &request)
 {
@@ -86,12 +106,16 @@ std::string	Response::build_get_method(Request &request)
 {
 	std::string	response;
 
+	std::cout << "path : " << request.get_path() << std::endl;
 	if (request.get_status() >= "400")
 		response = build_error(request);
 	else if (request.get_status() == "200")
 	{
-		response = 	"HTTP/1.1 200 OK\n"
-					"Content-Type: text/html\n\n";
+		response = 	"HTTP/1.1 200 OK\n";
+		if (request.get_path().find(".html") != std::string::npos)
+			response += "Content-Type: text/html\n\n";
+		else if (request.get_path().find(".css") != std::string::npos)
+			response += "Content-Type: text/css\n\n";
 		response += file_to_string(request.get_path());
 	}
 	return (response);

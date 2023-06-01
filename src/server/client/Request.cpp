@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 10:49:56 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:14:40 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,26 +161,27 @@ void	Request::check_path(Config conf)
 {
 	std::vector<Location> _loc	= conf.get_location();
 	std::vector<Location>::iterator it;
+	std::string	root_path;
 
+	this->_status = "200";
 	for (it = _loc.begin(); it != _loc.end(); ++it)
 	{
 		// std::cout << "it: " << it->getLocationType() << std::endl;
 		if (!_path.compare(it->getLocationType()))
 		{
-			_path.append(it->getRoot());
-			std::ifstream ifs(_path);
+			root_path = it->getRoot();
+			root_path.append(_path);
+			std::ifstream ifs(root_path);
 			if (ifs.fail())
 			{
-				std::cerr << "Error: " << strerror(errno) << std::endl;
+				// std::cerr << "Error: " << strerror(errno) << " | path : " << root_path << std::endl;
 				this->_status = "404";
 				break ;
 			}
-			this->_status = "200";
 		}
 	}
 	if (it == _loc.end())
 	{
-		// std::cout << "path: " << _path << std::endl;
 		if (!_path.compare("/"))
 		{
 			_path.erase(0, 1);
@@ -188,14 +189,20 @@ void	Request::check_path(Config conf)
 			_path.append(conf.get_index());
 		}
 		else
-			_path.append(conf.get_root());
-		std::ifstream ifs(_path);
-		if (ifs.fail())
 		{
-			std::cerr << "Error: " << strerror(errno) << std::endl;
+			root_path = conf.get_root();
+			size_t	pos;
+			if (((pos = _path.find("/")) != std::string::npos) && !pos)
+				_path.erase(0, 1);
+			root_path.append(_path);
+			_path = root_path;
+		}
+		std::ifstream ifs(_path);
+		if (!ifs.is_open())
+		{
+			// std::cerr << "Error: " << strerror(errno) << std::endl;
 			this->_status = "404";
 		}
-		this->_status = "200";
 	}
 	// std::cout << "status: " << _status << std::endl;
 }
