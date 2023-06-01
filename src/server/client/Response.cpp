@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 15:13:30 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:41:05 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ std::string	Response::build_get_method(Request &request)
 			response += "Content-Type: text/html\n\n";
 		else if (request.get_path().find(".css") != std::string::npos)
 			response += "Content-Type: text/css\n\n";
+		else if (request.get_path().find(".ico") != std::string::npos)
+			response += "Content-Type: image/ico\n\n";
 		response += file_to_string(request.get_path());
 	}
 	return (response);
