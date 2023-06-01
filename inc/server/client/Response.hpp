@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/30 14:48:32 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 10:36:47 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,14 @@ class Response
 		** ------------------------------- ACCESSORS --------------------------------
 		*/
 		std::string	get_full_response(void) const;
+		void		set_full_response(std::string resp);
 
 		/*
 		** ------------------------------- METHOD --------------------------------
 		*/
-		void		build_get_method(Request &request);
-		void		build_error(Request &request);
-		void		build(Request &request);
+		std::string		build_get_method(Request &request);
+		std::string		build_error(Request &request);
+		std::string		build(Request &request);
 };
 
 #endif //RESPONSE_HPP

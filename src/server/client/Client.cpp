@@ -63,18 +63,18 @@ Config		Client::get_conf(void) const { return (_conf); }
 ** ------------------------------- METHODS --------------------------------
 */
 
-int	Client::add_request(Config conf)
+void	Client::add_request(Config conf)
 {
 	// std::cout << "1:" << conf.get_name() << std::endl;
-	if (!_request.parse(_sock, conf))
-		return (0);// code ;
-	_response.build(_request);
-	return (1);
+	_request.parse(_sock, conf);
+	_response.set_full_response(_response.build(_request));
 }
 
 void	Client::send_response(void)
 {
-	std::string	response = _response.get_full_response();
-	// _response.build_response(_request);
-	size_t bytesSend = send(_sock, response.c_str(), response.length(), 0);
+		std::string response = _response.get_full_response();
+
+		std::cout << "response : " << response << std::endl;
+
+		size_t bytesSend = send(_sock, response.c_str(), response.length(), 0);
 }

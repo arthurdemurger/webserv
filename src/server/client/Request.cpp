@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 10:03:05 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 10:49:56 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ bool								Request::get_is_parsed() const { return (_isParsed); };
 ** ------------------------------- METHODS --------------------------------
 */
 
-int	Request::parse(int fd, Config conf)
+void	Request::parse(int fd, Config conf)
 {
 	std::stringstream	ss, buffer;
 	char				buff[BUF_SIZE];
@@ -73,10 +73,7 @@ int	Request::parse(int fd, Config conf)
 		n = read(fd, buff, BUF_SIZE);
 		data += buff;
 	}
-	if (!n)
-		return (0);
 	ss << data;
-	// std::cout << data << std::endl;
 	while (getline(ss, line))
 	{
 		if (i == 0)
@@ -91,7 +88,7 @@ int	Request::parse(int fd, Config conf)
 		}
 		i++;
 	}
-	return (1);
+	_isParsed = true;
 }
 
 void	Request::check_method()

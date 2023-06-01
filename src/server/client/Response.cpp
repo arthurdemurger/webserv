@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 10:03:22 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 10:36:42 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ Response	&Response::operator=(const Response &copy)
 
 	std::string	Response::get_full_response(void) const { return (_full_response); }
 
+	void		Response::set_full_response(std::string resp) { _full_response = resp; };
 
 /*
 ** ------------------------------- METHODS --------------------------------
@@ -70,37 +71,38 @@ std::string	Response::file_to_string(std::string filename) const
 }
 
 
-void	Response::build_error(Request &request)
-{
-	if (request.get_status() == "404")
-	{
-		_full_response = "HTTP/1.1 404 Not Found\n"
-						 "Content-Type: text/html\n\n";
-		_full_response += file_to_string("html/error/404.html");
-	}
-}
-
-void	Response::build_get_method(Request &request)
+std::string	Response::build_error(Request &request)
 {
 	std::string	response;
 
-	// ICI
-	if (request.get_status() >= "400")
-		build_error(request);
-	else if (request.get_status() == "200")
-	{
-		_full_response = "HTTP/1.1 200 OK\n"
-				   "Content-Type: text/html\n\n";
-		_full_response += file_to_string("html/index.html");
-	}
+	// if (request.get_status() == "404")
+	response =  "HTTP/1.1 404 Not Found\n"
+				"Content-Type: text/html\n\n";
+	response += file_to_string("html/error/404.html");
+	return (response);
 }
 
-void	Response::build(Request &request)
+std::string	Response::build_get_method(Request &request)
 {
-	if (request.get_method() == "GET")
+	std::string	response;
+
+	if (request.get_status() >= "400")
+		response = build_error(request);
+	else if (request.get_status() == "200")
 	{
-		std::cout << "ici\n" << std::endl;
-		_full_response = build_get_method(request);
+		response = 	"HTTP/1.1 200 OK\n"
+					"Content-Type: text/html\n\n";
+		response += file_to_string("html/index.html");
 	}
-	std::cout << request.get_method() << std::endl;
+	return (response);
+}
+
+std::string	Response::build(Request &request)
+{
+	std::cout << "status : " << request.get_status() << std::endl;
+	std::cout << "method : " << request.get_method() << std::endl;
+	if (request.get_method() == "GET")
+		return (build_get_method(request));
+	return ("");
+	// std::cout << request.get_method() << std::endl;
 }
