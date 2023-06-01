@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 13:01:09 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/01 16:56:06 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ Launcher::Launcher(std::string conf_filename)
 
 	FD_ZERO(&_read_pool);
 	FD_ZERO(&_write_pool);
+	_max_fd = 0;
 }
 
 Launcher::Launcher(const Launcher &copy)
@@ -135,12 +136,7 @@ void	Launcher::handle_request(int &client_sock, Client &client)
 	client.add_request(_servers[client.get_server_fd()].get_config());
 	remove_from_set(client_sock, _read_pool);
 	add_to_set(client_sock, _write_pool);
-	// close(client_sock);
-	// remove_from_set(client_sock, _read_pool);
-	// remove_from_set(client_sock, _write_pool);
-	// _clients.erase(client_sock);
-	// --client_sock;
-	std::cout << BKGD_RED << "[READ REQUEST]" << RESET << " " << RED << _servers[client.get_server_fd()].get_name() << " - client socket [" << client.get_socket() << "] | is parsed : " << client.is_request_parsed() << RESET << std::endl;
+	std::cout << BKGD_RED << "[READ REQUEST]" << RESET << " " << RED << _servers[client.get_server_fd()].get_name() << " - client socket [" << client.get_socket() << "]" << RESET << std::endl;
 }
 
 void Launcher::print_fd(void)
@@ -160,7 +156,6 @@ void Launcher::print_fd(void)
 	for (std::map<int, Client>::iterator it = _clients.begin(); it != _clients.end(); it++)
 		std::cout << "client socket [" << it->second.get_socket() << "] - server : " << it->second.get_server_fd() << std::endl;
 }
-
 
 
 void	Launcher::run(void)
@@ -191,8 +186,7 @@ void	Launcher::run(void)
 			else if (FD_ISSET(sock, &write_pool_cpy) && _clients.count(sock))
 				handle_response(sock, _clients[sock]);
 		}
-		// print_fd();
-		// sleep(5);
+
 		std::cout << "########## DONE    ##########" << std::endl << std::endl;
 	}
 }
