@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/02 11:02:27 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/02 16:07:22 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,16 +116,25 @@ void	Launcher::accepter(int server_sock)
 
 }
 
+// void	Launcher::time_out_check(void)
+// {
+// 	    for(std::map<int, Client>::iterator it = _clients.begin() ; it != _clients.end(); ++it)
+//     {
+//         if (time(NULL) - it->second.getLastTime() > CONNECTION_TIMEOUT)
+//         {
+//             close_socket(it->first);
+//             return ;
+//         }
+//     }
+// }
+
 void	Launcher::handle_response(int &client_sock, Client &client)
 {
 	if (client.is_request_parsed())
 	{
 		std::cout << BKGD_GREEN << "[SEND RESPONSE]" << RESET << " " << GREEN << _servers[client.get_server_fd()].get_name() << " - client socket [" << client.get_socket() << "]" << RESET << std::endl;
 		_clients[client_sock].send_response();
-		close(client_sock);
-		remove_from_set(client_sock, _read_pool);
-		remove_from_set(client_sock, _write_pool);
-		_clients.erase(client_sock);
+		close_socket(client_sock);
 		std::cout << BKGD_MAGENTA << "[CONNECTION REMOVED]" << RESET << " " << MAGENTA << _servers[client.get_server_fd()].get_name() << " - client socket [" << client.get_socket() << "]" << RESET << std::endl;
 	}
 }
@@ -139,38 +148,32 @@ void	Launcher::handle_request(int &client_sock, Client &client)
 	std::cout << BKGD_RED << "[READ REQUEST]" << RESET << " " << RED << _servers[client.get_server_fd()].get_name() << " - client socket [" << client.get_socket() << "]" << RESET << std::endl;
 }
 
-void Launcher::print_fd(void)
+void	Launcher::close_socket(int socket)
 {
-	std::vector<std::string> names;
-
-	for (std::map<int, Server>::iterator it = _servers.begin(); it != _servers.end(); it++)
-	{
-		if (std::find(names.begin(), names.end(), it->second.get_name()) == names.end())
-		{
-			names.push_back(it->second.get_name());
-			std::vector<int> fds = it->second.get_fds();
-			for (std::vector<int>::iterator ite = fds.begin(); ite != fds.end(); ite++)
-				std::cout << "server [" << it->first << "] - fd  :" << (*ite) << std::endl;
-		}
-	}
-	for (std::map<int, Client>::iterator it = _clients.begin(); it != _clients.end(); it++)
-		std::cout << "client socket [" << it->second.get_socket() << "] - server : " << it->second.get_server_fd() << std::endl;
+	if (FD_ISSET(socket, &_read_pool))
+		remove_from_set(socket, _read_pool);
+	if (FD_ISSET(socket, &_write_pool))
+		remove_from_set(socket, _write_pool);
+	close(socket);
+	_clients.erase(socket);
 }
-
 
 void	Launcher::run(void)
 {
 	fd_set	read_pool_cpy;
 	fd_set	write_pool_cpy;
+	struct timeval	timer;
 
 	setup();
 	while (true)
 	{
 		std::cout << "########## WAITING ##########" << std::endl;
 
+		timer.tv_sec = 5;
+		timer.tv_usec = 0;
 		read_pool_cpy = _read_pool;
 		write_pool_cpy = _write_pool;
-		if (select(_max_fd + 1, &read_pool_cpy, &write_pool_cpy, NULL, NULL) < 0)
+		if (select(_max_fd + 1, &read_pool_cpy, &write_pool_cpy, NULL, &timer) < 0)
 			throw Launcher::SelectException();
 		for (int sock = 0; sock <= _max_fd; ++sock)
 		{
@@ -184,7 +187,26 @@ void	Launcher::run(void)
 			else if (FD_ISSET(sock, &write_pool_cpy) && _clients.count(sock))
 				handle_response(sock, _clients[sock]);
 		}
-
+		// time_out_check();
+		// sleep(5);
 		std::cout << "########## DONE    ##########" << std::endl << std::endl;
 	}
 }
+
+// void Launcher::print_fd(void)
+// {
+// 	std::vector<std::string> names;
+
+// 	for (std::map<int, Server>::iterator it = _servers.begin(); it != _servers.end(); it++)
+// 	{
+// 		if (std::find(names.begin(), names.end(), it->second.get_name()) == names.end())
+// 		{
+// 			names.push_back(it->second.get_name());
+// 			std::vector<int> fds = it->second.get_fds();
+// 			for (std::vector<int>::iterator ite = fds.begin(); ite != fds.end(); ite++)
+// 				std::cout << "server [" << it->first << "] - fd  :" << (*ite) << std::endl;
+// 		}
+// 	}
+// 	for (std::map<int, Client>::iterator it = _clients.begin(); it != _clients.end(); it++)
+// 		std::cout << "client socket [" << it->second.get_socket() << "] - server : " << it->second.get_server_fd() << std::endl;
+// }

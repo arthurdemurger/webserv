@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/02 12:29:10 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/02 14:26:24 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	Request::parse(int fd, Config conf)
 		}
 		i++;
 	}
+	print_request();
 	_isParsed = true;
 }
 

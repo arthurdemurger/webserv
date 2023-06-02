@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 12:39:58 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/02 16:03:22 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,9 @@ class Launcher
 		void	add_to_set(int fd, fd_set &set);
 		void	remove_from_set(int fd, fd_set &set);
 		void	setup();
-
-	void	print_fd(void);
+		void	close_socket(int socket);
+		// void	time_out_check();
+		// void	print_fd(void);
 
 	public:
 		Launcher(std::string conf_filename);

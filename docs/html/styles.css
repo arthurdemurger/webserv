@@ -1,5 +1,5 @@
 body {
-	font-family: Arial, sans-serif;
+	font-family:  Arial, sans-serif;
 	margin: 0;
 	padding: 0;
 	background-color: #F0F8FF;
@@ -7,17 +7,15 @@ body {
 }
 
 header {
+	top: 0%;
+	width: 100%;
+	position: sticky;
 	color: #191970;
 	background-color: #B0C4DE;
 	padding: 20px;
-}
-
-h1 {
-	margin: 0;
-}
-
-h2 {
-	font-size: 50px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 section {
@@ -28,15 +26,29 @@ section {
 	flex-wrap: wrap;
 }
 
+h1 {
+	margin: 0;
+}
+
+h2 {
+	font-size: 50px;
+}
+
+nav {
+	font-weight: bold;
+	font-size: large;
+	margin-right: 30px;
+}
+
 nav ul {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
+	display: flex;
 }
 
 nav ul li {
 	color: #191970;
-	display: inline;
 	margin-right: 10px;
 }
 
@@ -44,22 +56,30 @@ nav ul li a {
 	color: #191970;
 	transition: color 0.2s ease;
 	text-decoration: none;
+	padding: 10px;
+	border-radius: 5px;
 }
 
-nav ul li a.active {
-	color: #6E6E9E;
-}
 
 nav ul li a:hover {
-	color: #6E6E9E;
+	background-color: #6E6E9E;
+	color: #FFF;
 }
 
 section {
 	padding: 50px;
 }
 
+.title {
+    font-size: 40px;
+    font-weight: bold;
+    color: #191970;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 footer {
-	position: absolute;
+	position:initial;
 	bottom: 0;
 	left: 0;
 	width: 100%;
@@ -69,8 +89,8 @@ footer {
 	text-align: center;
 }
 
-
 /* -------------------------- INDEX SECTION -------------------------- */
+
 #index-section {
 	display: flex;
 	justify-content:  center;
@@ -183,7 +203,7 @@ footer {
 	color: #6E6E9E;
 }
 
-/* -------------------------- FORM SECTION -------------------------- */
+/* -------------------------- CONTACT SECTION -------------------------- */
 #form-section {
 	display: flex;
 	justify-content:  center;

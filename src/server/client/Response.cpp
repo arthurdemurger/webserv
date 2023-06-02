@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/02 11:02:55 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/02 14:23:12 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ std::string	Response::build_get_method(Request &request)
 {
 	std::string	response;
 
-	std::cout << "path : " << request.get_path() << std::endl;
+	// std::cout << "path : " << request.get_path() << std::endl;
 	if (request.get_status() >= "400")
 		response = build_error(request);
 	else if (request.get_status() == "200")
