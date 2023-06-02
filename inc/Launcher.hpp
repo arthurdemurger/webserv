@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/02 16:03:22 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/02 17:03:01 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,16 @@ class Launcher
 		int								_max_fd;
 		std::string						_config_file;
 
-		void	accepter(int sock);
-		void	handle_request(int &client_sock, Client &client);
-		void	handle_response(int &client_sock, Client &client);
-		void	add_serv_to_sets(void);
-		void	add_to_set(int fd, fd_set &set);
-		void	remove_from_set(int fd, fd_set &set);
-		void	setup();
-		void	close_socket(int socket);
-		// void	time_out_check();
+		std::string	getCurrentTime(void);
+		void		accepter(int sock);
+		void		handle_request(int &client_sock, Client &client);
+		void		handle_response(int &client_sock, Client &client);
+		void		add_serv_to_sets(void);
+		void		add_to_set(int fd, fd_set &set);
+		void		remove_from_set(int fd, fd_set &set);
+		void		setup();
+		void		close_socket(int socket);
+		void		put_on_console(std::string color, std::string status, int client_sock, int serv_sock);
 		// void	print_fd(void);
 
 	public:

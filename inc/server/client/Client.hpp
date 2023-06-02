@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:56:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/02 16:09:39 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/02 16:48:23 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Client
 		Request		_request;
 		Response	_response;
 		Config		_conf;
+
 	public:
 		/*
 		** ------------------------------- COPLIEN --------------------------------

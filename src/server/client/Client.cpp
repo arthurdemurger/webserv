@@ -15,10 +15,14 @@
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-Client::Client(void) { }
+Client::Client(void)
+{
+}
 
 Client::Client(int socket, int server_fd) : _serv_fd(server_fd), _sock(socket)
-{}
+{
+
+}
 
 Client::Client(const Client &copy)
 {
@@ -49,6 +53,7 @@ Client	&Client::operator=(const Client &copy)
 */
 int			Client::get_socket(void) const { return (_sock); }
 
+
 int			Client::get_server_fd(void) const { return (_serv_fd); }
 
 Request		Client::get_request(void) const { return (_request); }
@@ -65,16 +70,13 @@ Config		Client::get_conf(void) const { return (_conf); }
 
 void	Client::add_request(Config conf)
 {
-	// std::cout << "1:" << conf.get_name() << std::endl;
 	_request.parse(_sock, conf);
-	_response.set_full_response(_response.build(_request));
+	_response.build(_request);
 }
 
 void	Client::send_response(void)
 {
 		std::string response = _response.get_full_response();
-
-		// std::cout << "response : " << response << std::endl;
 
 		size_t bytesSend = send(_sock, response.c_str(), response.length(), 0);
 }
