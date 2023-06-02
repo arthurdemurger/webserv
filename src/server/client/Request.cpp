@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 15:14:40 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/02 12:29:10 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ void	Request::check_path(Config conf)
 	std::string	root_path;
 
 	this->_status = "200";
+	// std::cout << "PATH : " << _path << std::endl;
 	for (it = _loc.begin(); it != _loc.end(); ++it)
 	{
 		// std::cout << "it: " << it->getLocationType() << std::endl;
@@ -215,9 +216,7 @@ void	Request::print_request()
 	std::cout << "\n";
 	std::cout << "REQUEST HEADERS START\n";
 	for (std::map<std::string, std::string>::iterator it = _headers.begin(); it != _headers.end(); ++it)
-	{
 		std::cout << it->first << ": " << it->second << std::endl;
-	}
 	std::cout << "\n";
 	std::cout << "REQUEST BODY START\n";
 	std::cout << this->_body << std::endl;

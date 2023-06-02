@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 15:41:05 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/02 11:02:55 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ std::string	Response::build_error(Request &request)
 	// if (request.get_status() == "404")
 	response =  "HTTP/1.1 404 Not Found\n"
 				"Content-Type: text/html\n\n";
-	response += file_to_string("html/error/404.html");
+	response += file_to_string("docs/html/error/404.html");
 	return (response);
 }
 

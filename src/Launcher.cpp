@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 17:01:10 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/02 11:02:27 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 Launcher::Launcher(std::string conf_filename)
 {
 	if (conf_filename.empty())
-		_config_file = "config/default.conf";
+		_config_file = "docs/config/default.conf";
 	else
 		_config_file = conf_filename;
 
