@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webserv - POST Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/ico" href="icon/favicon.ico">
+</head>
+<body>
+    <header>
+        <h1>Webserv</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+                <li><a href="about.html">About us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+	<h2>Contact</h2>
+    <section id="form-section">
+        <div class="form-container">
+            <h2>Submit form via a post request</h2>
+            <form action="script.cgi" method="post">
+                <div>
+                    <label for="first_name">First Name:</label>
+                    <input type="text" id="first_name" name="first_name" required>
+                </div>
+                <div>
+                    <label for="surname">Surname:</label>
+                    <input type="text" id="surname" name="surname" required>
+                </div>
+                <div>
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <div>
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 Webserv. All rights reserved.</p>
+    </footer>
+</body>
+</html>
