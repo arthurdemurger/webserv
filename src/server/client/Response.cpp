@@ -125,7 +125,7 @@ std::string	Response::build_get_method(Request &request)
 
 std::string	Response::build(Request &request)
 {
-	// std::cout << "status : " << request.get_status() << std::endl;
+	std::cout << "status : " << request.get_status() << std::endl;
 	// std::cout << "method : " << request.get_method() << std::endl;
 	if (request.get_method() == "GET")
 		return (build_get_method(request));

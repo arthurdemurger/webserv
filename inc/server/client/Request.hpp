@@ -26,6 +26,8 @@ class Request
 		std::map<std::string, std::string>				_headers;
 		std::string										_body;
 		bool											_isParsed;
+		std::string										_location;
+		std::string										_file;
 
 	public:
 		/*
@@ -56,6 +58,10 @@ class Request
 		void	print_request();
 		void	check_method();
 		void	check_path(Config conf);
+		void	parse_path(std::string path);
+		void	parse_styles(Config conf);
+		void	check_location_file();
+		void	open_file(std::string path, Config);
 };
 
 #endif
