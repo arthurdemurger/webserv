@@ -7,6 +7,7 @@ first_name = form.getvalue('first_name')
 surname = form.getvalue('surname')
 message = form.getvalue('message')
 
+print("HTTP/1.1 200 OK\n")
 print("Content-type: text/html\n\n")
 print("<!DOCTYPE html>")
 print("<html lang='fr'>")

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 14:08:50 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/05 14:09:42 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,9 @@ std::string	Response::build_error(Request &request)
 
 void	Response::build_post_method(Request &request, int sock)
 {
-	std::string	form_data = "first_name=arthur&surname=demurger&message=GG";
+	std::string	form_data = request.get_body();
+
+	std::cout << form_data << std::endl;
 	std::string	query_string = "QUERY_STRING=" + form_data;
 	std::string	content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
 	std::string	content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];

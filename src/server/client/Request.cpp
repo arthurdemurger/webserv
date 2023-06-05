@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 12:41:09 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/05 14:12:25 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ void	Request::check_path(Config conf)
 	int								c = 0, count = 0, index = 0;
 	size_t							pos;
 
-	std::cout << "_path: " << _path << std::endl;
+	// std::cout << "_path: " << _path << std::endl;
 	this->_status = "200";
 	check_location_file();
     while ((index = _path.find(substr, index)) != std::string::npos) {
@@ -242,7 +242,7 @@ void	Request::check_path(Config conf)
 					_file = it->getIndex();
 				root_path.append(_file);
 				this->_path = root_path;
-				std::cout << "updated_path: " << _path << std::endl;
+				// std::cout << "updated_path: " << _path << std::endl;
 				open_file(root_path, conf);
 				break ;
 			}
@@ -265,7 +265,7 @@ void	Request::check_path(Config conf)
 			root_path.append(_path);
 			_path = root_path;
 		}
-		std::cout << "updated_path: " << _path << std::endl;
+		// std::cout << "updated_path: " << _path << std::endl;
 		open_file(_path, conf);
 	}
 }
