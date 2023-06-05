@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 13:01:52 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/02 16:50:55 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 
 /* Define constants */
 # define BUF_SIZE		30000
+# define TIME_OUT       3
 # define RESET			"\x1B[0m"
 # define RED			"\x1B[31m"
 # define GREEN          "\x1b[32m"

@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 12:58:03 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/05 13:07:43 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	Request::parse(int fd, Config conf)
 		}
 		i++;
 	}
+	// print_request();
 	_isParsed = true;
 }
 

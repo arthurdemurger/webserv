@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 14:17:05 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/02 16:49:48 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ class Response
 		std::string		build_body(std::string filename);
 		std::string		build_get_method(Request &request);
 		std::string		build_error(Request &request);
-		std::string		build(Request &request);
+		void			build(Request &request);
 };
 
 #endif //RESPONSE_HPP
