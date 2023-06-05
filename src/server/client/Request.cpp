@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 14:12:25 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/05 14:15:58 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,12 @@ void	Request::parse(int fd, Config conf)
 	this->_status = "200";
 	n = read(fd, buff, BUF_SIZE);
 	std::string data(buff, n);
-	while (n > 0)
-	{
-		n = read(fd, buff, BUF_SIZE);
-		data += buff;
-	}
-
 	ss << data;
 	while (getline(ss, line))
 	{
 		if (i == 0)
 			parse_request_line(line, conf);
-		else if (i > 0 && !line.empty())
+		else if (i > 0 && line.find(":") != std::string::npos)
 			parse_request_headers(line);
 		else
 		{
