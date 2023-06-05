@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 13:07:43 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/05 14:46:39 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,6 @@ void	Request::parse_path(std::string path)
 
 	while(getline(ss, line, '/'))
 	{
-		std::cout << "line: " << line << std::endl;
 		if (c == 1)
 			this->_location = line;
 		else if (c == 3)
@@ -220,15 +219,18 @@ void	Request::check_path(Config conf)
 	std::cout << "_path: " << _path << std::endl;
 	this->_status = "200";
 	check_location_file();
+	std::cout << "_location: " << _location << std::endl;
     while ((index = _path.find(substr, index)) != std::string::npos) {
         index += substr.length();
 		count++;
     }
 	if (count > 1)
 	{
+		std::cout << "1\n";
 		_location.insert(0, "/");
 		for (it = _loc.begin(); it != _loc.end(); ++it)
 		{
+			std::cout << ": " << it->getLocationType() << std::endl;
 			if (!_location.compare(it->getLocationType()))
 			{
 				root_path = it->getRoot();
