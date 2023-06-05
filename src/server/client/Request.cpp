@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 12:57:28 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/05 12:58:03 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,8 @@ void	Request::parse(int fd, Config conf)
 	n = read(fd, buff, BUF_SIZE);
 	std::string data(buff, n);
 	ss << data;
-	std::cout << "parse new request: " << line << std::endl;
 	while (getline(ss, line))
 	{
-		std::cout << "line: " << line << std::endl;
 		if (i == 0)
 			parse_request_line(line, conf);
 		else if (i > 0 && line.find(":") != std::string::npos)
