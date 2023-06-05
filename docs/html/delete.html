@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Delete Request Example</title>
+</head>
+<body>
+  <h1>Delete Request Example</h1>
+  
+  <button onclick="sendDeleteRequest()">Delete Resource</button>
+
+  <script>
+    function sendDeleteRequest() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("DELETE", "/api/resource", true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            alert("Resource deleted successfully!");
+          } else {
+            alert("Failed to delete resource. Status code: " + xhr.status);
+          }
+        }
+      };
+      xhr.send();
+    }
+  </script>
+</body>
+</html>
