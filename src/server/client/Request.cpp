@@ -159,67 +159,113 @@ void	Request::trim_value(std::string &value)
 	value.erase(0, i);
 }
 
+void	Request::parse_path(std::string path)
+{
+	std::istringstream	ss(path);
+	std::string			line;
+	int					c = 0;
+
+	while(getline(ss, line, '/'))
+	{
+		std::cout << "line: " << line << std::endl;
+		if (c == 1)
+			this->_location = line;
+		else if (c == 3)
+			this->_file = line;
+		c++;
+	}
+}
+
+void	Request::parse_styles(Config conf)
+{
+	if (_path.find("style") != std::string::npos)
+	{
+		_path = conf.get_root() + "styles.css";
+		this->_status = "200";
+	}
+	else
+	{
+		_path = conf.get_root();
+		this->_status = "404";
+	}
+}
+
+void	Request::check_location_file()
+{
+	std::istringstream	iss(_path);
+	std::string			line;
+	int					c = 0;
+
+	while (getline(iss, line, '/')) {
+		if (c == 1)
+			this->_location = line;
+		else if (c == 2)
+			this->_file = line;
+		c++;
+	}
+}
+
+void	Request::open_file(std::string path, Config conf)
+{
+	std::ifstream ifs(path);
+	if (ifs.fail())
+	{
+		std::cerr << "Error: " << strerror(errno) << " | path : " << path << std::endl;
+		parse_styles(conf);
+	}
+}
+
 void	Request::check_path(Config conf)
 {
-	std::vector<Location> _loc	= conf.get_location();
-	std::vector<Location>::iterator it;
-	std::string	root_path;
+	std::vector<Location>			_loc = conf.get_location();
+	std::vector<Location>::iterator	it;
+	std::string						root_path, substr = "/";
+	int								c = 0, count = 0, index = 0;
+	size_t							pos;
 
+	std::cout << "_path: " << _path << std::endl;
 	this->_status = "200";
-	// std::cout << "PATH : " << _path << std::endl;
-	for (it = _loc.begin(); it != _loc.end(); ++it)
+	check_location_file();
+    while ((index = _path.find(substr, index)) != std::string::npos) {
+        index += substr.length();
+		count++;
+    }
+	if (count > 1)
 	{
-		// std::cout << "it: " << it->getLocationType() << std::endl;
-		if (!_path.compare(it->getLocationType()))
+		_location.insert(0, "/");
+		for (it = _loc.begin(); it != _loc.end(); ++it)
 		{
-			root_path = it->getRoot();
-			root_path.append(_path);
-			std::ifstream ifs(root_path);
-			if (ifs.fail())
+			if (!_location.compare(it->getLocationType()))
 			{
-				// std::cerr << "Error: " << strerror(errno) << " | path : " << root_path << std::endl;
-				this->_status = "404";
+				root_path = it->getRoot();
+				if (_file.empty())
+					_file = it->getIndex();
+				root_path.append(_file);
+				this->_path = root_path;
+				std::cout << "updated_path: " << _path << std::endl;
+				open_file(root_path, conf);
 				break ;
 			}
 		}
+		if (it == _loc.end())
+			parse_styles(conf);
 	}
-	if (it == _loc.end())
+	else
 	{
 		if (!_path.compare("/"))
 		{
 			_path.erase(0, 1);
-			_path.append(conf.get_root());
-			_path.append(conf.get_index());
+			_path.append(conf.get_root().append(conf.get_index()));
 		}
 		else
 		{
-			root_path = conf.get_root();
-			size_t	pos;
 			if (((pos = _path.find("/")) != std::string::npos) && !pos)
 				_path.erase(0, 1);
+			root_path = conf.get_root();
 			root_path.append(_path);
 			_path = root_path;
 		}
-		std::ifstream ifs(_path);
-		if (!ifs.is_open())
-		{
-			// std::cerr << "Error: " << strerror(errno) << std::endl;
-			this->_status = "404";
-		}
+		std::cout << "updated_path: " << _path << std::endl;
+		open_file(_path, conf);
 	}
-	// std::cout << "status: " << _status << std::endl;
-}
-
-void	Request::print_request()
-{
-	std::cout << "REQUEST LINE START\n";
-	std::cout << "method: " << this->_method << std::endl;
-	std::cout << "path: " << this->_path << std::endl;
-	std::cout << "\n";
-	std::cout << "REQUEST HEADERS START\n";
-	for (std::map<std::string, std::string>::iterator it = _headers.begin(); it != _headers.end(); ++it)
-		std::cout << it->first << ": " << it->second << std::endl;
-	std::cout << "\n";
-	std::cout << "REQUEST BODY START\n";
-	std::cout << this->_body << std::endl;
 }
