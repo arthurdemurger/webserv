@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 17:27:42 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/05 17:33:41 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,10 +146,8 @@ void	Response::build(Request &request)
 	std::cout << "method : " << request.get_method() << std::endl;
 	std::cout << "method : " << request.get_path() << std::endl;
 	std::cout << "status : " << request.get_status() << std::endl;
-	// std::cout << "method : " << request.get_method() << std::endl;
 	if (request.get_method() == "GET")
 		_full_response = build_get_method(request);
 	else if (request.get_method() == "DELETE")
 		_full_response = build_delete_method(request);
-	// std::cout << request.get_method() << std::endl;
 }
