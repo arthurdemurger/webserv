@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 14:15:58 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:02:04 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	Request::parse(int fd, Config conf)
 	i = 0;
 	this->_status = "200";
 	n = read(fd, buff, BUF_SIZE);
+
 	std::string data(buff, n);
 	ss << data;
 	while (getline(ss, line))

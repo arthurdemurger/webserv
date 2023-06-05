@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 14:09:42 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:59:25 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ std::string	Response::build_error(Request &request)
 	response =  "HTTP/1.1 404 Not Found\n"
 				"Content-Type: text/html\n\n";
 	response += file_to_string("docs/html/error/404.html");
+
 	return (response);
 }
 
@@ -102,7 +103,6 @@ void	Response::build_post_method(Request &request, int sock)
 {
 	std::string	form_data = request.get_body();
 
-	std::cout << form_data << std::endl;
 	std::string	query_string = "QUERY_STRING=" + form_data;
 	std::string	content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
 	std::string	content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
@@ -110,6 +110,8 @@ void	Response::build_post_method(Request &request, int sock)
 
 	char	*env[] = { &query_string[0], &content_type[0], &content_length[0], &request_method[0], NULL };
 
+	// for (int i = 0; i < 4; i++)
+	// 	std::cout << env[i] << std::endl;
 	Cgi	cgi;
 
 	cgi.launch(sock, env, request.get_path());

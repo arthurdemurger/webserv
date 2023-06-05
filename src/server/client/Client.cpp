@@ -75,6 +75,7 @@ void	Client::add_request(Config conf)
 
 void	Client::send_response(void)
 {
+	// std::cout << _request.get_method() << " : " << _request.get_path() << std::endl;
 	if (_request.get_method() == "GET")
 	{
 		std::string response = _response.build_get_method(_request);

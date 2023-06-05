@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 14:07:10 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:34:07 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,25 +43,21 @@ Cgi &Cgi::operator=(const Cgi &copy)
 
 void	Cgi::launch(int client_sock, char **env, std::string path)
 {
+	int		pipefd[2];
 	pid_t	pid;
 
-	// int size = 0;
-	ICI
-		printf("%s\n", env[0]);
-		printf("%s\n", env[1]);
-		printf("%s\n", env[2]);
-		printf("%s\n", env[3]);
-		ICI
-	// std::cout << "PATH : " << path << std::endl;
 
+	if (pipe(pipefd) < 0)
+		perror("pipe");
 	if ((pid = fork()) < 0)
 		throw Cgi::ForkException();
 
 	if (!pid) /* child process */
 	{
-		dup2(client_sock, STDOUT_FILENO);
-
-		execve("docs/html/cgi/script.py", NULL, env);
+		close(pipefd[0]);
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+		execve(path.c_str(), NULL, env);
 
 		perror("execve");
 		exit(EXIT_FAILURE);
@@ -69,5 +65,12 @@ void	Cgi::launch(int client_sock, char **env, std::string path)
 	else /* parent process */
 	{
 		waitpid(pid, NULL, 0);
+		char buffer[1000];
+
+		close(pipefd[1]);
+
+		int n = read(pipefd[0], buffer, 1000);
+		write (client_sock, buffer, strlen(buffer));
+		close(pipefd[0]);
 	}
 }
