@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 12:54:35 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/05 14:07:10 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,14 @@ void	Cgi::launch(int client_sock, char **env, std::string path)
 {
 	pid_t	pid;
 
-		std::cout << "PATH : " << path << std::endl;
+	// int size = 0;
+	ICI
+		printf("%s\n", env[0]);
+		printf("%s\n", env[1]);
+		printf("%s\n", env[2]);
+		printf("%s\n", env[3]);
+		ICI
+	// std::cout << "PATH : " << path << std::endl;
 
 	if ((pid = fork()) < 0)
 		throw Cgi::ForkException();
