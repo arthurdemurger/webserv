@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/02 16:51:32 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/05 12:41:09 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	Request::parse(int fd, Config conf)
 		n = read(fd, buff, BUF_SIZE);
 		data += buff;
 	}
+
 	ss << data;
 	while (getline(ss, line))
 	{

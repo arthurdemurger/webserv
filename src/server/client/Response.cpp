@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/02 16:50:05 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/05 12:30:08 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,6 @@ Response	&Response::operator=(const Response &copy)
 /*
 ** ------------------------------- ACCESSORS --------------------------------
 */
-
-	std::string	Response::get_full_response(void) const { return (_full_response); }
-
-	void		Response::set_full_response(std::string resp) { _full_response = resp; };
 
 /*
 ** ------------------------------- METHODS --------------------------------
@@ -102,6 +98,21 @@ std::string	Response::build_error(Request &request)
 	return (response);
 }
 
+void	Response::build_post_method(Request &request, int sock)
+{
+	std::string	form_data = "first_name=arthur&surname=demurger&message=GG";
+	std::string	query_string = "QUERY_STRING=" + form_data;
+	std::string	content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
+	std::string	content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
+	std::string request_method = "REQUEST_METHOD=" + request.get_method();
+
+	char	*env[] = { &query_string[0], &content_type[0], &content_length[0], &request_method[0], NULL };
+
+	Cgi	cgi;
+
+	cgi.launch(sock, env, request.get_path());
+}
+
 std::string	Response::build_get_method(Request &request)
 {
 	std::string	response;
@@ -121,13 +132,4 @@ std::string	Response::build_get_method(Request &request)
 		response += file_to_string(request.get_path());
 	}
 	return (response);
-}
-
-void	Response::build(Request &request)
-{
-	// std::cout << "status : " << request.get_status() << std::endl;
-	// std::cout << "method : " << request.get_method() << std::endl;
-	if (request.get_method() == "GET")
-		_full_response = build_get_method(request);
-	// std::cout << request.get_method() << std::endl;
 }
