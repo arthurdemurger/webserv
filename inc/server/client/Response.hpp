@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/02 16:49:48 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/05 13:54:01 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ class Response
 		*/
 		std::string		build_body(std::string filename);
 		std::string		build_get_method(Request &request);
+		std::string		build_delete_method(Request &request);
 		std::string		build_error(Request &request);
 		void			build(Request &request);
 };
