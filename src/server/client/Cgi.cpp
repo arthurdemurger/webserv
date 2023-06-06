@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 16:33:38 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/06 17:31:06 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ Cgi &Cgi::operator=(const Cgi &copy)
 ** ------------------------------- METHODS --------------------------------
 */
 
+/* Redirect std::in & std::out to the read and write end of the pipe */
 void Cgi::executeCGI(const std::string& cgiPath, char* const* envp) {
   // std::cout << "env: " << envp << std::endl;
   //creation du pipe
