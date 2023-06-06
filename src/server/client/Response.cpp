@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 12:33:13 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/06 14:42:43 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,6 @@ std::string	Response::build_error(Request &request)
 
 void	Response::build_post_method(Request &request, int sock)
 {
-	std::string	form_data = request.get_body();
-	std::string	query_string = "QUERY_STRING=" + form_data;
 	std::string content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
 	std::string content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
 	std::string request_method = "REQUEST_METHOD=" + request.get_method();
@@ -111,7 +109,7 @@ void	Response::build_post_method(Request &request, int sock)
 	std::string server_name = "SERVER_NAME=localhost";
 	std::string server_port = "SERVER_PORT=8000";
 
-	char* env[] = {&query_string[0], &content_type[0], &content_length[0], &request_method[0], &script_name[0],
+	char* env[] = {&content_type[0], &content_length[0], &request_method[0], &script_name[0],
 				   &server_protocol[0], &server_name[0], &server_port[0], NULL};
 
 	Cgi	cgi;

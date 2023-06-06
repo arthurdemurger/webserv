@@ -85,5 +85,4 @@ void	Client::send_response(void)
 
 	if (_request.get_method() == "POST")
 		_response.build_post_method(_request, _sock);
-
 }

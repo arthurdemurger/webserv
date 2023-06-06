@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 15:02:04 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/06 14:34:19 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	Request::parse(int fd, Config conf)
 	n = read(fd, buff, BUF_SIZE);
 
 	std::string data(buff, n);
+
 	ss << data;
 	while (getline(ss, line))
 	{
@@ -263,4 +264,20 @@ void	Request::check_path(Config conf)
 		// std::cout << "updated_path: " << _path << std::endl;
 		open_file(_path, conf);
 	}
+}
+
+void	Request::print_request()
+{
+	std::cout << "REQUEST LINE START\n";
+	std::cout << "method: " << this->_method << std::endl;
+	std::cout << "path: " << this->_path << std::endl;
+	std::cout << "\n";
+	std::cout << "REQUEST HEADERS START\n";
+	for (std::map<std::string, std::string>::iterator it = _headers.begin(); it != _headers.end(); ++it)
+	{
+		std::cout << it->first << ": " << it->second << std::endl;
+	}
+	std::cout << "\n";
+	std::cout << "REQUEST BODY START\n";
+	std::cout << this->_body << std::endl;
 }

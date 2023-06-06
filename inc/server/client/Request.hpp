@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 10:43:23 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/06 14:35:24 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ class Request
 		void	parse_request_line(std::string &line, Config conf);
 		void	parse_request_headers(std::string &line);
 		void	trim_value(std::string &value);
-		void	print_request();
 		void	check_method();
 		void	check_path(Config conf);
 		void	parse_path(std::string path);
 		void	parse_styles(Config conf);
 		void	check_location_file();
 		void	open_file(std::string path, Config);
+		void	print_request(void);
 };
 
 #endif
