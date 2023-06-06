@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 17:33:41 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/06 11:07:19 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,6 @@ Response	&Response::operator=(const Response &copy)
 /*
 ** ------------------------------- ACCESSORS --------------------------------
 */
-
-	std::string	Response::get_full_response(void) const { return (_full_response); }
-
-	void		Response::set_full_response(std::string resp) { _full_response = resp; };
 
 /*
 ** ------------------------------- METHODS --------------------------------
@@ -99,7 +95,26 @@ std::string	Response::build_error(Request &request)
 	response =  "HTTP/1.1 404 Not Found\n"
 				"Content-Type: text/html\n\n";
 	response += file_to_string("docs/html/error/404.html");
+
 	return (response);
+}
+
+void	Response::build_post_method(Request &request, int sock)
+{
+	std::string	form_data = request.get_body();
+
+	std::string	query_string = "QUERY_STRING=" + form_data;
+	std::string	content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
+	std::string	content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
+	std::string request_method = "REQUEST_METHOD=" + request.get_method();
+
+	char	*env[] = { &query_string[0], &content_type[0], &content_length[0], &request_method[0], NULL };
+
+	// for (int i = 0; i < 4; i++)
+	// 	std::cout << env[i] << std::endl;
+	Cgi	cgi;
+
+	cgi.launch(sock, env, request.get_path());
 }
 
 std::string	Response::build_get_method(Request &request)

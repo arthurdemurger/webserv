@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hdony <hdony@student.42.fr>                +#+  +:+       +#+         #
+#    By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/15 11:46:45 by ademurge          #+#    #+#              #
-#    Updated: 2023/05/30 13:53:57 by hdony            ###   ########.fr        #
+#    Updated: 2023/06/05 11:51:29 by ademurge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,10 +38,11 @@ SRC			=	src/server/Server.cpp \
 				src/server/Socket.cpp \
 				src/server/Config.cpp \
 				src/server/Utils.cpp \
+				src/server/client/Cgi.cpp \
 				src/server/client/Client.cpp \
+				src/server/client/Response.cpp \
 				src/server/client/Request.cpp \
 				src/server/Location.cpp \
-				src/server/client/Response.cpp \
 				src/parser/Parser.cpp \
 				src/Launcher.cpp \
 				src/main.cpp

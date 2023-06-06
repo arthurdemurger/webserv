@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 17:15:45 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/06 11:07:00 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	Request::parse(int fd, Config conf)
 	i = 0;
 	this->_status = "200";
 	n = read(fd, buff, BUF_SIZE);
+
 	std::string data(buff, n);
 	ss << data;
 	while (getline(ss, line))
@@ -216,7 +217,7 @@ void	Request::check_path(Config conf)
 	int								c = 0, count = 0, index = 0;
 	size_t							pos;
 
-	std::cout << "_path: " << _path << std::endl;
+	// std::cout << "_path: " << _path << std::endl;
 	this->_status = "200";
 	check_location_file();
 	// std::cout << "_location: " << _location << std::endl;
@@ -236,7 +237,7 @@ void	Request::check_path(Config conf)
 					_file = it->getIndex();
 				root_path.append(_file);
 				this->_path = root_path;
-				std::cout << "updated_path: " << _path << std::endl;
+				// std::cout << "updated_path: " << _path << std::endl;
 				open_file(root_path, conf);
 				break ;
 			}
@@ -259,7 +260,7 @@ void	Request::check_path(Config conf)
 			root_path.append(_path);
 			_path = root_path;
 		}
-		std::cout << "updated_path: " << _path << std::endl;
+		// std::cout << "updated_path: " << _path << std::endl;
 		open_file(_path, conf);
 	}
 }
