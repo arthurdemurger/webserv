@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:12:06 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 14:01:59 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/06 12:24:49 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int main(int ac, char **av, char **env)
 		launcher.run();
 		return (EXIT_SUCCESS);
 	}
+
+	// setenv(env, "QUERY_STRING=first_name=John&surname=Doe&message=Hello".)
 	// std::string	form_data = "first_name=arthur&surname=demurger&message=GG";
 	// std::string	query_string = "QUERY_STRING=" + form_data;
 	// std::string	content_type = "CONTENT_TYPE=application/x-www-form-urlencoded";
@@ -34,6 +36,6 @@ int main(int ac, char **av, char **env)
 	// std::string path = "PATH=/Users/ademurge/.brew/bin:/Users/ademurge/.brew/bin:/Users/ademurge/.brew/bin:/Users/ademurge/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Users/ademurge/.brew/bin";
 
 
-	// execve("docs/html/cgi/script.py", NULL, env);
+	// execve("docs/html/cgi/script.cgi", NULL, env);
 	return (EXIT_FAILURE);
 }
