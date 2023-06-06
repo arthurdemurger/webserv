@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 11:07:19 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/06 16:06:49 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,9 @@ std::string	Response::build_error(Request &request)
 void	Response::build_post_method(Request &request, int sock)
 {
 	std::string	form_data = request.get_body();
+	// std::cout << "request body: " << request.get_body();
 
+	// std::string	test = getenv()
 	std::string	query_string = "QUERY_STRING=" + form_data;
 	std::string	content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
 	std::string	content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
@@ -110,17 +112,20 @@ void	Response::build_post_method(Request &request, int sock)
 
 	char	*env[] = { &query_string[0], &content_type[0], &content_length[0], &request_method[0], NULL };
 
-	// for (int i = 0; i < 4; i++)
-	// 	std::cout << env[i] << std::endl;
+	for (int i = 0; i < 4; i++)
+		std::cout << env[i] << std::endl;
 	Cgi	cgi;
 
-	cgi.launch(sock, env, request.get_path());
+	// cgi.launch(sock, env, request.get_path());
+	cgi.executeCGI(request.get_path(), env);
 }
 
 std::string	Response::build_get_method(Request &request)
 {
 	std::string	response;
-
+	
+	// std::cout << "method : " << request.get_path() << std::endl;
+	// std::cout << "status : " << request.get_status() << std::endl;
 	// std::cout << "path : " << request.get_path() << std::endl;
 	if (request.get_status() >= "400")
 		response = build_error(request);
@@ -142,6 +147,8 @@ std::string	Response::build_delete_method(Request &request)
 {
 	std::string	response;
 	
+	std::cout << request.get_status() << std::endl;
+	std::cout << request.get_path() << std::endl;
 	if (request.get_status() >= "400")
 		response = build_error(request);
 	else if (request.get_status() == "200")
@@ -154,15 +161,4 @@ std::string	Response::build_delete_method(Request &request)
 		}
 	}
 	return (response);
-}
-
-void	Response::build(Request &request)
-{
-	std::cout << "method : " << request.get_method() << std::endl;
-	std::cout << "method : " << request.get_path() << std::endl;
-	std::cout << "status : " << request.get_status() << std::endl;
-	if (request.get_method() == "GET")
-		_full_response = build_get_method(request);
-	else if (request.get_method() == "DELETE")
-		_full_response = build_delete_method(request);
 }

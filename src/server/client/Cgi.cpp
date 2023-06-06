@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/05 15:34:07 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/06 16:33:38 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,36 +41,64 @@ Cgi &Cgi::operator=(const Cgi &copy)
 ** ------------------------------- METHODS --------------------------------
 */
 
-void	Cgi::launch(int client_sock, char **env, std::string path)
-{
-	int		pipefd[2];
-	pid_t	pid;
+void Cgi::executeCGI(const std::string& cgiPath, char* const* envp) {
+  // std::cout << "env: " << envp << std::endl;
+  //creation du pipe
+	int pipefd[2];
+    if (pipe(pipefd) == -1) {
+      perror("pipe");
+      return;
+    }
 
+    //creation d'un nouveau processus en dupliquant l'existant
+	pid_t pid = fork();
+    if (pid == 0)
+    {
+      // Child process
+      close(pipefd[0]); // Close the read end of the pipe, nothing to read from 
 
-	if (pipe(pipefd) < 0)
-		perror("pipe");
-	if ((pid = fork()) < 0)
-		throw Cgi::ForkException();
+      // Redirect stdout to the write end of the pipe as the cgi script writes on stdout
+      if (dup2(pipefd[1], STDOUT_FILENO) == -1) {
+        perror("dup2");
+        close(pipefd[1]);
+        exit(EXIT_FAILURE);
+      }
+    /*
+      To clarify, after duplicating the write end of the pipe using dup2, it is generally a good practice to close the original file descriptor (in this case, pipefd[1]) to ensure proper resource management.
+      Closing the original file descriptor does not affect the duplicated file descriptor that is now connected to the pipe.
+    */
+    close(pipefd[1]); // Close the write end of the pipe
+    // Execute the CGI program, write to the fd
+      if (execvp(cgiPath.c_str(), envp) == -1) {
+        perror("execvp");
+        exit(EXIT_FAILURE);
+      }
+    } 
+    else if (pid < 0) {
+      // Handle fork error, if any
+      perror("fork");
+    } 
+    else {
+      // Parent process
+      close(pipefd[1]); // Close the write end of the pipe
 
-	if (!pid) /* child process */
-	{
-		close(pipefd[0]);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-		execve(path.c_str(), NULL, env);
+      // Read the output from the CGI program
+      char buffer[1024];
+      ssize_t bytesRead;
+      std::string output;
 
-		perror("execve");
-		exit(EXIT_FAILURE);
-	}
-	else /* parent process */
-	{
-		waitpid(pid, NULL, 0);
-		char buffer[1000];
+      while ((bytesRead = read(pipefd[0], buffer, sizeof(buffer))) > 0) {
+        std::cout << "buffer: " << buffer;
+        write(6, buffer, strlen(buffer));
+	  	  output.append(buffer, bytesRead);
+      }
 
-		close(pipefd[1]);
+      close(pipefd[0]); // Close the read end of the pipe
 
-		int n = read(pipefd[0], buffer, 1000);
-		write (client_sock, buffer, strlen(buffer));
-		close(pipefd[0]);
-	}
-}
+      int status;
+      waitpid(pid, &status, 0);
+      // Handle the exit status of the child process if needed
+
+      // std::cout << "CGI Program Output:\n" << output << std::endl;
+    }
+  }

@@ -35,7 +35,8 @@ class Cgi
 				/*
 			** ------------------------------- Accessors --------------------------------
 			*/
-			void launch(int client_sock, char **env, std::string path);
+			void 	launch(int client_sock, char **env, std::string path);
+			void	executeCGI(const std::string& cgiPath, char* const* envp);
 
 			class ForkException : public std::exception
 			{

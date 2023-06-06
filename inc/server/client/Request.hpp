@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/01 10:43:23 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/06 14:34:46 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ class Request
 		void	parse_path(std::string path);
 		void	parse_styles(Config conf);
 		void	check_location_file();
+		bool	check_allowed_method(Location loc);
 		void	open_file(std::string path, Config);
 };
 

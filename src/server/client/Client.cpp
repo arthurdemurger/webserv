@@ -79,11 +79,13 @@ void	Client::send_response(void)
 	if (_request.get_method() == "GET")
 	{
 		std::string response = _response.build_get_method(_request);
+		// std::cout << "response: " << response << std::endl;
 
 		size_t bytesSend = send(_sock, response.c_str(), response.length(), 0);
 	}
-
-	if (_request.get_method() == "POST")
+	else if (_request.get_method() == "POST")
 		_response.build_post_method(_request, _sock);
+	else if (_request.get_method() == "DELETE")
+		_response.build_delete_method(_request);
 
 }

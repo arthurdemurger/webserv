@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 11:07:00 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/06 15:31:40 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	Request::parse(int fd, Config conf)
 	ss << data;
 	while (getline(ss, line))
 	{
+		// std::cout << "line: " << line << std::endl;
 		if (i == 0)
 			parse_request_line(line, conf);
 		else if (i > 0 && line.find(":") != std::string::npos)
@@ -209,6 +210,19 @@ void	Request::open_file(std::string path, Config conf)
 	}
 }
 
+bool	Request::check_allowed_method(Location loc)
+{
+	std::vector<std::string>	location = loc.getAllowMethods();
+	bool						flag = false;
+
+	for (std::vector<std::string>::iterator it = location.begin(); it != location.end(); ++it)
+	{
+		if (!this->_method.compare(*it))
+			flag = true;
+	}
+	return (flag);
+}
+
 void	Request::check_path(Config conf)
 {
 	std::vector<Location>			_loc = conf.get_location();
@@ -217,10 +231,10 @@ void	Request::check_path(Config conf)
 	int								c = 0, count = 0, index = 0;
 	size_t							pos;
 
-	// std::cout << "_path: " << _path << std::endl;
+	std::cout << "_path: " << _path << std::endl;
 	this->_status = "200";
 	check_location_file();
-	// std::cout << "_location: " << _location << std::endl;
+	std::cout << "_location: " << _location << std::endl;
     while ((index = _path.find(substr, index)) != std::string::npos) {
         index += substr.length();
 		count++;
@@ -232,12 +246,17 @@ void	Request::check_path(Config conf)
 		{
 			if (!_location.compare(it->getLocationType()))
 			{
+				if (!check_allowed_method(*it))
+				{
+					this->_status = "404";
+					break ;
+				}
 				root_path = it->getRoot();
 				if (_file.empty())
 					_file = it->getIndex();
 				root_path.append(_file);
 				this->_path = root_path;
-				// std::cout << "updated_path: " << _path << std::endl;
+				std::cout << "updated_path: " << _path << std::endl;
 				open_file(root_path, conf);
 				break ;
 			}
