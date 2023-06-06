@@ -24,10 +24,10 @@ html = """
         <h1>Webserv</h1>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="contact.html" class="active">Contact</a></li>
-                <li><a href="upload.html">Upload</a></li>
-                <li><a href="about.html">About us</a></li>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../contact.html" class="active">Contact</a></li>
+                <li><a href="../upload.html">Upload</a></li>
+                <li><a href="../about.html">About us</a></li>
             </ul>
         </nav>
     </header>
