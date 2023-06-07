@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 14:34:19 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/07 12:49:25 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	Request::parse(int fd, Config conf)
 	ss << data;
 	while (getline(ss, line))
 	{
+		std::cout << "line: " << line << std::endl;
 		if (i == 0)
 			parse_request_line(line, conf);
 		else if (i > 0 && line.find(":") != std::string::npos)
@@ -81,6 +82,7 @@ void	Request::parse(int fd, Config conf)
 		{
 			buffer << ss.rdbuf();
 			this->_body = buffer.str();
+			std::cout << "body: " << _body << std::endl;
 			break;
 		}
 		i++;
@@ -144,15 +146,15 @@ void	Request::parse_request_headers(std::string &line)
 
 void	Request::trim_value(std::string &value)
 {
-	int	i;
+	int	i = 0, j = 0;
 
-	i = 0;
-	for (std::string::iterator	it = value.begin(); it != value.end(); ++it)
+	while (value[i])
 	{
-		if (*it == ' ')
-			i++;
+		if (value[i] == ' ' && value[i + 1] == ' ')
+			j++;
+		i++;
 	}
-	value.erase(0, i);
+	value.erase(0, j);
 }
 
 void	Request::parse_path(std::string path)
