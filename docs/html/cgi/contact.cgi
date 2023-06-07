@@ -16,8 +16,8 @@ html = """
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webserv - POST Form</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/ico" href="icon/favicon.ico">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="icon" type="image/ico" href="../icon/favicon.ico">
 </head>
 <body>
     <header>

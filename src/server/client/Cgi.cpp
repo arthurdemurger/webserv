@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 14:55:07 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/07 10:12:15 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,10 @@ void Cgi::launch(int client_sock, char **env, std::string path, std::string body
     int pipe_out[2]; // Tube pour la sortie du script CGI
     pid_t pid;
 
-	// for (int i = 0; i < 7; i++)
-	// 	std::cout << env[i] << std::endl;
-	// std::cout << "body : \n" << body << "\nend body\n";
+	for (int i = 0; i < 7; i++)
+		std::cout << env[i] << std::endl;
+	std::cout << "body : \n" << body << "\nend body\n";
+	std::cout << "path : " << path << "\n";
 	//
     if (pipe(pipe_in) < 0 || pipe(pipe_out) < 0) {
         perror("pipe");

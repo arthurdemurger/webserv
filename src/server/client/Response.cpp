@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 14:42:43 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/07 10:47:49 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ std::string	Response::build_error(Request &request)
 
 void	Response::build_post_method(Request &request, int sock)
 {
-	std::string content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
+	std::string content_type = "CONTENT_TYPE=m" + request.get_headers()["Content-Type"];
 	std::string content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
 	std::string request_method = "REQUEST_METHOD=" + request.get_method();
 	std::string script_name = "SCRIPT_NAME=" + request.get_path();
