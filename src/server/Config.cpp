@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 14:27:56 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/07 17:34:10 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ Config::Config(std::string server_block)
 		getline(iss_line, value, ';');
 		setter(key, value, iss, location);
 	}
+	// std::vector<std::string> vec = get_AMS();
+	// std::cout << "AMS: " << vec.size() << std::endl;
 	// print_server();
 }
 
@@ -72,6 +74,8 @@ void	Config::setter(std::string &key, std::string &value, std::istringstream &is
 {
 	if (!key.compare("listen"))
 		 setPortMBS(key, value);
+	else if (!key.compare("allow_methods"))
+		setAMS(value);
 	else if (!key.compare("host"))
 		setHostDir(value);
 	else if (!key.compare("server_name"))
@@ -91,6 +95,20 @@ void	Config::setter(std::string &key, std::string &value, std::istringstream &is
 	}
 }
 
+void	Config::setAMS(std::string &value)
+{
+	std::istringstream	ss(value);
+	std::string			line;
+
+	while (getline(ss, line, ' '))
+	{
+		this->_allow_methods.push_back(line);
+	}
+// 	for (std::vector<std::string>::iterator it = _allow_methods.begin(); it != _allow_methods.end(); ++it)
+// 	{
+// 		std::cout << "it: " << *it << std::endl;
+// 	}
+}
 
 void	Config::print_server()
 {
@@ -133,7 +151,6 @@ void	Config::print_server()
 
 void	Config::setPortMBS(std::string &key, std::string &value)
 {
-	// std::cout << "value: " << value << std::endl;
 	int i, port;
 
 	i = 0;
@@ -226,5 +243,6 @@ void	Config::setErrorPageDir(std::string &value)
 std::string				Config::get_name(void) const { return (_server_name[0]); }
 std::vector<int>		Config::get_ports(void) const { return (_port); }
 std::vector<Location>	Config::get_location(void) const { return (_location); }
+std::vector<std::string>	Config::get_AMS(void) const { return (this->_allow_methods); }
 std::string				Config::get_root(void) const { return (_root); }
 std::string				Config::get_index(void) const { return (_index); }

@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 14:09:59 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/07 17:02:02 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,9 @@ void	Response::build_post_method(Request &request, int sock)
 
 std::string	Response::build_get_method(Request &request)
 {
+	std::cout << "response: " << request.get_method() << std::endl;
+	std::cout << "response: " << request.get_path() << std::endl;
+	std::cout << "response: " << request.get_status() << std::endl;
 	std::string	response;
 	if (request.get_status() >= "400")
 		response = build_error(request);
@@ -141,6 +144,7 @@ std::string	Response::build_delete_method(Request &request)
 {
 	std::string	response;
 	
+	std::cout << "response: " << request.get_method() << std::endl;
 	std::cout << "response: " << request.get_status() << std::endl;
 	std::cout << "response: " << request.get_path() << std::endl;
 	if (request.get_status() >= "400")

@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 12:51:51 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/07 15:41:55 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ class Request
 		bool	check_allowed_method(Location loc);
 		void	open_file(std::string path, Config);
 		void	print_request(void);
+		bool	check_AMS(Config conf);
 };
 
 #endif
