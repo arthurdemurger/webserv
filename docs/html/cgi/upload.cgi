@@ -42,9 +42,6 @@ if fileitem.filename:
 	    <main>
 	        <p>File Uploaded : <strong> {file_name} </strong></p>
 	    </main>
-	    <footer>
-	        <p>&copy; 2023 My Website. All rights reserved.</p>
-	    </footer>
 	</body>
 	</html>
 	""".format(file_name=fn)
@@ -77,9 +74,6 @@ else:
 		<main>
 			<p>No file uploaded.</p>
 		</main>
-		<footer>
-			<p>&copy; 2023 My Website. All rights reserved.</p>
-		</footer>
 	</body>
 	</html>
 	"""

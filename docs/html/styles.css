@@ -78,17 +78,6 @@ section {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-footer {
-	position:initial;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	background-color: #B0C4DE;
-	color: #191970;
-	padding: 20px;
-	text-align: center;
-}
-
 /* -------------------------- INDEX SECTION -------------------------- */
 
 #index-section {
@@ -203,7 +192,7 @@ footer {
 	color: #6E6E9E;
 }
 
-/* -------------------------- Upload SECTION -------------------------- */
+/* -------------------------- UPLOAD SECTION -------------------------- */
 #form-section {
 	display: flex;
 	justify-content:  center;
@@ -220,12 +209,21 @@ h2 {
 .form-container {
 	display: inline-block;
 	text-align: left;
+	width: 50%;
 	padding: 20px;
 	background-color: #FFF;
 	border-radius: 5px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.message-container {
+	text-align: center;
+	border-radius: 5px;
+	padding: 20px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	background-color: #FFF;
+
+}
 form {
 	background-color: #FFF;
 	border-radius: 5px;
