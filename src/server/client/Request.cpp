@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 12:50:23 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/07 14:37:10 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	Request::parse(int fd, Config conf)
 	ss << data;
 	while (getline(ss, line))
 	{
-		std::cout << "line: " << line << std::endl;
 		if (i == 0)
 			parse_request_line(line, conf);
 		else if (i > 0 && line.find(":") != std::string::npos)
@@ -90,7 +89,6 @@ void	Request::parse(int fd, Config conf)
 		{
 			buffer << ss.rdbuf();
 			this->_body = buffer.str();
-			std::cout << "body: " << _body << std::endl;
 			break;
 		}
 		i++;
@@ -173,7 +171,6 @@ void	Request::parse_path(std::string path)
 
 	while(getline(ss, line, '/'))
 	{
-		std::cout << "line: " << line << std::endl;
 		if (c == 1)
 			this->_location = line;
 		else if (c == 3)
