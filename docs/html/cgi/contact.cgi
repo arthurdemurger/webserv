@@ -6,12 +6,25 @@ import cgi
 form = cgi.FieldStorage()
 
 first_name = form.getvalue('first_name', '')
-surname = form.getvalue('surname', '')
+last_name = form.getvalue('last_name', '')
 message = form.getvalue('message', '')
+email = form.getvalue('email', '')
+
+messages_dir = './form'
+if not os.path.exists(messages_dir):
+    os.makedirs(messages_dir)
+
+file_name = os.path.join(messages_dir, first_name)
+
+with open(file_name, 'w') as file:
+    file.write("First Name: {}\n".format(first_name))
+    file.write("Last Name: {}\n".format(last_name))
+    file.write("Email: {}\n".format(email))
+    file.write("Message: {}\n".format(message))
 
 html = """
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,21 +44,19 @@ html = """
             </ul>
         </nav>
     </header>
-    <main>
-        <h2>Thank you for submitting the form</h2>
-        <p>Here are the details you provided:</p>
-        <ul>
-            <li><strong>First Name:</strong> {first_name}</li>
-            <li><strong>Last Name:</strong> {surname}</li>
-            <li><strong>Message:</strong> {message}</li>
-        </ul>
-    </main>
-    <footer>
-        <p>&copy; 2023 My Website. All rights reserved.</p>
-    </footer>
+
+	<h2 class="title">Contact</h2>
+    <section id="form-section">
+        <div class="form-container">
+            <h2>Submit form</h2>
+			<div class="message-container">
+            	<h3> Message sent ! </h3>
+			</div>
+        </div>
+    </section>
 </body>
 </html>
-""".format(first_name=first_name, surname=surname, message=message)
+"""
 
 print("HTTP/1.1 200 OK\nContent-type: text/html")
 print("Content-length: {}\n".format(len(html)))
