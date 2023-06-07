@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 15:31:40 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/07 12:52:57 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,18 @@ void	Request::parse(int fd, Config conf)
 
 	i = 0;
 	this->_status = "200";
+	bzero(buff, BUF_SIZE);
 	n = read(fd, buff, BUF_SIZE);
 
 	std::string data(buff, n);
+
+	// std::ofstream file("request_log", std::ios::out | std::ios::app);
+    // if (file.is_open())
+	// {
+	// 	file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
+    //     file.close();
+	// }
+
 	ss << data;
 	while (getline(ss, line))
 	{
@@ -81,6 +90,7 @@ void	Request::parse(int fd, Config conf)
 		{
 			buffer << ss.rdbuf();
 			this->_body = buffer.str();
+			std::cout << "body: " << _body << std::endl;
 			break;
 		}
 		i++;
@@ -144,15 +154,15 @@ void	Request::parse_request_headers(std::string &line)
 
 void	Request::trim_value(std::string &value)
 {
-	int	i;
+	int	i = 0, j = 0;
 
-	i = 0;
-	for (std::string::iterator	it = value.begin(); it != value.end(); ++it)
+	while (value[i])
 	{
-		if (*it == ' ')
-			i++;
+		if (value[i] == ' ' && value[i + 1] == ' ')
+			j++;
+		i++;
 	}
-	value.erase(0, i);
+	value.erase(0, j);
 }
 
 void	Request::parse_path(std::string path)
@@ -282,4 +292,20 @@ void	Request::check_path(Config conf)
 		// std::cout << "updated_path: " << _path << std::endl;
 		open_file(_path, conf);
 	}
+}
+
+void	Request::print_request()
+{
+	std::cout << "REQUEST LINE START\n";
+	std::cout << "method: " << this->_method << std::endl;
+	std::cout << "path: " << this->_path << std::endl;
+	std::cout << "\n";
+	std::cout << "REQUEST HEADERS START\n";
+	for (std::map<std::string, std::string>::iterator it = _headers.begin(); it != _headers.end(); ++it)
+	{
+		std::cout << it->first << ": " << it->second << std::endl;
+	}
+	std::cout << "\n";
+	std::cout << "REQUEST BODY START\n";
+	std::cout << this->_body << std::endl;
 }

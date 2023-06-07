@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 14:34:46 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/07 12:51:51 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ class Request
 		void	parse_request_line(std::string &line, Config conf);
 		void	parse_request_headers(std::string &line);
 		void	trim_value(std::string &value);
-		void	print_request();
 		void	check_method();
 		void	check_path(Config conf);
 		void	parse_path(std::string path);
@@ -63,6 +62,7 @@ class Request
 		void	check_location_file();
 		bool	check_allowed_method(Location loc);
 		void	open_file(std::string path, Config);
+		void	print_request(void);
 };
 
 #endif

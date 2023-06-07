@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 16:06:49 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/07 12:53:22 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,32 +101,26 @@ std::string	Response::build_error(Request &request)
 
 void	Response::build_post_method(Request &request, int sock)
 {
-	std::string	form_data = request.get_body();
-	// std::cout << "request body: " << request.get_body();
-
-	// std::string	test = getenv()
-	std::string	query_string = "QUERY_STRING=" + form_data;
-	std::string	content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
-	std::string	content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
+	std::string content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
+	std::string content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
 	std::string request_method = "REQUEST_METHOD=" + request.get_method();
+	std::string script_name = "SCRIPT_NAME=" + request.get_path();
+	std::string server_protocol = "SERVER_PROTOCOL=HTTP/1.1";
+	std::string server_name = "SERVER_NAME=localhost";
+	std::string server_port = "SERVER_PORT=8000";
 
-	char	*env[] = { &query_string[0], &content_type[0], &content_length[0], &request_method[0], NULL };
+	char* env[] = {&content_type[0], &content_length[0], &request_method[0], &script_name[0],
+				   &server_protocol[0], &server_name[0], &server_port[0], NULL};
 
-	for (int i = 0; i < 4; i++)
-		std::cout << env[i] << std::endl;
 	Cgi	cgi;
 
-	// cgi.launch(sock, env, request.get_path());
-	cgi.executeCGI(request.get_path(), env);
+	if (!request.get_body().empty())
+		 cgi.launch(sock, env, request.get_path(), request.get_body());
 }
 
 std::string	Response::build_get_method(Request &request)
 {
 	std::string	response;
-	
-	// std::cout << "method : " << request.get_path() << std::endl;
-	// std::cout << "status : " << request.get_status() << std::endl;
-	// std::cout << "path : " << request.get_path() << std::endl;
 	if (request.get_status() >= "400")
 		response = build_error(request);
 	else if (request.get_status() == "200")

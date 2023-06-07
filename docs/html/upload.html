@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Webserv - POST Form</title>
+	<link rel="stylesheet" href="styles.css">
+	<link rel="icon" type="image/ico" href="icon/favicon.ico">
+</head>
+<body>
+	<header>
+		<h1>Webserv</h1>
+		<nav>
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="contact.html">Contact</a></li>
+				<li><a href="upload.html" class="active">Upload</a></li>
+				<li><a href="about.html">About us</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<h2 class="title">Upload</h2>
+	<section id="form-section">
+		<div class="form-container">
+			<h2>Upload a file</h2>
+			<form action="cgi/upload.cgi" method="post" enctype="multipart/form-data">
+				<input type="file" name="file_upload" required>
+				<input type="submit" value="Upload">
+			</form>
+		</div>
+	</section>
+
+	<footer>
+		<p>&copy; 2023 Webserv. All rights reserved.</p>
+	</footer>
+</body>
+</html>
+

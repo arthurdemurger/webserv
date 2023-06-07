@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 17:38:28 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/07 12:52:37 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,68 +41,56 @@ Cgi &Cgi::operator=(const Cgi &copy)
 ** ------------------------------- METHODS --------------------------------
 */
 
-/* 
-A CGI script reads the POST string from the STDIN and send their content to the STDOUT.
-Redirect std::in & std::out to the read and write end of the pipe
-*/
-void Cgi::executeCGI(const std::string& cgiPath, char* const* envp) {
-  // std::cout << "env: " << envp << std::endl;
-  //creation du pipe
-	int pipefd[2];
-    if (pipe(pipefd) == -1) {
-      perror("pipe");
-      return;
-    }
+void Cgi::launch(int client_sock, char **env, std::string path, std::string body)
+{
+	int pipe_in[2]; // Tube pour l'entrée standard du script CGI
+	int pipe_out[2]; // Tube pour la sortie du script CGI
+	pid_t pid;
 
-    //creation d'un nouveau processus en dupliquant l'existant
-	pid_t pid = fork();
-    if (pid == 0)
-    {
-      // Child process
-      close(pipefd[0]); // Close the read end of the pipe, nothing to read from 
+	if (pipe(pipe_in) < 0 || pipe(pipe_out) < 0) {
+		perror("pipe");
+		return;
+	}
+	if ((pid = fork()) < 0)
+		throw Cgi::ForkException();
 
-      // Redirect stdout to the write end of the pipe as the cgi script writes on stdout
-      if (dup2(pipefd[1], STDOUT_FILENO) == -1) {
-        perror("dup2");
-        close(pipefd[1]);
-        exit(EXIT_FAILURE);
-      }
-    /*
-      To clarify, after duplicating the write end of the pipe using dup2, it is generally a good practice to close the original file descriptor (in this case, pipefd[1]) to ensure proper resource management.
-      Closing the original file descriptor does not affect the duplicated file descriptor that is now connected to the pipe.
-    */
-    close(pipefd[1]); // Close the write end of the pipe
-    // Execute the CGI program, write to the fd
-      if (execvp(cgiPath.c_str(), envp) == -1) {
-        perror("execvp");
-        exit(EXIT_FAILURE);
-      }
-    } 
-    else if (pid < 0) {
-      // Handle fork error, if any
-      perror("fork");
-    } 
-    else {
-      // Parent process
-      close(pipefd[1]); // Close the write end of the pipe
+	if (!pid) // child process
+	{
+		// Processus enfant : exécute le script CGI
+		close(pipe_in[1]);
+		close(pipe_out[0]);
 
-      // Read the output from the CGI program
-      char buffer[1024];
-      ssize_t bytesRead;
-      std::string output;
+		// Rediriger l'entrée standard (stdin) vers le côté de lecture du tube d'entrée
+		dup2(pipe_in[0], STDIN_FILENO);
+		close(pipe_in[0]);
 
-      while ((bytesRead = read(pipefd[0], buffer, sizeof(buffer))) > 0) {
-        std::cout << "buffer: " << buffer;
-        write(6, buffer, strlen(buffer));
-	  	  output.append(buffer, bytesRead);
-      }
+		// Rediriger la sortie standard (stdout) vers le côté d'écriture du tube de sortie
+		dup2(pipe_out[1], STDOUT_FILENO);
+		close(pipe_out[1]);
 
-      close(pipefd[0]); // Close the read end of the pipe
+		execve(path.c_str(), NULL, env);
 
-      int status;
-      waitpid(pid, &status, 0);
-      // Handle the exit status of the child process if needed
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+	else // parent process
+	{
+		close(pipe_in[0]);
+		close(pipe_out[1]);
 
-      // std::cout << "CGI Program Output:\n" << output << std::endl;
-    }
-  }
+		// Écrire les données de la requête POST dans le tube d'entrée du script CGI
+		write(pipe_in[1], body.c_str(), body.length());
+		close(pipe_in[1]);
+
+		char buffer[1000];
+
+		int n;
+		while ((n = read(pipe_out[0], buffer, 1000)) > 0) {
+			write(client_sock, buffer, n);
+		}
+		close(pipe_out[0]);
+
+		waitpid(pid, NULL, 0);
+	}
+}
+
