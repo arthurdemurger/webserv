@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 10:47:49 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/07 12:22:46 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,14 +114,14 @@ void	Response::build_post_method(Request &request, int sock)
 
 	Cgi	cgi;
 
-	cgi.launch(sock, env, request.get_path(), request.get_body());
+	if (!request.get_body().empty())
+		 cgi.launch(sock, env, request.get_path(), request.get_body());
 }
 
 std::string	Response::build_get_method(Request &request)
 {
 	std::string	response;
 
-	// std::cout << "path : " << request.get_path() << std::endl;
 	if (request.get_status() >= "400")
 		response = build_error(request);
 	else if (request.get_status() == "200")

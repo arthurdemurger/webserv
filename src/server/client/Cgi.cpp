@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 10:12:15 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/07 12:24:02 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,60 +43,54 @@ Cgi &Cgi::operator=(const Cgi &copy)
 
 void Cgi::launch(int client_sock, char **env, std::string path, std::string body)
 {
-    int pipe_in[2]; // Tube pour l'entrée standard du script CGI
-    int pipe_out[2]; // Tube pour la sortie du script CGI
-    pid_t pid;
+	int pipe_in[2]; // Tube pour l'entrée standard du script CGI
+	int pipe_out[2]; // Tube pour la sortie du script CGI
+	pid_t pid;
 
-	for (int i = 0; i < 7; i++)
-		std::cout << env[i] << std::endl;
-	std::cout << "body : \n" << body << "\nend body\n";
-	std::cout << "path : " << path << "\n";
-	//
-    if (pipe(pipe_in) < 0 || pipe(pipe_out) < 0) {
-        perror("pipe");
-        return;
-    }
-    if ((pid = fork()) < 0) {
-        throw Cgi::ForkException();
-    }
+	if (pipe(pipe_in) < 0 || pipe(pipe_out) < 0) {
+		perror("pipe");
+		return;
+	}
+	if ((pid = fork()) < 0)
+		throw Cgi::ForkException();
 
-    if (pid == 0) {
-        // Processus enfant : exécute le script CGI
+	if (!pid) // child process
+	{
+		// Processus enfant : exécute le script CGI
+		close(pipe_in[1]);
+		close(pipe_out[0]);
 
-        close(pipe_in[1]);
-        close(pipe_out[0]);
+		// Rediriger l'entrée standard (stdin) vers le côté de lecture du tube d'entrée
+		dup2(pipe_in[0], STDIN_FILENO);
+		close(pipe_in[0]);
 
-        // Rediriger l'entrée standard (stdin) vers le côté de lecture du tube d'entrée
-        dup2(pipe_in[0], STDIN_FILENO);
-        close(pipe_in[0]);
+		// Rediriger la sortie standard (stdout) vers le côté d'écriture du tube de sortie
+		dup2(pipe_out[1], STDOUT_FILENO);
+		close(pipe_out[1]);
 
-        // Rediriger la sortie standard (stdout) vers le côté d'écriture du tube de sortie
-        dup2(pipe_out[1], STDOUT_FILENO);
-        close(pipe_out[1]);
+		execve(path.c_str(), NULL, env);
 
-        execve(path.c_str(), NULL, env);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+	else // parent process
+	{
+		close(pipe_in[0]);
+		close(pipe_out[1]);
 
-        perror("execve");
-        exit(EXIT_FAILURE);
-    } else {
-        // Processus parent
+		// Écrire les données de la requête POST dans le tube d'entrée du script CGI
+		write(pipe_in[1], body.c_str(), body.length());
+		close(pipe_in[1]);
 
-        close(pipe_in[0]);
-        close(pipe_out[1]);
+		char buffer[1000];
 
-        // Écrire les données de la requête POST dans le tube d'entrée du script CGI
-        write(pipe_in[1], body.c_str(), body.length());
-        close(pipe_in[1]);
+		int n;
+		while ((n = read(pipe_out[0], buffer, 1000)) > 0) {
+			write(client_sock, buffer, n);
+		}
+		close(pipe_out[0]);
 
-        char buffer[1000];
-
-        int n;
-        while ((n = read(pipe_out[0], buffer, 1000)) > 0) {
-            write(client_sock, buffer, n);
-        }
-        close(pipe_out[0]);
-
-        waitpid(pid, NULL, 0);
-    }
+		waitpid(pid, NULL, 0);
+	}
 }
 

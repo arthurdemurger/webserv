@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 14:34:19 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/07 12:15:08 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,17 @@ void	Request::parse(int fd, Config conf)
 
 	i = 0;
 	this->_status = "200";
+	bzero(buff, BUF_SIZE);
 	n = read(fd, buff, BUF_SIZE);
 
 	std::string data(buff, n);
+
+	// std::ofstream file("request_log", std::ios::out | std::ios::app);
+    // if (file.is_open())
+	// {
+	// 	file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
+    //     file.close();
+	// }
 
 	ss << data;
 	while (getline(ss, line))
