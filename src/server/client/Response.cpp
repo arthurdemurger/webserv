@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 12:53:22 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/07 14:09:59 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,13 +141,13 @@ std::string	Response::build_delete_method(Request &request)
 {
 	std::string	response;
 	
-	std::cout << request.get_status() << std::endl;
-	std::cout << request.get_path() << std::endl;
+	std::cout << "response: " << request.get_status() << std::endl;
+	std::cout << "response: " << request.get_path() << std::endl;
 	if (request.get_status() >= "400")
 		response = build_error(request);
 	else if (request.get_status() == "200")
 	{
-		response = "HTTP/1.1 200 OK\n";
+		response = "HTTP/1.1 204 No Content\n";
 		if (request.get_path().find("html") != std::string::npos)
 		{
 			response.append("Content-Type: text/html\n\n");

@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/31 15:20:46 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/07 14:21:29 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ class Config
 		std::vector<int>			_port;
 		std::string					_host;
 		std::vector<std::string>	_server_name;
+		std::vector<std::string>	_allow_methods;
 		std::map<int, std::string>	_error_page;
 		int							_client_max_body_size;
 		std::string					_root;
@@ -55,6 +56,7 @@ class Config
 		void	setErrorPageDir(std::string &rhs);
 		void	setClientMaxBodySize(std::string &rhs);
 		void	setRootDir(std::string &value);
+		void	setAllowMethods(std::string &value);
 
 		std::string				get_name(void) const;
 		std::string				get_root(void) const;

@@ -86,6 +86,9 @@ void	Client::send_response(void)
 	else if (_request.get_method() == "POST")
 		_response.build_post_method(_request, _sock);
 	else if (_request.get_method() == "DELETE")
-		_response.build_delete_method(_request);
+	{
+		std::string response= _response.build_delete_method(_request);
+		size_t bytesSend = send(_sock, response.c_str(), response.length(), 0);
+	}
 
 }
