@@ -10,7 +10,7 @@ last_name = form.getvalue('last_name', '')
 message = form.getvalue('message', '')
 email = form.getvalue('email', '')
 
-messages_dir = './form'
+messages_dir = './docs/messages/'
 if not os.path.exists(messages_dir):
     os.makedirs(messages_dir)
 
