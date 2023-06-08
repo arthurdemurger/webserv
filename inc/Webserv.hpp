@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 16:15:24 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/08 16:55:00 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,14 @@
 // #include "Launcher.hpp"
 
 /* Define constants */
+// status code
+# define CODE_200 "200 OK"
+# define CODE_204 "204 No Content"
+# define CODE_400 "400 Bad Request"
+# define CODE_404 "404 Not Found"
+# define CODE_405 "405 Not Allowed"
+# define CODE_413 "413 Payload Too Large"
+
 # define BUF_SIZE		30000
 # define TIME_OUT       3
 # define RESET			"\x1B[0m"

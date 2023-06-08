@@ -272,14 +272,14 @@ form input[type="submit"]:hover {
 	background-color: #6E6E9E;
 }
 
-/* -------------------------- 404 SECTION -------------------------- */
-#error-404-section {
+/* -------------------------- ERROR PAGES SECTION -------------------------- */
+#error-page-section {
 	display: flex;
 	justify-content:  center;
 	align-items: center;
 	text-align: center;
 }
-.err-404-container {
+.err-page-container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -287,33 +287,33 @@ form input[type="submit"]:hover {
 	margin-top: 100px;
 }
 
-.err-404-container h2 {
+.err-page-container h2 {
 	font-weight: bold;
 	font-size: 60px;
 	margin-bottom: 20px;
 }
 
-.err-404-container h3 {
+.err-page-container h3 {
 	font-weight:lighter;
 	font-size: 30px;
 	margin-bottom: 20px;
 }
 
-.err-404-container p {
+.err-page-container p {
 	margin-bottom: 10px;
 }
 
-.err-404-container a {
+.err-page-container a {
 	color: #191970;
 	text-decoration: none;
 	transition: color 0.2s ease;
 }
 
-.err-404-container a:hover {
+.err-page-container a:hover {
 	color: #6E6E9E;
 }
 
-.err-404-container .home-button {
+.err-page-container .home-button {
 	display: inline-block;
 	padding: 10px 20px;
 	background-color: #191970;
@@ -324,6 +324,6 @@ form input[type="submit"]:hover {
 	transition: background-color 0.2s ease;
 }
 
-.err-404-container .home-button:hover {
+.err-page-container .home-button:hover {
 	background-color: #6E6E9E;
 }

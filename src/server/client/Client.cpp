@@ -78,20 +78,14 @@ void	Client::add_request(Config conf)
 
 void	Client::send_response(void)
 {
-	// std::cout << _request.get_method() << " : " << _request.get_path() << std::endl;
-	if (_request.get_method() == "GET")
-	{
-		std::string response = _response.build_get_method(_request);
-		// std::cout << "response: " << response << std::endl;
+	int	status = stoi(_request.get_status());
 
-		size_t bytesSend = send(_sock, response.c_str(), response.length(), 0);
-	}
+	if (status >= 400 && status < 500)
+		send(_sock, _response.build_error(_request, status).c_str(), _response.build_error(_request, status).length(), 0);
+	if (_request.get_method() == "GET")
+		send(_sock, _response.build_get_method(_request).c_str(), _response.build_get_method(_request).length(), 0);
 	else if (_request.get_method() == "POST")
 		_response.build_post_method(_request, _sock);
 	else if (_request.get_method() == "DELETE")
-	{
-		std::string response= _response.build_delete_method(_request);
-		size_t bytesSend = send(_sock, response.c_str(), response.length(), 0);
-	}
-
+		send(_sock, _response.build_delete_method(_request).c_str(), _response.build_delete_method(_request).length(), 0);
 }

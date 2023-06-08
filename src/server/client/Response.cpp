@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 16:25:16 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/08 17:17:37 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,27 @@ std::string	Response::build_body(std::string filename)
 	return (str);
 }
 
-std::string	Response::build_error(Request &request)
+std::string	Response::build_error(Request &request, int status)
 {
-	std::string	response;
+	std::string	response =  "HTTP/1.1 " + request.get_status() + "\n"
+							"Content-Type: text/html\n\n";
 
-	// if (request.get_status() == "404")
-	response =  "HTTP/1.1 404 Not Found\n"
-				"Content-Type: text/html\n\n";
-	response += file_to_string("docs/html/error/404.html");
+	switch (status)
+	{
+		case 400:
+			response += file_to_string("docs/html/error/400.html");
+			break;
+		case 404:
+			response += file_to_string("docs/html/error/404.html");
+			break;
+		case 405:
+			response += file_to_string("docs/html/error/405.html");
+			break;
+		case 413:
+			response += file_to_string("docs/html/error/413.html");
+			break;
+	}
+	std::cout << "response : " << response << std::endl;
 
 	return (response);
 }
@@ -120,43 +133,25 @@ void	Response::build_post_method(Request &request, int sock)
 
 std::string	Response::build_get_method(Request &request)
 {
-	// std::cout << "response: " << request.get_method() << std::endl;
-	// std::cout << "response: " << request.get_path() << std::endl;
-	// std::cout << "response: " << request.get_status() << std::endl;
-	std::string	response;
-	if (request.get_status() >= "400")
-		response = build_error(request);
-	else if (request.get_status() == "200")
-	{
-		response = 	"HTTP/1.1 200 OK\n";
-		if (request.get_path().find(".html") != std::string::npos)
-			response += "Content-Type: text/html\n\n";
-		else if (request.get_path().find(".css") != std::string::npos)
-			response += "Content-Type: text/css\n\n";
-		else if (request.get_path().find(".ico") != std::string::npos)
-			response += "Content-Type: image/ico\n\n";
-		response += file_to_string(request.get_path());
-	}
+	std::string	response = 	"HTTP/1.1 " + request.get_status() + "\n";
+
+	if (request.get_path().find(".html") != std::string::npos)
+		response += "Content-Type: text/html\n\n";
+	else if (request.get_path().find(".css") != std::string::npos)
+		response += "Content-Type: text/css\n\n";
+	else if (request.get_path().find(".ico") != std::string::npos)
+		response += "Content-Type: image/ico\n\n";
+	response += file_to_string(request.get_path());
+
 	return (response);
 }
 
 std::string	Response::build_delete_method(Request &request)
 {
-	std::string	response;
-	
-	std::cout << "response: " << request.get_method() << std::endl;
-	std::cout << "response: " << request.get_status() << std::endl;
-	std::cout << "response: " << request.get_path() << std::endl;
-	if (request.get_status() >= "400")
-		response = build_error(request);
-	else if (request.get_status() == "200")
-	{
-		response = "HTTP/1.1 204 No Content\n";
-		if (remove(request.get_path().c_str()))
-		{
-			//set exception if remove failed
-			std::cout << "remove error\n";
-		}
-	}
+	std::string	response = 	"HTTP/1.1 204 No Content";
+
+	if (remove(request.get_path().c_str()))
+		perror("remove");
+
 	return (response);
 }

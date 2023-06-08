@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 16:36:39 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/08 16:51:55 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,8 @@ void	Request::parse(int fd, Config conf)
 	std::string			request;
 	int					i, n;
 
-	
 	i = 0;
-	this->_status = "200";
+	this->_status = CODE_200;
 	bzero(buff, BUF_SIZE);
 	n = read(fd, buff, BUF_SIZE);
 	std::string data(buff, n);
@@ -82,7 +81,6 @@ void	Request::parse(int fd, Config conf)
 			buffer << ss.rdbuf();
 			this->_body = buffer.str();
 			check_body_size(conf);
-			// std::cout << "body: " << _body << std::endl;
 			break;
 		}
 		i++;
@@ -101,7 +99,7 @@ void	Request::check_method()
 			return ;
 		i++;
 	}
-	this->_status = "400";
+	this->_status = CODE_400;
 }
 
 void	Request::parse_request_line(std::string &line, Config conf)
@@ -126,7 +124,7 @@ void	Request::parse_request_line(std::string &line, Config conf)
 		i++;
 	}
 	if (i != 3)
-		this->_status = "400";
+		this->_status = CODE_400;
 }
 
 void	Request::parse_request_headers(std::string &line)
@@ -177,60 +175,48 @@ void	Request::parse_styles(Config conf)
 	if (_path.find("style") != std::string::npos)
 	{
 		_path = conf.get_root() + "styles.css";
-		this->_status = "200";
+		this->_status = CODE_200;
 	}
 	else
 	{
 		_path = conf.get_root();
-		this->_status = "404";
+		this->_status = CODE_404;
 	}
 }
 
-// void	Request::check_location_file()
-// {
-// 	std::istringstream	iss(_path);
-// 	std::string			line;
-// 	int					c = 0;
-
-// 	while (getline(iss, line, '/')) {
-// 		std::cout << "line: " << line << std::endl;
-// 	}
-// }
-
-
 std::vector<std::string> Request::check_location_file(const std::string& path)
 {
-    std::vector<std::string> result;
-    if (path == "/")
-    {
-        result.push_back("/");
-        result.push_back("");
-    }
-    else
-    {
-        size_t pos = path.find('/', 1);
-        if (pos != std::string::npos)
-        {
-            result.push_back(path.substr(0, pos));
-            result.push_back(path.substr(pos + 1));
-        }
-        else
-        {
-            std::string filename = path.substr(1, path.size() - 1);
-            struct stat fileStat;
-            if (stat(filename.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
-            {
-                result.push_back(path);
-                result.push_back("");
-            }
-            else
-            {
-                result.push_back("/");
-                result.push_back(filename);
-            }
-        }
-    }
-    return result;
+	std::vector<std::string> result;
+	if (path == "/")
+	{
+		result.push_back("/");
+		result.push_back("");
+	}
+	else
+	{
+		size_t pos = path.find('/', 1);
+		if (pos != std::string::npos)
+		{
+			result.push_back(path.substr(0, pos));
+			result.push_back(path.substr(pos + 1));
+		}
+		else
+		{
+			std::string filename = path.substr(1, path.size() - 1);
+			struct stat fileStat;
+			if (stat(filename.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
+			{
+				result.push_back(path);
+				result.push_back("");
+			}
+			else
+			{
+				result.push_back("/");
+				result.push_back(filename);
+			}
+		}
+	}
+	return result;
 }
 
 void	Request::open_file(std::string path, Config conf)
@@ -261,7 +247,7 @@ bool	Request::check_AMS(Config conf)
 	// std::cout << "AMS: " << *conf.get_AMS().begin() << std::endl;
 	std::vector<std::string>	ams = conf.get_AMS();
 	bool						flag = false;
-	
+
 	std::cout << "method: " << this->_method << std::endl;
 	for (std::vector<std::string>::iterator it = ams.begin(); it != ams.end(); ++it)
 	{
@@ -275,9 +261,7 @@ bool	Request::check_AMS(Config conf)
 void	Request::check_body_size(Config &conf)
 {
 	if (_body.size() > conf.get_CMBS())
-	{
-		this->_status = "413";
-	}
+		this->_status = CODE_413;
 }
 
 void	Request::check_path(Config conf)
@@ -288,21 +272,18 @@ void	Request::check_path(Config conf)
 	int								c = 0, count = 0, index = 0;
 	size_t							pos;
 
-	// std::cout << "_path: " << _path << std::endl;
-	this->_status = "200";
+	this->_status = CODE_200;
 	std::vector<std::string> vec = check_location_file(_path);
 	_location = vec[0];
 	_file = vec[1];
-	
-	
+
 	for (it = loc.begin(); it != loc.end(); ++it)
 	{
-		// std::cout << "_loc: " << it->getLocationType() << std::endl;
 		if (!_location.compare(it->getLocationType()))
 		{
 			if (!check_allowed_method(*it))
 			{
-				this->_status = "404";
+				this->_status = CODE_405;
 				break ;
 			}
 			root_path = it->getRoot();
@@ -310,8 +291,6 @@ void	Request::check_path(Config conf)
 				_file = it->getIndex();
 			root_path.append(_file);
 			this->_path = root_path;
-			// std::cout << "file: " << _file << std::endl;
-			// std::cout << "updated_path: " << _path << std::endl;
 			open_file(root_path, conf);
 			break ;
 		}
@@ -319,35 +298,7 @@ void	Request::check_path(Config conf)
 
 	if (it == loc.end())
 	{
-		
-		// for (it = loc.begin(); it != loc.end(); ++it)
-		// {
-		// 	if (!it->getLocationType().compare("/"))
-		// 	{
-		// 		std::cout << "1\n";
-		// 		if (!check_allowed_method(*it))
-		// 		{
-					this->_status = "404";
-					this->_path = conf.get_root();
-					// open_file(_path, conf);
-				// 	break ;
-				// }
-				// root_path = it->getRoot();
-				// if (_file.empty())
-				// 	_file = it->getIndex();
-				// root_path.append(_file);
-				// this->_path = root_path;
-				// std::cout << "file: " << _file << std::endl;
-				// std::cout << "updated_path: " << _path << std::endl;
-				// open_file(root_path, conf);
-				// }
-		// }
-		// if (((pos = _path.find("/")) != std::string::npos) && !pos)
-		// 	_path.erase(0, 1);
-		// root_path = conf.get_root();
-		// root_path.append(_path);
-		// _path = root_path;
-		// open_file(_path, conf);
-		// std::cout << "updated_path: " << _path << std::endl;
+		this->_status = CODE_404;
+		this->_path = conf.get_root();
 	}
 }
