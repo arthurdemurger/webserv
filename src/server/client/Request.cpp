@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 16:51:55 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/08 18:01:47 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,20 @@ void	Request::parse(int fd, Config conf)
 	int					i, n;
 
 	i = 0;
+
+
 	this->_status = CODE_200;
 	bzero(buff, BUF_SIZE);
 	n = read(fd, buff, BUF_SIZE);
 	std::string data(buff, n);
+
+	std::ofstream file("request_log", std::ios::out | std::ios::app);
+    if (file.is_open())
+	{
+		file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
+		file.close();
+	}
+
 	ss << data;
 	while (getline(ss, line))
 	{
@@ -184,7 +194,7 @@ void	Request::parse_styles(Config conf)
 	}
 }
 
-std::vector<std::string> Request::check_location_file(const std::string& path)
+std::vector<std::string> Request::check_location_file(std::string root, const std::string& path)
 {
 	std::vector<std::string> result;
 	if (path == "/")
@@ -202,9 +212,8 @@ std::vector<std::string> Request::check_location_file(const std::string& path)
 		}
 		else
 		{
-			std::string filename = path.substr(1, path.size() - 1);
-			struct stat fileStat;
-			if (stat(filename.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
+			std::string	tmp = root + path;
+			if (opendir(tmp.c_str()))
 			{
 				result.push_back(path);
 				result.push_back("");
@@ -212,7 +221,7 @@ std::vector<std::string> Request::check_location_file(const std::string& path)
 			else
 			{
 				result.push_back("/");
-				result.push_back(filename);
+				result.push_back(path.substr(1, path.size() - 1));
 			}
 		}
 	}
@@ -224,7 +233,7 @@ void	Request::open_file(std::string path, Config conf)
 	std::ifstream ifs(path);
 	if (ifs.fail())
 	{
-		std::cerr << "Error: " << strerror(errno) << " | path : " << path << std::endl;
+		// std::cerr << "Error: " << strerror(errno) << " | path : " << path << std::endl;
 		parse_styles(conf);
 	}
 }
@@ -273,7 +282,7 @@ void	Request::check_path(Config conf)
 	size_t							pos;
 
 	this->_status = CODE_200;
-	std::vector<std::string> vec = check_location_file(_path);
+	std::vector<std::string> vec = check_location_file(conf.get_root(), _path);
 	_location = vec[0];
 	_file = vec[1];
 

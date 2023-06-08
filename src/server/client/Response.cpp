@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 17:17:37 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/08 17:59:50 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,9 @@ std::string	Response::build_body(std::string filename)
 
 std::string	Response::build_error(Request &request, int status)
 {
-	std::string	response =  "HTTP/1.1 " + request.get_status() + "\n"
-							"Content-Type: text/html\n\n";
+	std::string	response =  "HTTP/1.1 " + request.get_status() + "\n";
+
+	response += "Content-Type: text/html\n\n";
 
 	switch (status)
 	{
@@ -107,7 +108,6 @@ std::string	Response::build_error(Request &request, int status)
 			response += file_to_string("docs/html/error/413.html");
 			break;
 	}
-	std::cout << "response : " << response << std::endl;
 
 	return (response);
 }
@@ -148,10 +148,9 @@ std::string	Response::build_get_method(Request &request)
 
 std::string	Response::build_delete_method(Request &request)
 {
-	std::string	response = 	"HTTP/1.1 204 No Content";
+	std::string	response = 	"HTTP/1.1 204 No Content\n\n";
 
-	if (remove(request.get_path().c_str()))
-		perror("remove");
+	remove(request.get_path().c_str());
 
 	return (response);
 }

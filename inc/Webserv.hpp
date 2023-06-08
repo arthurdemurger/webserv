@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 16:55:00 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/08 17:33:46 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <string>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <dirent.h>
 #include <unistd.h>
 #include <vector>
 #include <sys/stat.h>
