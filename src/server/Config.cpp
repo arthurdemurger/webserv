@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 17:34:10 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/08 12:54:44 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,6 @@ Config::Config(std::string server_block)
 		getline(iss_line, value, ';');
 		setter(key, value, iss, location);
 	}
-	// std::vector<std::string> vec = get_AMS();
-	// std::cout << "AMS: " << vec.size() << std::endl;
-	// print_server();
 }
 
 Config::Config(const Config &copy)
@@ -110,44 +107,6 @@ void	Config::setAMS(std::string &value)
 // 	}
 }
 
-void	Config::print_server()
-{
-	std::cout << "SERVER BLOCK START\n";
-
-	for (std::vector<int>::iterator it = this->_port.begin(); it != this->_port.end(); ++it)
-	{
-		std::cout << "port: " << *it << std::endl;
-	}
-	std::cout << "host: " << this->_host << std::endl;
-	for (std::vector<std::string>::iterator it = this->_server_name.begin(); it != this->_server_name.end(); ++it)
-	{
-		std::cout << "server name: " << *it << std::endl;
-	}
-	for (std::map<int, std::string>::iterator it = this->_error_page.begin(); it != this->_error_page.end(); ++it)
-	{
-		std::cout << "Error code: " << it->first << std::endl;
-		std::cout << "Error page: " << it->second << std::endl;
-	}
-	std::cout << "CMBS: " << this->_client_max_body_size << std::endl;
-	std::cout << "root: " << this->_root << std::endl;
-	std::cout << "index: " << this->_index << std::endl;
-	for (std::vector<Location>::iterator it = this->_location.begin(); it != this->_location.end(); ++it)
-	{
-		std::cout << "location type: " << it->getLocationType() << std::endl;
-		std::cout << "root: " << it->getRoot() << std::endl;
-		std::cout << "autoindex: " << it->getAutoindex() << std::endl;
-		for (std::vector<std::string>::iterator itA = it->getAllowMethods().begin(); itA != it->getAllowMethods().end(); ++itA)
-		{
-			std::cout << "allow methods: " << *itA << std::endl;
-		}
-		std::cout << "index: " << it->getIndex() << std::endl;
-		std::cout << "return: " << it->getReturn() << std::endl;
-		std::cout << "alias: " << it->getAlias() << std::endl;
-	}
-
-	std::cout << "SERVER BLOCK END\n";
-	std::cout << "\n";
-}
 
 void	Config::setPortMBS(std::string &key, std::string &value)
 {
@@ -240,9 +199,10 @@ void	Config::setErrorPageDir(std::string &value)
 	this->_error_page.insert(std::pair<int, std::string>(key, val));
 }
 
-std::string				Config::get_name(void) const { return (_server_name[0]); }
-std::vector<int>		Config::get_ports(void) const { return (_port); }
-std::vector<Location>	Config::get_location(void) const { return (_location); }
+std::string					Config::get_name(void) const { return (_server_name[0]); }
+std::vector<int>			Config::get_ports(void) const { return (_port); }
+std::vector<Location>		Config::get_location(void) const { return (_location); }
 std::vector<std::string>	Config::get_AMS(void) const { return (this->_allow_methods); }
-std::string				Config::get_root(void) const { return (_root); }
-std::string				Config::get_index(void) const { return (_index); }
+std::string					Config::get_root(void) const { return (_root); }
+std::string					Config::get_index(void) const { return (_index); }
+int							Config::get_CMBS(void) const { return (_client_max_body_size); }

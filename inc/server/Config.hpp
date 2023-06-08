@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/06/07 15:37:46 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/08 12:21:30 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,13 @@ class Config
 		void	setRootDir(std::string &value);
 		void	setAMS(std::string &value);
 
-		std::string				get_name(void) const;
-		std::string				get_root(void) const;
-		std::string				get_index(void) const;
-		std::vector<int>		get_ports(void) const;
-		std::vector<Location>	get_location(void) const;
+		std::string					get_name(void) const;
+		std::string					get_root(void) const;
+		std::string					get_index(void) const;
+		std::vector<int>			get_ports(void) const;
+		std::vector<Location>		get_location(void) const;
 		std::vector<std::string>	get_AMS(void) const;
+		int							get_CMBS(void) const;
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/

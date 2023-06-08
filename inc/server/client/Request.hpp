@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 15:41:55 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/08 16:26:51 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,12 @@ class Request
 		void	check_path(Config conf);
 		void	parse_path(std::string path);
 		void	parse_styles(Config conf);
-		void	check_location_file();
+		std::vector<std::string>	check_location_file(const std::string &path);
 		bool	check_allowed_method(Location loc);
 		void	open_file(std::string path, Config);
 		void	print_request(void);
 		bool	check_AMS(Config conf);
+		void	check_body_size(Config &conf);
 };
 
 #endif

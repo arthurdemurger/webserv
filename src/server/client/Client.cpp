@@ -71,6 +71,8 @@ Config		Client::get_conf(void) const { return (_conf); }
 void	Client::add_request(Config conf)
 {
 	// std::cout << "AMS: " << *conf.get_AMS().begin() << std::endl;
+	std::vector<std::string> vec = conf.get_AMS();
+	// std::cout << "client: " << &vec << std::endl;
 	_request.parse(_sock, conf);
 }
 

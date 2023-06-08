@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 17:02:02 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/08 16:25:16 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,9 @@ void	Response::build_post_method(Request &request, int sock)
 
 std::string	Response::build_get_method(Request &request)
 {
-	std::cout << "response: " << request.get_method() << std::endl;
-	std::cout << "response: " << request.get_path() << std::endl;
-	std::cout << "response: " << request.get_status() << std::endl;
+	// std::cout << "response: " << request.get_method() << std::endl;
+	// std::cout << "response: " << request.get_path() << std::endl;
+	// std::cout << "response: " << request.get_status() << std::endl;
 	std::string	response;
 	if (request.get_status() >= "400")
 		response = build_error(request);
@@ -152,10 +152,10 @@ std::string	Response::build_delete_method(Request &request)
 	else if (request.get_status() == "200")
 	{
 		response = "HTTP/1.1 204 No Content\n";
-		if (request.get_path().find("html") != std::string::npos)
+		if (remove(request.get_path().c_str()))
 		{
-			response.append("Content-Type: text/html\n\n");
-			remove(request.get_path().c_str());
+			//set exception if remove failed
+			std::cout << "remove error\n";
 		}
 	}
 	return (response);
