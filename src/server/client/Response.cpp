@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 12:50:27 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/08 16:25:16 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,10 @@ void	Response::build_post_method(Request &request, int sock)
 
 std::string	Response::build_get_method(Request &request)
 {
+	// std::cout << "response: " << request.get_method() << std::endl;
+	// std::cout << "response: " << request.get_path() << std::endl;
+	// std::cout << "response: " << request.get_status() << std::endl;
 	std::string	response;
-
 	if (request.get_status() >= "400")
 		response = build_error(request);
 	else if (request.get_status() == "200")
@@ -134,6 +136,27 @@ std::string	Response::build_get_method(Request &request)
 		else if (request.get_path().find(".ico") != std::string::npos)
 			response += "Content-Type: image/ico\n\n";
 		response += file_to_string(request.get_path());
+	}
+	return (response);
+}
+
+std::string	Response::build_delete_method(Request &request)
+{
+	std::string	response;
+	
+	std::cout << "response: " << request.get_method() << std::endl;
+	std::cout << "response: " << request.get_status() << std::endl;
+	std::cout << "response: " << request.get_path() << std::endl;
+	if (request.get_status() >= "400")
+		response = build_error(request);
+	else if (request.get_status() == "200")
+	{
+		response = "HTTP/1.1 204 No Content\n";
+		if (remove(request.get_path().c_str()))
+		{
+			//set exception if remove failed
+			std::cout << "remove error\n";
+		}
 	}
 	return (response);
 }

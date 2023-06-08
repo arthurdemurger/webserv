@@ -6,7 +6,7 @@ form = cgi.FieldStorage()
 
 fileitem = form['file_upload']
 
-path = "./docs/upload/"
+path = "./docs/html/upload/"
 
 isExist = os.path.exists(path)
 

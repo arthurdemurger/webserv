@@ -70,6 +70,9 @@ Config		Client::get_conf(void) const { return (_conf); }
 
 void	Client::add_request(Config conf)
 {
+	// std::cout << "AMS: " << *conf.get_AMS().begin() << std::endl;
+	std::vector<std::string> vec = conf.get_AMS();
+	// std::cout << "client: " << &vec << std::endl;
 	_request.parse(_sock, conf);
 }
 
@@ -79,10 +82,16 @@ void	Client::send_response(void)
 	if (_request.get_method() == "GET")
 	{
 		std::string response = _response.build_get_method(_request);
+		// std::cout << "response: " << response << std::endl;
 
 		size_t bytesSend = send(_sock, response.c_str(), response.length(), 0);
 	}
-
-	if (_request.get_method() == "POST")
+	else if (_request.get_method() == "POST")
 		_response.build_post_method(_request, _sock);
+	else if (_request.get_method() == "DELETE")
+	{
+		std::string response= _response.build_delete_method(_request);
+		size_t bytesSend = send(_sock, response.c_str(), response.length(), 0);
+	}
+
 }

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Delete Request Form</title>
+</head>
+<body>
+  <h1>Delete Request Form</h1>
+
+  <form id="deleteForm">
+    <label for="resourceId">Resource ID:</label>
+    <input type="text" id="resourceId" name="resourceId" required>
+    <button type="button" onclick="sendDeleteRequest()">Delete</button>
+  </form>
+
+  <script>
+    function sendDeleteRequest() {
+      var resourceId = document.getElementById('resourceId').value;
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('DELETE', '/delete', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            alert('Resource deleted successfully!');
+          } else {
+            alert('Failed to delete resource. Status code: ' + xhr.status);
+          }
+        }
+      };
+
+      xhr.send(JSON.stringify({ resourceId: resourceId }));
+    }
+  </script>
+</body>
+</html>

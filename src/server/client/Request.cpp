@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 14:37:10 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/08 16:36:39 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,12 @@ void	Request::parse(int fd, Config conf)
 	std::string			request;
 	int					i, n;
 
+	
 	i = 0;
 	this->_status = "200";
 	bzero(buff, BUF_SIZE);
 	n = read(fd, buff, BUF_SIZE);
-
 	std::string data(buff, n);
-
-	// std::ofstream file("request_log", std::ios::out | std::ios::app);
-    // if (file.is_open())
-	// {
-	// 	file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
-    //     file.close();
-	// }
-
 	ss << data;
 	while (getline(ss, line))
 	{
@@ -89,11 +81,12 @@ void	Request::parse(int fd, Config conf)
 		{
 			buffer << ss.rdbuf();
 			this->_body = buffer.str();
+			check_body_size(conf);
+			// std::cout << "body: " << _body << std::endl;
 			break;
 		}
 		i++;
 	}
-	// print_request();
 	_isParsed = true;
 }
 
@@ -193,19 +186,51 @@ void	Request::parse_styles(Config conf)
 	}
 }
 
-void	Request::check_location_file()
-{
-	std::istringstream	iss(_path);
-	std::string			line;
-	int					c = 0;
+// void	Request::check_location_file()
+// {
+// 	std::istringstream	iss(_path);
+// 	std::string			line;
+// 	int					c = 0;
 
-	while (getline(iss, line, '/')) {
-		if (c == 1)
-			this->_location = line;
-		else if (c == 2)
-			this->_file = line;
-		c++;
-	}
+// 	while (getline(iss, line, '/')) {
+// 		std::cout << "line: " << line << std::endl;
+// 	}
+// }
+
+
+std::vector<std::string> Request::check_location_file(const std::string& path)
+{
+    std::vector<std::string> result;
+    if (path == "/")
+    {
+        result.push_back("/");
+        result.push_back("");
+    }
+    else
+    {
+        size_t pos = path.find('/', 1);
+        if (pos != std::string::npos)
+        {
+            result.push_back(path.substr(0, pos));
+            result.push_back(path.substr(pos + 1));
+        }
+        else
+        {
+            std::string filename = path.substr(1, path.size() - 1);
+            struct stat fileStat;
+            if (stat(filename.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
+            {
+                result.push_back(path);
+                result.push_back("");
+            }
+            else
+            {
+                result.push_back("/");
+                result.push_back(filename);
+            }
+        }
+    }
+    return result;
 }
 
 void	Request::open_file(std::string path, Config conf)
@@ -218,9 +243,46 @@ void	Request::open_file(std::string path, Config conf)
 	}
 }
 
+bool	Request::check_allowed_method(Location loc)
+{
+	std::vector<std::string>	location = loc.getAllowMethods();
+	bool						flag = false;
+
+	for (std::vector<std::string>::iterator it = location.begin(); it != location.end(); ++it)
+	{
+		if (!this->_method.compare(*it))
+			flag = true;
+	}
+	return (flag);
+}
+
+bool	Request::check_AMS(Config conf)
+{
+	// std::cout << "AMS: " << *conf.get_AMS().begin() << std::endl;
+	std::vector<std::string>	ams = conf.get_AMS();
+	bool						flag = false;
+	
+	std::cout << "method: " << this->_method << std::endl;
+	for (std::vector<std::string>::iterator it = ams.begin(); it != ams.end(); ++it)
+	{
+		std::cout << "AMS: " << *it << std::endl;
+		if (!this->_method.compare(*it))
+			flag = true;
+	}
+	return (flag);
+}
+
+void	Request::check_body_size(Config &conf)
+{
+	if (_body.size() > conf.get_CMBS())
+	{
+		this->_status = "413";
+	}
+}
+
 void	Request::check_path(Config conf)
 {
-	std::vector<Location>			_loc = conf.get_location();
+	std::vector<Location>			loc = conf.get_location();
 	std::vector<Location>::iterator	it;
 	std::string						root_path, substr = "/";
 	int								c = 0, count = 0, index = 0;
@@ -228,63 +290,64 @@ void	Request::check_path(Config conf)
 
 	// std::cout << "_path: " << _path << std::endl;
 	this->_status = "200";
-	check_location_file();
-    while ((index = _path.find(substr, index)) != std::string::npos) {
-        index += substr.length();
-		count++;
-    }
-	if (count > 1)
+	std::vector<std::string> vec = check_location_file(_path);
+	_location = vec[0];
+	_file = vec[1];
+	
+	
+	for (it = loc.begin(); it != loc.end(); ++it)
 	{
-		_location.insert(0, "/");
-		for (it = _loc.begin(); it != _loc.end(); ++it)
+		// std::cout << "_loc: " << it->getLocationType() << std::endl;
+		if (!_location.compare(it->getLocationType()))
 		{
-			if (!_location.compare(it->getLocationType()))
+			if (!check_allowed_method(*it))
 			{
-				root_path = it->getRoot();
-				if (_file.empty())
-					_file = it->getIndex();
-				root_path.append(_file);
-				this->_path = root_path;
-				// std::cout << "updated_path: " << _path << std::endl;
-				open_file(root_path, conf);
+				this->_status = "404";
 				break ;
 			}
+			root_path = it->getRoot();
+			if (_file.empty())
+				_file = it->getIndex();
+			root_path.append(_file);
+			this->_path = root_path;
+			// std::cout << "file: " << _file << std::endl;
+			// std::cout << "updated_path: " << _path << std::endl;
+			open_file(root_path, conf);
+			break ;
 		}
-		if (it == _loc.end())
-			parse_styles(conf);
 	}
-	else
-	{
-		if (!_path.compare("/"))
-		{
-			_path.erase(0, 1);
-			_path.append(conf.get_root().append(conf.get_index()));
-		}
-		else
-		{
-			if (((pos = _path.find("/")) != std::string::npos) && !pos)
-				_path.erase(0, 1);
-			root_path = conf.get_root();
-			root_path.append(_path);
-			_path = root_path;
-		}
-		// std::cout << "updated_path: " << _path << std::endl;
-		open_file(_path, conf);
-	}
-}
 
-void	Request::print_request()
-{
-	std::cout << "REQUEST LINE START\n";
-	std::cout << "method: " << this->_method << std::endl;
-	std::cout << "path: " << this->_path << std::endl;
-	std::cout << "\n";
-	std::cout << "REQUEST HEADERS START\n";
-	for (std::map<std::string, std::string>::iterator it = _headers.begin(); it != _headers.end(); ++it)
+	if (it == loc.end())
 	{
-		std::cout << it->first << ": " << it->second << std::endl;
+		
+		// for (it = loc.begin(); it != loc.end(); ++it)
+		// {
+		// 	if (!it->getLocationType().compare("/"))
+		// 	{
+		// 		std::cout << "1\n";
+		// 		if (!check_allowed_method(*it))
+		// 		{
+					this->_status = "404";
+					this->_path = conf.get_root();
+					// open_file(_path, conf);
+				// 	break ;
+				// }
+				// root_path = it->getRoot();
+				// if (_file.empty())
+				// 	_file = it->getIndex();
+				// root_path.append(_file);
+				// this->_path = root_path;
+				// std::cout << "file: " << _file << std::endl;
+				// std::cout << "updated_path: " << _path << std::endl;
+				// open_file(root_path, conf);
+				// }
+		// }
+		// if (((pos = _path.find("/")) != std::string::npos) && !pos)
+		// 	_path.erase(0, 1);
+		// root_path = conf.get_root();
+		// root_path.append(_path);
+		// _path = root_path;
+		// open_file(_path, conf);
+		// std::cout << "updated_path: " << _path << std::endl;
 	}
-	std::cout << "\n";
-	std::cout << "REQUEST BODY START\n";
-	std::cout << this->_body << std::endl;
 }
