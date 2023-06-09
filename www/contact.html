@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webserv - POST Form</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/ico" href="icon/favicon.ico">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/ico" href="/icon/favicon.ico">
 </head>
 <body>
     <header>
         <h1>Webserv</h1>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="contact.html" class="active">Contact</a></li>
-                <li><a href="upload.html">Upload</a></li>
-                <li><a href="about.html">About us</a></li>
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/contact.html" class="active">Contact</a></li>
+                <li><a href="/upload.html">Upload</a></li>
+                <li><a href="/about.html">About us</a></li>
             </ul>
         </nav>
     </header>
@@ -23,18 +23,22 @@
 	<h2 class="title">Contact</h2>
     <section id="form-section">
         <div class="form-container">
-            <h2>Submit form via a post request</h2>
+            <h2>Submit form</h2>
             <form action="cgi/contact.cgi" method="post">
                 <div>
-                    <label for="first_name">First Name:</label>
+                    <label for="first_name">First Name :</label>
                     <input type="text" id="first_name" name="first_name" required>
                 </div>
                 <div>
-                    <label for="surname">Surname:</label>
-                    <input type="text" id="surname" name="surname" required>
+                    <label for="last_name">Last Name :</label>
+                    <input type="text" id="last_name" name="last_name" required>
+                </div>
+				<div>
+                    <label for="email">Email :</label>
+                    <input type="email" id="email" name="email" required>
                 </div>
                 <div>
-                    <label for="message">Message:</label>
+                    <label for="message">Message :</label>
                     <textarea id="message" name="message" required></textarea>
                 </div>
                 <div>
@@ -43,9 +47,5 @@
             </form>
         </div>
     </section>
-
-    <footer>
-        <p>&copy; 2023 Webserv. All rights reserved.</p>
-    </footer>
 </body>
 </html>

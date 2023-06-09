@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 11:11:25 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/09 11:13:49 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,14 @@
 class Response
 {
 	private:
-		std::string	_version;
-		std::string	_status_code;
-		std::string	_date;
-		std::string	_content_type;
-		std::string	_content_length;
-		std::string	_body;
-		std::string	_full_response;
+		std::string					_version;
+		std::string					_status_code;
+		std::string					_date;
+		std::string					_content_type;
+		std::string					_content_length;
+		std::string					_body;
+		std::string					_full_response;
+		std::map<int, std::string>	_error_pages;
 
 		std::string	file_to_string(std::string filename) const;
 	public:
@@ -42,7 +43,7 @@ class Response
 		/*
 		** ------------------------------- ACCESSORS --------------------------------
 		*/
-
+		void	set_error_pages(std::map<int, std::string> error_pages);
 		/*
 		** ------------------------------- METHOD --------------------------------
 		*/
@@ -51,8 +52,8 @@ class Response
 		std::string		build_body(std::string filename);
 		std::string		build_get_method(Request &request);
 		void			build_post_method(Request &request, int sock);
-		std::string			build_delete_method(Request &request);
-		std::string		build_error(Request &request);
+		std::string		build_delete_method(Request &request);
+		std::string		build_error(Request &request, int status);
 };
 
 #endif //RESPONSE_HPP

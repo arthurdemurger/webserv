@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:50 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 15:07:41 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/08 17:12:57 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,11 @@ class Socket
 		class BindException : public std::exception
 		{
 			public:
-				virtual const char *what() const throw() { return "Bind failed."; };
+				virtual const char *what() const throw()
+				{
+					perror("bind");
+					return "";
+				};
 		};
 		class ListenException : public std::exception
 		{
