@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 18:01:47 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 11:14:41 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	Request::check_method()
 			return ;
 		i++;
 	}
-	this->_status = CODE_400;
+	this->_status = CODE_405;
 }
 
 void	Request::parse_request_line(std::string &line, Config conf)
@@ -251,22 +251,6 @@ bool	Request::check_allowed_method(Location loc)
 	return (flag);
 }
 
-bool	Request::check_AMS(Config conf)
-{
-	// std::cout << "AMS: " << *conf.get_AMS().begin() << std::endl;
-	std::vector<std::string>	ams = conf.get_AMS();
-	bool						flag = false;
-
-	std::cout << "method: " << this->_method << std::endl;
-	for (std::vector<std::string>::iterator it = ams.begin(); it != ams.end(); ++it)
-	{
-		std::cout << "AMS: " << *it << std::endl;
-		if (!this->_method.compare(*it))
-			flag = true;
-	}
-	return (flag);
-}
-
 void	Request::check_body_size(Config &conf)
 {
 	if (_body.size() > conf.get_CMBS())
@@ -281,7 +265,6 @@ void	Request::check_path(Config conf)
 	int								c = 0, count = 0, index = 0;
 	size_t							pos;
 
-	this->_status = CODE_200;
 	std::vector<std::string> vec = check_location_file(conf.get_root(), _path);
 	_location = vec[0];
 	_file = vec[1];
