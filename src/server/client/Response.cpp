@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 17:59:50 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 09:32:56 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,16 +96,16 @@ std::string	Response::build_error(Request &request, int status)
 	switch (status)
 	{
 		case 400:
-			response += file_to_string("docs/html/error/400.html");
+			response += file_to_string("www/error/400.html");
 			break;
 		case 404:
-			response += file_to_string("docs/html/error/404.html");
+			response += file_to_string("www/error/404.html");
 			break;
 		case 405:
-			response += file_to_string("docs/html/error/405.html");
+			response += file_to_string("www/error/405.html");
 			break;
 		case 413:
-			response += file_to_string("docs/html/error/413.html");
+			response += file_to_string("www/error/413.html");
 			break;
 	}
 
