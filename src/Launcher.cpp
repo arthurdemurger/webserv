@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 09:34:51 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 12:28:38 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,11 @@ void	Launcher::put_on_console(std::string color, std::string status, int client_
 
 	if (status.length() != 18)
 		status.resize(18, ' ');
-	std::cout << CYAN << "[" << getCurrentTime() << "] " << color << status << CYAN << " client " << client_sock << " (" << _servers[serv_sock].get_name() << ")" << RESET << std::endl;
+	if (client_sock && serv_sock)
+		std::cout << CYAN << "[" << getCurrentTime() << "] " << color << status << CYAN << " client " << client_sock << " (" << _servers[serv_sock].get_name() << ")" << RESET << std::endl;
+	else
+		std::cout << CYAN << "[" << getCurrentTime() << "] " << color << status << RESET << std::endl;
+
 }
 
 void	Launcher::handle_response(int &client_sock, Client &client)
@@ -172,10 +176,10 @@ void	Launcher::run(void)
 	struct timeval	timer;
 
 	setup();
+	put_on_console(DARK_GREY, "WEBSERV LAUNCHED", 0, 0);
 	while (true)
 	{
 		// std::cout << "########## WAITING ##########" << std::endl;
-
 		timer.tv_sec = TIME_OUT;
 		read_pool_cpy = _read_pool;
 		write_pool_cpy = _write_pool;

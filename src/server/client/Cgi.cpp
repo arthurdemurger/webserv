@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 16:36:21 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/09 12:16:45 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void Cgi::launch(int client_sock, char **env, std::string path, std::string body
 		write(pipe_in[1], body.c_str(), body.length());
 		close(pipe_in[1]);
 
-		char buffer[1000];
+		char buffer[BUF_SIZE];
 
 		int n;
 		while ((n = read(pipe_out[0], buffer, BUF_SIZE)) > 0) {

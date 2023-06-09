@@ -6,7 +6,7 @@
 #    By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/15 11:46:45 by ademurge          #+#    #+#              #
-#    Updated: 2023/06/07 15:24:20 by ademurge         ###   ########.fr        #
+#    Updated: 2023/06/09 12:43:49 by ademurge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,7 @@ $(OBJDIR)/%.o: %.cpp
 	@$(CC) $(CPPFLAGS) -c $< -o $@
 
 clean:
-	@$(RM) $(OBJDIR) $(OBJ) form
+	@$(RM) $(OBJDIR) $(OBJ) www/upload/* messages/*
 	@echo "$(RED)... object files removed$(RESET)"
 
 fclean:	clean
