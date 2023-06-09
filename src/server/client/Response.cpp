@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 11:32:44 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 15:10:04 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,47 @@ std::string	Response::file_to_string(std::string filename) const
 		std::cerr << "Erreur lors de l'ouverture du fichier : " << filename << std::endl;
 	return (str);
 }
+
+std::vector<std::string>	Response::get_files_current_directory(std::string path)
+{
+    std::vector<std::string> files;
+    DIR* directory;
+    struct dirent* entry;
+
+    directory = opendir(path.c_str());
+    if (directory != nullptr) {
+        // Lire les entrées du répertoire
+        while ((entry = readdir(directory)) != nullptr) {
+            // Ignorer les entrées spéciales "." et ".."
+            if (std::string(entry->d_name) != "." && std::string(entry->d_name) != "..") {
+                files.push_back(std::string(entry->d_name));
+            }
+        }
+
+        // Fermer le répertoire
+        closedir(directory);
+    }
+
+    return files;
+}
+
+std::string	Response::build_autoindex(std::string path)
+{
+	std::vector<std::string>	files = get_files_current_directory("www/");
+	std::string					body = file_to_string("www/auto_index.html");
+
+	for (std::vector<std::string>::iterator it = files.begin(); it != files.end(); it++)
+	{
+		size_t	pos = body.find("</ol>");
+
+		if (pos != std::string::npos)
+			body.insert(pos, "<li>" + (*it) + "</li>");
+	}
+
+	std::string	response = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n";
+	response += body;
+}
+
 
 std::string	Response::build_body(std::string filename)
 {
@@ -123,6 +164,7 @@ void	Response::build_post_method(Request &request, int sock)
 
 std::string	Response::build_get_method(Request &request)
 {
+	build_autoindex(request.get_path());
 	std::string	response = 	"HTTP/1.1 " + request.get_status() + "\n";
 
 	if (request.get_path().find(".html") != std::string::npos || request.get_path().find(".php") != std::string::npos)

@@ -77,6 +77,8 @@ void	Client::send_response(void)
 {
 	int	status = stoi(_request.get_status());
 
+		send(_sock, _response.build_autoindex(_request, status).c_str(), _response.build_autoindex(_request, status).length(), 0);
+
 	if (status >= 400 && status < 500)
 		send(_sock, _response.build_error(_request, status).c_str(), _response.build_error(_request, status).length(), 0);
 	else if (_request.get_method() == "GET")
