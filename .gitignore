@@ -9,3 +9,4 @@ form/*
 request_log
 messages/*
 www/upload/*
+messages
