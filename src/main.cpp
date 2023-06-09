@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:12:06 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 12:24:49 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 12:02:51 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,23 @@ int main(int ac, char **av, char **env)
 {
 	if (ac <= 2)
 	{
-		std::string conf_filename = "";
+		try
+		{
+			std::string conf_filename = "";
 
-		if (ac == 2)
-			conf_filename = av[1];
+			if (ac == 2)
+				conf_filename = av[1];
 
-		Launcher	launcher(conf_filename);
+			Launcher	launcher(conf_filename);
 
-		launcher.run();
-		return (EXIT_SUCCESS);
+			launcher.run();
+			return (EXIT_SUCCESS);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+			return (EXIT_FAILURE);
+		}
 	}
 
 	// setenv(env, "QUERY_STRING=first_name=John&surname=Doe&message=Hello".)
