@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:56:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 16:51:51 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 17:37:57 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "Request.hpp"
 #include "Response.hpp"
 #include "../Config.hpp"
-#include "../../Launcher.hpp"
 
 class Client
 {
@@ -51,7 +50,7 @@ class Client
 		/*
 		** ------------------------------- METHODS --------------------------------
 		*/
-		void		add_request(Config conf);
+		void	add_request(Config conf);
 		std::string	send_response();
 };
 

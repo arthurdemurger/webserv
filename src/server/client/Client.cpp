@@ -82,14 +82,12 @@ std::string	Client::send_response(void)
 		response = _response.build_error(_request, status);
 	else if (_request.get_method() == "GET")
 		response = _response.build_get_method(_request);
-	else if (_request.get)
+	else if (_request.get_method() == "POST")
+		response = _response.build_post_method(_request, _sock);
 	else if (_request.get_method() == "DELETE")
 		response = _response.build_delete_method(_request);
 
-	if (_request.get_method() == "POST")
-		_response.build_post_method(_request, _sock);
-	else
-		send(_sock, response.c_str(), response.length(), 0);
+	send(_sock, response.c_str(), response.length(), 0);
 
 	return (response);
 }

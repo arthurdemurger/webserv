@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 16:19:08 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 17:34:05 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ Request	&Request::operator=(const Request &copy)
 std::string							Request::get_method() const { return (_method); };
 std::string							Request::get_body() const { return (_body); };
 std::string							Request::get_path() const { return (_path); };
+std::string							Request::get_raw_path() const { return (_raw_path); };
 std::string							Request::get_status() const { return (_status); };
 std::map<std::string, std::string>	Request::get_headers() const { return (_headers); };
 bool								Request::get_is_parsed() const { return (_isParsed); };
@@ -75,12 +76,12 @@ void	Request::parse(int fd, Config conf)
 	n = read(fd, buff, BUF_SIZE);
 	std::string data(buff, n);
 
-	std::ofstream file("request_log", std::ios::out | std::ios::app);
-    if (file.is_open())
-	{
-		file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
-		file.close();
-	}
+	// std::ofstream file("request_log", std::ios::out | std::ios::app);
+    // if (file.is_open())
+	// {
+	// 	file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
+	// 	file.close();
+	// }
 
 	ss << data;
 	while (getline(ss, line))
@@ -188,6 +189,7 @@ void	Request::parse_path(std::string path)
 
 std::vector<std::string> Request::check_location_file(std::string root, const std::string& path)
 {
+	_raw_path = path;
 	std::vector<std::string> result;
 	if (path == "/")
 	{

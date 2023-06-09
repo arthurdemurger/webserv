@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 16:54:35 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 17:01:49 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ std::string Cgi::launch(int client_sock, char **env, std::string path, std::stri
 
 	if (pipe(pipe_in) < 0 || pipe(pipe_out) < 0) {
 		perror("pipe");
-		return;
+		return ("");
 	}
 	if ((pid = fork()) < 0)
 		throw Cgi::ForkException();

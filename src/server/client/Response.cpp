@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 16:24:11 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 17:34:34 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ std::string	Response::build_error(Request &request, int status)
 	return (response);
 }
 
-void	Response::build_post_method(Request &request, int sock)
+std::string	Response::build_post_method(Request &request, int sock)
 {
 	std::string content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
 	std::string content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
@@ -160,12 +160,11 @@ void	Response::build_post_method(Request &request, int sock)
 	Cgi	cgi;
 
 	if (!request.get_body().empty())
-		 cgi.launch(sock, env, request.get_path(), request.get_body());
+		return (cgi.launch(sock, env, request.get_path(), request.get_body()));
 }
 
 std::string	Response::build_get_method(Request &request)
 {
-	// build_autoindex(request.get_path());
 	std::string	response = 	"HTTP/1.1 " + request.get_status() + "\n";
 
 	if (request.get_autoindex() == true)

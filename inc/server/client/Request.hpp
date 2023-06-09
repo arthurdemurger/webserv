@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 16:04:55 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 17:11:46 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class Request
 		std::string										_method;
 		std::string										_status;
 		std::string										_path;
+		std::string										_raw_path;
 		std::map<std::string, std::string>				_headers;
 		std::string										_body;
 		bool											_isParsed;
@@ -45,6 +46,7 @@ class Request
 		std::string							get_method() const;
 		std::string							get_body() const;
 		std::string							get_path() const;
+		std::string							get_raw_path() const;
 		std::string							get_location() const;
 		std::string							get_status() const;
 		std::map<std::string, std::string>	get_headers() const;
