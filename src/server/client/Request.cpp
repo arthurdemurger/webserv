@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 11:14:41 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/09 15:05:15 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ bool								Request::get_is_parsed() const { return (_isParsed); };
 ** ------------------------------- METHODS --------------------------------
 */
 
+//trim /r/n body
 void	Request::parse(int fd, Config conf)
 {
 	std::stringstream	ss, buffer;
@@ -90,7 +91,7 @@ void	Request::parse(int fd, Config conf)
 		{
 			buffer << ss.rdbuf();
 			this->_body = buffer.str();
-			check_body_size(conf);
+			check_body_size(fd, conf);
 			break;
 		}
 		i++;
@@ -147,7 +148,10 @@ void	Request::parse_request_headers(std::string &line)
 		getline(iss, value);
 		trim_value(value);
 		if (!key.empty() && !value.empty())
+		{
 			_headers[key] = value;
+			std::cout << key << _headers[key] << std::endl;	
+		}
 	}
 }
 
@@ -251,10 +255,25 @@ bool	Request::check_allowed_method(Location loc)
 	return (flag);
 }
 
-void	Request::check_body_size(Config &conf)
+void	Request::check_body_size(int fd, Config &conf)
 {
+	int			ret, n;
+	char 		buffer[BUF_SIZE];
+	
 	if (_body.size() > conf.get_CMBS())
 		this->_status = CODE_413;
+	if (!_headers["Content-Length"].empty())
+	{
+		while (_body.size() != (ret = std::stoi(_headers["Content-Length"])))
+		{
+			std::string	response =  "HTTP/1.1 100 Continue";
+			send(fd, response.c_str(), response.size(), 0);
+			while ( (n = read(fd, buffer, BUF_SIZE)))
+			{
+				_body.append(buffer);	
+			}
+		}
+	}
 }
 
 void	Request::check_path(Config conf)
