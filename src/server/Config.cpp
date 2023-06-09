@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 11:55:13 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/09 12:45:40 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ void	Config::setter(std::string &key, std::string &value, std::istringstream &is
 {
 	if (!key.compare("listen"))
 		 setPortMBS(key, value);
-	else if (!key.compare("allow_methods"))
-		setAMS(value);
 	else if (!key.compare("host"))
 		setHostDir(value);
 	else if (!key.compare("server_name"))
@@ -186,7 +184,6 @@ void	Config::setErrorPageDir(std::string &value)
 std::string					Config::get_name(void) const { return (_server_name[0]); }
 std::vector<int>			Config::get_ports(void) const { return (_port); }
 std::vector<Location>		Config::get_location(void) const { return (_location); }
-std::vector<std::string>	Config::get_AMS(void) const { return (this->_allow_methods); }
 std::string					Config::get_root(void) const { return (_root); }
 std::string					Config::get_index(void) const { return (_index); }
 int							Config::get_CMBS(void) const { return (_client_max_body_size); }

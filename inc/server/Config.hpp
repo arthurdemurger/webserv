@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/06/09 11:15:21 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 12:45:16 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,12 @@ class Config
 		void	setErrorPageDir(std::string &rhs);
 		void	setClientMaxBodySize(std::string &rhs);
 		void	setRootDir(std::string &value);
-		void	setAMS(std::string &value);
 
 		std::string					get_name(void) const;
 		std::string					get_root(void) const;
 		std::string					get_index(void) const;
 		std::vector<int>			get_ports(void) const;
 		std::vector<Location>		get_location(void) const;
-		std::vector<std::string>	get_AMS(void) const;
 		int							get_CMBS(void) const;
 		std::map<int, std::string>	get_error_pages(void) const;
 		/*
