@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 09:32:56 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 11:32:44 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ Response	&Response::operator=(const Response &copy)
 /*
 ** ------------------------------- ACCESSORS --------------------------------
 */
+void	Response::set_error_pages(std::map<int, std::string> error_pages) { _error_pages = error_pages; };
 
 /*
 ** ------------------------------- METHODS --------------------------------
@@ -93,21 +94,10 @@ std::string	Response::build_error(Request &request, int status)
 
 	response += "Content-Type: text/html\n\n";
 
-	switch (status)
-	{
-		case 400:
-			response += file_to_string("www/error/400.html");
-			break;
-		case 404:
-			response += file_to_string("www/error/404.html");
-			break;
-		case 405:
-			response += file_to_string("www/error/405.html");
-			break;
-		case 413:
-			response += file_to_string("www/error/413.html");
-			break;
-	}
+	if (_error_pages[status].empty())
+		response += file_to_string("www/error/default_error.html");
+	else
+		response += file_to_string(_error_pages[status]);
 
 	return (response);
 }
@@ -135,14 +125,16 @@ std::string	Response::build_get_method(Request &request)
 {
 	std::string	response = 	"HTTP/1.1 " + request.get_status() + "\n";
 
-	if (request.get_path().find(".html") != std::string::npos)
-		response += "Content-Type: text/html\n\n";
+	if (request.get_path().find(".html") != std::string::npos || request.get_path().find(".php") != std::string::npos)
+		response += "Content-Type: text/html\n";
 	else if (request.get_path().find(".css") != std::string::npos)
-		response += "Content-Type: text/css\n\n";
+		response += "Content-Type: text/css\n";
 	else if (request.get_path().find(".ico") != std::string::npos)
-		response += "Content-Type: image/ico\n\n";
-	response += file_to_string(request.get_path());
+		response += "Content-Type: image/ico\n";
 
+	std::string body = file_to_string(request.get_path());
+	response += "Content-Length: " + std::to_string(body.size());
+	response += "\n\n" + body;
 	return (response);
 }
 

@@ -74,6 +74,7 @@ void	Client::add_request(Config conf)
 	std::vector<std::string> vec = conf.get_AMS();
 	// std::cout << "client: " << &vec << std::endl;
 	_request.parse(_sock, conf);
+	_response.set_error_pages(conf.get_error_pages());
 }
 
 void	Client::send_response(void)

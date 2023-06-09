@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 16:55:47 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 11:13:49 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,14 @@
 class Response
 {
 	private:
-		std::string	_version;
-		std::string	_status_code;
-		std::string	_date;
-		std::string	_content_type;
-		std::string	_content_length;
-		std::string	_body;
-		std::string	_full_response;
+		std::string					_version;
+		std::string					_status_code;
+		std::string					_date;
+		std::string					_content_type;
+		std::string					_content_length;
+		std::string					_body;
+		std::string					_full_response;
+		std::map<int, std::string>	_error_pages;
 
 		std::string	file_to_string(std::string filename) const;
 	public:
@@ -42,7 +43,7 @@ class Response
 		/*
 		** ------------------------------- ACCESSORS --------------------------------
 		*/
-
+		void	set_error_pages(std::map<int, std::string> error_pages);
 		/*
 		** ------------------------------- METHOD --------------------------------
 		*/
