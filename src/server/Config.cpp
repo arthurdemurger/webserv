@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 11:15:52 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 11:55:13 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,22 +91,6 @@ void	Config::setter(std::string &key, std::string &value, std::istringstream &is
 		this->_location.push_back(Location(location, value));
 	}
 }
-
-void	Config::setAMS(std::string &value)
-{
-	std::istringstream	ss(value);
-	std::string			line;
-
-	while (getline(ss, line, ' '))
-	{
-		this->_allow_methods.push_back(line);
-	}
-// 	for (std::vector<std::string>::iterator it = _allow_methods.begin(); it != _allow_methods.end(); ++it)
-// 	{
-// 		std::cout << "it: " << *it << std::endl;
-// 	}
-}
-
 
 void	Config::setPortMBS(std::string &key, std::string &value)
 {

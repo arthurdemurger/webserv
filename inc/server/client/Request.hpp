@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 17:45:22 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 11:15:00 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ class Request
 		bool						check_allowed_method(Location loc);
 		void						open_file(std::string path, Config);
 		void						print_request(void);
-		bool						check_AMS(Config conf);
 		void						check_body_size(Config &conf);
 };
 
