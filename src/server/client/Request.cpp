@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 11:14:41 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/09 12:41:32 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,4 +293,5 @@ void	Request::check_path(Config conf)
 		this->_status = CODE_404;
 		this->_path = conf.get_root();
 	}
+	std::cout << "updated path: " << _path << std::endl;
 }

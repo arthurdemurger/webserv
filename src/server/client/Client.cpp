@@ -70,9 +70,6 @@ Config		Client::get_conf(void) const { return (_conf); }
 
 void	Client::add_request(Config conf)
 {
-	// std::cout << "AMS: " << *conf.get_AMS().begin() << std::endl;
-	std::vector<std::string> vec = conf.get_AMS();
-	// std::cout << "client: " << &vec << std::endl;
 	_request.parse(_sock, conf);
 	_response.set_error_pages(conf.get_error_pages());
 }
@@ -81,6 +78,8 @@ void	Client::send_response(void)
 {
 	int	status = stoi(_request.get_status());
 
+	std::cout << "method: " << _request.get_method() << std::endl;
+	std::cout << "status: " << _request.get_status() << std::endl;
 	if (status >= 400 && status < 500)
 		send(_sock, _response.build_error(_request, status).c_str(), _response.build_error(_request, status).length(), 0);
 	else if (_request.get_method() == "GET")

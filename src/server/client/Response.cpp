@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 11:32:44 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 12:25:53 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,9 @@ void	Response::build_post_method(Request &request, int sock)
 	Cgi	cgi;
 
 	if (!request.get_body().empty())
-		 cgi.launch(sock, env, request.get_path(), request.get_body());
+	{
+		 cgi.launch(sock, env, request.get_path(), request.get_body());	
+	}
 }
 
 std::string	Response::build_get_method(Request &request)

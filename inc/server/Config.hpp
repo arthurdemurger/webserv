@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/06/09 11:15:21 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 12:12:41 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ class Config
 		void	setErrorPageDir(std::string &rhs);
 		void	setClientMaxBodySize(std::string &rhs);
 		void	setRootDir(std::string &value);
-		void	setAMS(std::string &value);
 
 		std::string					get_name(void) const;
 		std::string					get_root(void) const;

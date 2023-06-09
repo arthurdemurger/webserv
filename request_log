@@ -204,3 +204,163 @@ Accept: */*
 
 ********** END **********
 
+********** REQUEST **********
+POST / HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+Content-Type: plain/text
+Content-Length: 1
+
+a********** END **********
+
+********** REQUEST **********
+POST / HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+Content-Type: plain/text
+Content-Length: 12
+
+BODY IS HERE********** END **********
+
+********** REQUEST **********
+POST / HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+Content-Type: plain/text
+Content-Length: 12
+
+BODY IS HERE********** END **********
+
+********** REQUEST **********
+POST / HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+Content-Type: plain/text
+Content-Length: 12
+
+BODY IS HERE********** END **********
+
+********** REQUEST **********
+POST / HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+Content-Type: plain/text
+Content-Length: 12
+
+BODY IS HERE********** END **********
+
+********** REQUEST **********
+POST / HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+Content-Type: plain/text
+Content-Length: 12
+
+BODY IS HERE********** END **********
+
+********** REQUEST **********
+POST / HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+Content-Type: plain/text
+Content-Length: 12
+
+BODY IS HERE********** END **********
+
+********** REQUEST **********
+POST /www/cgi/contact.cgi HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+Content-Type: plain/text
+Content-Length: 12
+
+BODY IS HERE********** END **********
+
+********** REQUEST **********
+POST / HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+Content-Type: plain/text
+Content-Length: 12
+
+BODY IS HERE********** END **********
+
+********** REQUEST **********
+POST /index.html HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+Content-Type: plain/text
+Content-Length: 12
+
+BODY IS HERE********** END **********
+
+********** REQUEST **********
+POST /index.html HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+Content-Type: plain/text
+Content-Length: 12
+
+BODY IS HERE********** END **********
+
+********** REQUEST **********
+POST /index.html HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+Content-Type: plain/text
+Content-Length: 1
+
+B********** END **********
+
+********** REQUEST **********
+GETTT / HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+
+********** END **********
+
+********** REQUEST **********
+GETT / HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+
+********** END **********
+
+********** REQUEST **********
+GEET / HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+
+********** END **********
+
+********** REQUEST **********
+GET /www/cgi/contact.cgi HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+
+********** END **********
+
+********** REQUEST **********
+GET /www/cgi/contact.cgi HTTP/1.1
+Host: localhost:8000
+User-Agent: curl/7.64.1
+Accept: */*
+
+********** END **********
+

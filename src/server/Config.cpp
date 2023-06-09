@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 11:55:13 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/09 12:12:50 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ void	Config::setter(std::string &key, std::string &value, std::istringstream &is
 {
 	if (!key.compare("listen"))
 		 setPortMBS(key, value);
-	else if (!key.compare("allow_methods"))
-		setAMS(value);
 	else if (!key.compare("host"))
 		setHostDir(value);
 	else if (!key.compare("server_name"))
