@@ -73,17 +73,23 @@ void	Client::add_request(Config conf)
 	_response.set_error_pages(conf.get_error_pages());
 }
 
-void	Client::send_response(void)
+std::string	Client::send_response(void)
 {
 	int	status = stoi(_request.get_status());
-
+	std::string	response;
 
 	if (status >= 400 && status < 500)
-		send(_sock, _response.build_error(_request, status).c_str(), _response.build_error(_request, status).length(), 0);
+		response = _response.build_error(_request, status);
 	else if (_request.get_method() == "GET")
-			send(_sock, _response.build_get_method(_request).c_str(), _response.build_get_method(_request).length(), 0);
-	else if (_request.get_method() == "POST")
-		_response.build_post_method(_request, _sock);
+		response = _response.build_get_method(_request);
+	else if (_request.get)
 	else if (_request.get_method() == "DELETE")
-		send(_sock, _response.build_delete_method(_request).c_str(), _response.build_delete_method(_request).length(), 0);
+		response = _response.build_delete_method(_request);
+
+	if (_request.get_method() == "POST")
+		_response.build_post_method(_request, _sock);
+	else
+		send(_sock, response.c_str(), response.length(), 0);
+
+	return (response);
 }

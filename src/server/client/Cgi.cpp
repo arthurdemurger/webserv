@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 12:16:45 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 16:54:35 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@ Cgi &Cgi::operator=(const Cgi &copy)
 ** ------------------------------- METHODS --------------------------------
 */
 
-void Cgi::launch(int client_sock, char **env, std::string path, std::string body)
+std::string Cgi::launch(int client_sock, char **env, std::string path, std::string body)
 {
+	std::string	response;
 	int pipe_in[2]; // Tube pour l'entrée standard du script CGI
 	int pipe_out[2]; // Tube pour la sortie du script CGI
 	pid_t pid;
@@ -86,11 +87,12 @@ void Cgi::launch(int client_sock, char **env, std::string path, std::string body
 
 		int n;
 		while ((n = read(pipe_out[0], buffer, BUF_SIZE)) > 0) {
-			write(client_sock, buffer, n);
+			response += buffer;
 		}
 		close(pipe_out[0]);
 
 		waitpid(pid, NULL, 0);
 	}
+	return (response);
 }
 
