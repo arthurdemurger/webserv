@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/06/08 12:21:30 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/09 11:15:21 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ class Config
 		std::vector<Location>		get_location(void) const;
 		std::vector<std::string>	get_AMS(void) const;
 		int							get_CMBS(void) const;
+		std::map<int, std::string>	get_error_pages(void) const;
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
