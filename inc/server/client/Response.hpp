@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 15:10:15 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 16:04:23 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ class Response
 		std::string					build_body(std::string filename);
 		std::string					build_get_method(Request &request);
 		void						build_post_method(Request &request, int sock);
-		std::string					build_autoindex(std::string path);
+		std::string					build_autoindex(std::string path, std::string location);
 		std::vector<std::string>	get_files_current_directory(std::string path);
 		std::string					build_delete_method(Request &request);
 		std::string					build_error(Request &request, int status);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 15:05:15 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/09 16:19:08 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-Request::Request() : _isParsed(false) { }
+Request::Request() : _isParsed(false), _autoindex(false) { }
 
 Request::Request(const Request &copy)
 {
@@ -51,6 +51,8 @@ std::string							Request::get_path() const { return (_path); };
 std::string							Request::get_status() const { return (_status); };
 std::map<std::string, std::string>	Request::get_headers() const { return (_headers); };
 bool								Request::get_is_parsed() const { return (_isParsed); };
+bool								Request::get_autoindex() const { return (_autoindex); };
+std::string							Request::get_location() const { return (_location); };
 
 /*
 ** ------------------------------- METHODS --------------------------------
@@ -150,7 +152,7 @@ void	Request::parse_request_headers(std::string &line)
 		if (!key.empty() && !value.empty())
 		{
 			_headers[key] = value;
-			std::cout << key << _headers[key] << std::endl;	
+			// std::cout << key << _headers[key] << std::endl;
 		}
 	}
 }
@@ -181,20 +183,6 @@ void	Request::parse_path(std::string path)
 		else if (c == 3)
 			this->_file = line;
 		c++;
-	}
-}
-
-void	Request::parse_styles(Config conf)
-{
-	if (_path.find("style") != std::string::npos)
-	{
-		_path = conf.get_root() + "styles.css";
-		this->_status = CODE_200;
-	}
-	else
-	{
-		_path = conf.get_root();
-		this->_status = CODE_404;
 	}
 }
 
@@ -229,6 +217,7 @@ std::vector<std::string> Request::check_location_file(std::string root, const st
 			}
 		}
 	}
+
 	return result;
 }
 
@@ -237,8 +226,8 @@ void	Request::open_file(std::string path, Config conf)
 	std::ifstream ifs(path);
 	if (ifs.fail())
 	{
-		// std::cerr << "Error: " << strerror(errno) << " | path : " << path << std::endl;
-		parse_styles(conf);
+		_path = conf.get_root();
+		this->_status = CODE_404;
 	}
 }
 
@@ -259,7 +248,7 @@ void	Request::check_body_size(int fd, Config &conf)
 {
 	int			ret, n;
 	char 		buffer[BUF_SIZE];
-	
+
 	if (_body.size() > conf.get_CMBS())
 		this->_status = CODE_413;
 	if (!_headers["Content-Length"].empty())
@@ -269,9 +258,7 @@ void	Request::check_body_size(int fd, Config &conf)
 			std::string	response =  "HTTP/1.1 100 Continue";
 			send(fd, response.c_str(), response.size(), 0);
 			while ( (n = read(fd, buffer, BUF_SIZE)))
-			{
-				_body.append(buffer);	
-			}
+				_body.append(buffer);
 		}
 	}
 }
@@ -292,6 +279,7 @@ void	Request::check_path(Config conf)
 	{
 		if (!_location.compare(it->getLocationType()))
 		{
+			// std::cout << it->getLocationType() << " | autoindex : " << it->getAutoindex() << std::endl;
 			if (!check_allowed_method(*it))
 			{
 				this->_status = CODE_405;
@@ -299,7 +287,12 @@ void	Request::check_path(Config conf)
 			}
 			root_path = it->getRoot();
 			if (_file.empty())
-				_file = it->getIndex();
+			{
+				if (it->getAutoindex() == true)
+					_autoindex = true;
+				else
+					_file = it->getIndex();
+			}
 			root_path.append(_file);
 			this->_path = root_path;
 			open_file(root_path, conf);

@@ -77,12 +77,11 @@ void	Client::send_response(void)
 {
 	int	status = stoi(_request.get_status());
 
-		send(_sock, _response.build_autoindex(_request, status).c_str(), _response.build_autoindex(_request, status).length(), 0);
 
 	if (status >= 400 && status < 500)
 		send(_sock, _response.build_error(_request, status).c_str(), _response.build_error(_request, status).length(), 0);
 	else if (_request.get_method() == "GET")
-		send(_sock, _response.build_get_method(_request).c_str(), _response.build_get_method(_request).length(), 0);
+			send(_sock, _response.build_get_method(_request).c_str(), _response.build_get_method(_request).length(), 0);
 	else if (_request.get_method() == "POST")
 		_response.build_post_method(_request, _sock);
 	else if (_request.get_method() == "DELETE")

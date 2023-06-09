@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 15:10:04 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 16:24:11 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,23 +88,30 @@ std::vector<std::string>	Response::get_files_current_directory(std::string path)
     return files;
 }
 
-std::string	Response::build_autoindex(std::string path)
+std::string	Response::build_autoindex(std::string path, std::string location)
 {
-	std::vector<std::string>	files = get_files_current_directory("www/");
+	std::vector<std::string>	files = get_files_current_directory(path);
 	std::string					body = file_to_string("www/auto_index.html");
 
-	for (std::vector<std::string>::iterator it = files.begin(); it != files.end(); it++)
+	for (std::vector<std::string>::reverse_iterator it = files.rbegin(); it != files.rend(); it++)
 	{
-		size_t	pos = body.find("</ol>");
+		size_t	pos = body.find("</ul></div>");
 
 		if (pos != std::string::npos)
-			body.insert(pos, "<li>" + (*it) + "</li>");
+		{
+			if (location == "/")
+				body.insert(pos, "<li><a href=\"/" + (*it) + "\">" + (*it) + "</a></li>");
+			else
+				body.insert(pos, "<li><a href=\"" + location + "/" + (*it) + "\">" + (*it) + "</a></li>");
+
+		}
 	}
 
 	std::string	response = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n";
 	response += body;
-}
 
+	return (response);
+}
 
 std::string	Response::build_body(std::string filename)
 {
@@ -115,13 +122,7 @@ std::string	Response::build_body(std::string filename)
 	{
 		std::string line;
 		while (std::getline(file, line))
-		{
-			size_t	pos;
-
-			// if ((pos = line.find("<head>")) != std::string::npos)
-			// 	line.insert(pos, "<style>" + file_to_string("html/styles.css") + "</style>");
 			str += line + '\n';
-		}
 		file.close();
 	}
 	else
@@ -164,11 +165,13 @@ void	Response::build_post_method(Request &request, int sock)
 
 std::string	Response::build_get_method(Request &request)
 {
-	build_autoindex(request.get_path());
+	// build_autoindex(request.get_path());
 	std::string	response = 	"HTTP/1.1 " + request.get_status() + "\n";
 
+	if (request.get_autoindex() == true)
+		return (build_autoindex(request.get_path(), request.get_location()));
 	if (request.get_path().find(".html") != std::string::npos || request.get_path().find(".php") != std::string::npos)
-		response += "Content-Type: text/html\n";
+		 response += "Content-Type: text/html\n";
 	else if (request.get_path().find(".css") != std::string::npos)
 		response += "Content-Type: text/css\n";
 	else if (request.get_path().find(".ico") != std::string::npos)
