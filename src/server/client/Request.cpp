@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 17:34:05 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/12 16:38:12 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,29 +59,30 @@ std::string							Request::get_location() const { return (_location); };
 ** ------------------------------- METHODS --------------------------------
 */
 
-//trim /r/n body
 void	Request::parse(int fd, Config conf)
 {
 	std::stringstream	ss, buffer;
 	char				buff[BUF_SIZE];
 	std::string			line;
 	std::string			request;
-	int					i, n;
+	int					i = 0, n = 0;
 
 	i = 0;
-
-
+	n = 0;
 	this->_status = CODE_200;
 	bzero(buff, BUF_SIZE);
-	n = read(fd, buff, BUF_SIZE);
 	std::string data(buff, n);
+	while (	(n = read(fd, buff, BUF_SIZE) > 0) )
+	{
+		data.append(buff);
+	}
 
-	// std::ofstream file("request_log", std::ios::out | std::ios::app);
-    // if (file.is_open())
-	// {
-	// 	file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
-	// 	file.close();
-	// }
+	std::ofstream file("request_log", std::ios::out | std::ios::app);
+    if (file.is_open())
+	{
+		file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
+		file.close();
+	}
 
 	ss << data;
 	while (getline(ss, line))
@@ -94,7 +95,14 @@ void	Request::parse(int fd, Config conf)
 		{
 			buffer << ss.rdbuf();
 			this->_body = buffer.str();
+			// std::cout << "_body: " << _body << std::endl; 
+			// std::cout << "end _body" << std::endl; 
 			check_body_size(fd, conf);
+			trim_body();
+			if (_isChunked)
+			{
+				parse_chunk_request();
+			}
 			break;
 		}
 		i++;
@@ -153,38 +161,27 @@ void	Request::parse_request_headers(std::string &line)
 		if (!key.empty() && !value.empty())
 		{
 			_headers[key] = value;
-			// std::cout << key << _headers[key] << std::endl;
+			if (_headers.count("Transfer-Encoding") && _headers["Transfer-Encoding"] == "chunked")
+			{
+				_isChunked = true;
+			}
 		}
 	}
 }
 
 void	Request::trim_value(std::string &value)
 {
-	int	i = 0, j = 0;
-
-	while (value[i])
+	size_t	pos;
+	
+	pos = value.find_first_not_of(32, 0);
+	if (pos != std::string::npos)
 	{
-		if (value[i] == ' ' && value[i + 1] == ' ')
-			j++;
-		i++;
+		value.erase(0, pos);
 	}
-	value.erase(0, j);
-}
-
-void	Request::parse_path(std::string path)
-{
-	std::istringstream	ss(path);
-	std::string			line;
-	int					c = 0;
-
-	while(getline(ss, line, '/'))
+	while (!value.empty() && (value.back() == '\r' || value.back() == '\n')) 
 	{
-		if (c == 1)
-			this->_location = line;
-		else if (c == 3)
-			this->_file = line;
-		c++;
-	}
+	   value.pop_back();
+    }
 }
 
 std::vector<std::string> Request::check_location_file(std::string root, const std::string& path)
@@ -253,15 +250,46 @@ void	Request::check_body_size(int fd, Config &conf)
 
 	if (_body.size() > conf.get_CMBS())
 		this->_status = CODE_413;
-	if (!_headers["Content-Length"].empty())
+	// if (!_headers["Content-Length"].empty())
+	// {
+	// 	std::cout << "CL: " << _headers["Content-Length"] << std::endl;
+	// 	std::cout << "BS: " << _body.size() << std::endl;
+	// 	while (_body.size() != (ret = std::stoi(_headers["Content-Length"])))
+	// 	{
+	// 		std::string	response =  "HTTP/1.1 100 Continue";
+	// 		send(fd, response.c_str(), response.size(), 0);
+	// 		std::cout << "1\n";
+	// 		while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
+	// 		{
+	// 			_body.append(buffer);
+	// 		}
+	// 	}
+	// }
+}
+
+void	Request::trim_body()
+{
+	while (!_body.empty() && (_body.back() == '\r' || _body.back() == '\n')) 
 	{
-		while (_body.size() != (ret = std::stoi(_headers["Content-Length"])))
-		{
-			std::string	response =  "HTTP/1.1 100 Continue";
-			send(fd, response.c_str(), response.size(), 0);
-			while ( (n = read(fd, buffer, BUF_SIZE)))
-				_body.append(buffer);
-		}
+    //    std::cout << "remove carriage return\n";
+	   _body.pop_back();
+    }
+	// size_t	pos = _body.find("/r/n");
+	// if (pos != std::string::npos)
+    //    std::cout << "carriage return remains\n";
+		
+}
+
+void	Request::parse_chunk_request()
+{
+	std::istringstream	iss(_body);
+	std::string			line;
+
+	std::cout << "body: " << _body << std::endl;
+	while (getline(iss, line))
+	{
+		
+		std::cout << "line: " << line << std::endl;
 	}
 }
 

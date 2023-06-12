@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 17:11:46 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/12 14:47:15 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Request
 		std::map<std::string, std::string>				_headers;
 		std::string										_body;
 		bool											_isParsed;
+		bool											_isChunked;
 		std::string										_location;
 		std::string										_file;
 		bool											_autoindex;
@@ -68,6 +69,8 @@ class Request
 		void						open_file(std::string path, Config);
 		void						print_request(void);
 		void						check_body_size(int fd, Config &conf);
+		void						trim_body();
+		void						parse_chunk_request();
 };
 
 #endif
