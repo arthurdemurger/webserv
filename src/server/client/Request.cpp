@@ -282,15 +282,33 @@ void	Request::trim_body()
 
 void	Request::parse_chunk_request()
 {
-	std::istringstream	iss(_body);
-	std::string			line;
+	std::istringstream iss(_body);
+    std::string line, util;
 
-	std::cout << "body: " << _body << std::endl;
-	while (getline(iss, line))
-	{
-		
-		std::cout << "line: " << line << std::endl;
-	}
+    // Read and process each chunk
+    while (std::getline(iss, line)) {
+        // Parse the chunk size
+        std::cout << "line: " << line << std::endl;
+        size_t chunkSize = std::stoul(line, nullptr, 16);
+        if (chunkSize == 0) {
+            // Zero-length chunk indicates the end of the request body
+            break;
+        }
+
+        // Read the chunk data
+        std::string chunkData(chunkSize, '\0');
+        iss.read(&chunkData[0], chunkSize);
+
+        // Process the chunk
+        // processChunk(chunkData);
+
+        std::cout << "parsed chunk: " << chunkData << std::endl;
+        // Append the chunk to the reconstructed request body
+        _body.append(chunkData);
+        // Discard the line break after each chunk
+        getline(iss, util);
+    }
+    std::cout << "Reconstructed Body: " << _body << std::endl;
 }
 
 void	Request::check_path(Config conf)
