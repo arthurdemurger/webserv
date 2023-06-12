@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 12:25:53 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/12 11:09:40 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,54 @@ std::string	Response::file_to_string(std::string filename) const
 	return (str);
 }
 
+std::vector<std::string>	Response::get_files_current_directory(std::string path)
+{
+    std::vector<std::string> files;
+    DIR* directory;
+    struct dirent* entry;
+
+    directory = opendir(path.c_str());
+    if (directory != nullptr) {
+        // Lire les entrées du répertoire
+        while ((entry = readdir(directory)) != nullptr) {
+            // Ignorer les entrées spéciales "." et ".."
+            if (std::string(entry->d_name) != "." && std::string(entry->d_name) != "..") {
+                files.push_back(std::string(entry->d_name));
+            }
+        }
+
+        // Fermer le répertoire
+        closedir(directory);
+    }
+
+    return files;
+}
+
+std::string	Response::build_autoindex(std::string path, std::string location)
+{
+	std::vector<std::string>	files = get_files_current_directory(path);
+	std::string					body = file_to_string("www/auto_index.html");
+
+	for (std::vector<std::string>::reverse_iterator it = files.rbegin(); it != files.rend(); it++)
+	{
+		size_t	pos = body.find("</ul></div>");
+
+		if (pos != std::string::npos)
+		{
+			if (location == "/")
+				body.insert(pos, "<li><a href=\"/" + (*it) + "\">" + (*it) + "</a></li>");
+			else
+				body.insert(pos, "<li><a href=\"" + location + "/" + (*it) + "\">" + (*it) + "</a></li>");
+
+		}
+	}
+
+	std::string	response = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n";
+	response += body;
+
+	return (response);
+}
+
 std::string	Response::build_body(std::string filename)
 {
 	std::ifstream	file(filename);
@@ -74,13 +122,7 @@ std::string	Response::build_body(std::string filename)
 	{
 		std::string line;
 		while (std::getline(file, line))
-		{
-			size_t	pos;
-
-			// if ((pos = line.find("<head>")) != std::string::npos)
-			// 	line.insert(pos, "<style>" + file_to_string("html/styles.css") + "</style>");
 			str += line + '\n';
-		}
 		file.close();
 	}
 	else
@@ -102,7 +144,7 @@ std::string	Response::build_error(Request &request, int status)
 	return (response);
 }
 
-void	Response::build_post_method(Request &request, int sock)
+std::string	Response::build_post_method(Request &request, int sock)
 {
 	std::string content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
 	std::string content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
@@ -118,17 +160,17 @@ void	Response::build_post_method(Request &request, int sock)
 	Cgi	cgi;
 
 	if (!request.get_body().empty())
-	{
-		 cgi.launch(sock, env, request.get_path(), request.get_body());	
-	}
+		return (cgi.launch(sock, env, request.get_path(), request.get_body()));
 }
 
 std::string	Response::build_get_method(Request &request)
 {
 	std::string	response = 	"HTTP/1.1 " + request.get_status() + "\n";
 
+	if (request.get_autoindex() == true)
+		return (build_autoindex(request.get_path(), request.get_location()));
 	if (request.get_path().find(".html") != std::string::npos || request.get_path().find(".php") != std::string::npos)
-		response += "Content-Type: text/html\n";
+		 response += "Content-Type: text/html\n";
 	else if (request.get_path().find(".css") != std::string::npos)
 		response += "Content-Type: text/css\n";
 	else if (request.get_path().find(".ico") != std::string::npos)

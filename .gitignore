@@ -7,3 +7,6 @@ a.out
 .vscode/*
 form/*
 request_log
+messages/*
+www/upload/*
+messages

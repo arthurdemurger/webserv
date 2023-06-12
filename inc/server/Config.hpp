@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/06/09 12:12:41 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/12 11:09:20 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ class Config
 		std::string					get_index(void) const;
 		std::vector<int>			get_ports(void) const;
 		std::vector<Location>		get_location(void) const;
-		std::vector<std::string>	get_AMS(void) const;
 		int							get_CMBS(void) const;
 		std::map<int, std::string>	get_error_pages(void) const;
 		/*

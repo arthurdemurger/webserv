@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 11:13:49 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 16:57:01 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,13 @@ class Response
 		** ------------------------------- METHOD --------------------------------
 		*/
 
-		void			build(Request &request);
-		std::string		build_body(std::string filename);
-		std::string		build_get_method(Request &request);
-		void			build_post_method(Request &request, int sock);
-		std::string		build_delete_method(Request &request);
-		std::string		build_error(Request &request, int status);
+		std::string					build_body(std::string filename);
+		std::string					build_get_method(Request &request);
+		std::string					build_post_method(Request &request, int sock);
+		std::string					build_autoindex(std::string path, std::string location);
+		std::vector<std::string>	get_files_current_directory(std::string path);
+		std::string					build_delete_method(Request &request);
+		std::string					build_error(Request &request, int status);
 };
 
-#endif //RESPONSE_HPP
+#endif //RESPONSE_HPPol

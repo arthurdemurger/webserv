@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:56:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/02 16:48:23 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/09 17:37:57 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 # define CLIENT_HPP
 
-#include "../../Webserv.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
 #include "../Config.hpp"
@@ -52,7 +51,7 @@ class Client
 		** ------------------------------- METHODS --------------------------------
 		*/
 		void	add_request(Config conf);
-		void	send_response();
+		std::string	send_response();
 };
 
 #endif // CLIENT_HPP

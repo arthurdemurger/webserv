@@ -10,7 +10,7 @@ last_name = form.getvalue('last_name', '')
 message = form.getvalue('message', '')
 email = form.getvalue('email', '')
 
-messages_dir = './docs/messages/'
+messages_dir = 'messages/'
 if not os.path.exists(messages_dir):
     os.makedirs(messages_dir)
 
@@ -30,7 +30,7 @@ html = """
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webserv - POST Form</title>
     <link rel="stylesheet" href="/styles.css">
-    <link rel="icon" type="image/ico" href="/icon/favicon.ico">
+    <link rel="icon" type="image/ico" href="/favicon.ico">
 </head>
 <body>
     <header>

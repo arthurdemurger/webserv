@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 12:41:32 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/12 11:09:28 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
-Request::Request() : _isParsed(false) { }
+Request::Request() : _isParsed(false), _autoindex(false) { }
 
 Request::Request(const Request &copy)
 {
@@ -48,14 +48,18 @@ Request	&Request::operator=(const Request &copy)
 std::string							Request::get_method() const { return (_method); };
 std::string							Request::get_body() const { return (_body); };
 std::string							Request::get_path() const { return (_path); };
+std::string							Request::get_raw_path() const { return (_raw_path); };
 std::string							Request::get_status() const { return (_status); };
 std::map<std::string, std::string>	Request::get_headers() const { return (_headers); };
 bool								Request::get_is_parsed() const { return (_isParsed); };
+bool								Request::get_autoindex() const { return (_autoindex); };
+std::string							Request::get_location() const { return (_location); };
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
 
+//trim /r/n body
 void	Request::parse(int fd, Config conf)
 {
 	std::stringstream	ss, buffer;
@@ -72,12 +76,12 @@ void	Request::parse(int fd, Config conf)
 	n = read(fd, buff, BUF_SIZE);
 	std::string data(buff, n);
 
-	std::ofstream file("request_log", std::ios::out | std::ios::app);
-    if (file.is_open())
-	{
-		file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
-		file.close();
-	}
+	// std::ofstream file("request_log", std::ios::out | std::ios::app);
+    // if (file.is_open())
+	// {
+	// 	file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
+	// 	file.close();
+	// }
 
 	ss << data;
 	while (getline(ss, line))
@@ -90,7 +94,7 @@ void	Request::parse(int fd, Config conf)
 		{
 			buffer << ss.rdbuf();
 			this->_body = buffer.str();
-			check_body_size(conf);
+			check_body_size(fd, conf);
 			break;
 		}
 		i++;
@@ -147,7 +151,10 @@ void	Request::parse_request_headers(std::string &line)
 		getline(iss, value);
 		trim_value(value);
 		if (!key.empty() && !value.empty())
+		{
 			_headers[key] = value;
+			// std::cout << key << _headers[key] << std::endl;
+		}
 	}
 }
 
@@ -180,22 +187,9 @@ void	Request::parse_path(std::string path)
 	}
 }
 
-void	Request::parse_styles(Config conf)
-{
-	if (_path.find("style") != std::string::npos)
-	{
-		_path = conf.get_root() + "styles.css";
-		this->_status = CODE_200;
-	}
-	else
-	{
-		_path = conf.get_root();
-		this->_status = CODE_404;
-	}
-}
-
 std::vector<std::string> Request::check_location_file(std::string root, const std::string& path)
 {
+	_raw_path = path;
 	std::vector<std::string> result;
 	if (path == "/")
 	{
@@ -225,6 +219,7 @@ std::vector<std::string> Request::check_location_file(std::string root, const st
 			}
 		}
 	}
+
 	return result;
 }
 
@@ -233,8 +228,8 @@ void	Request::open_file(std::string path, Config conf)
 	std::ifstream ifs(path);
 	if (ifs.fail())
 	{
-		// std::cerr << "Error: " << strerror(errno) << " | path : " << path << std::endl;
-		parse_styles(conf);
+		_path = conf.get_root();
+		this->_status = CODE_404;
 	}
 }
 
@@ -251,10 +246,23 @@ bool	Request::check_allowed_method(Location loc)
 	return (flag);
 }
 
-void	Request::check_body_size(Config &conf)
+void	Request::check_body_size(int fd, Config &conf)
 {
+	int			ret, n;
+	char 		buffer[BUF_SIZE];
+
 	if (_body.size() > conf.get_CMBS())
 		this->_status = CODE_413;
+	if (!_headers["Content-Length"].empty())
+	{
+		while (_body.size() != (ret = std::stoi(_headers["Content-Length"])))
+		{
+			std::string	response =  "HTTP/1.1 100 Continue";
+			send(fd, response.c_str(), response.size(), 0);
+			while ( (n = read(fd, buffer, BUF_SIZE)))
+				_body.append(buffer);
+		}
+	}
 }
 
 void	Request::check_path(Config conf)
@@ -273,6 +281,7 @@ void	Request::check_path(Config conf)
 	{
 		if (!_location.compare(it->getLocationType()))
 		{
+			// std::cout << it->getLocationType() << " | autoindex : " << it->getAutoindex() << std::endl;
 			if (!check_allowed_method(*it))
 			{
 				this->_status = CODE_405;
@@ -280,7 +289,12 @@ void	Request::check_path(Config conf)
 			}
 			root_path = it->getRoot();
 			if (_file.empty())
-				_file = it->getIndex();
+			{
+				if (it->getAutoindex() == true)
+					_autoindex = true;
+				else
+					_file = it->getIndex();
+			}
 			root_path.append(_file);
 			this->_path = root_path;
 			open_file(root_path, conf);

@@ -6,7 +6,9 @@ form = cgi.FieldStorage()
 
 fileitem = form['file_upload']
 
-path = "./docs/html/upload/"
+path = "www/upload/"
+port = os.environ.get('SERVER_PORT')
+server_name = os.environ.get('SERVER_NAME')
 
 isExist = os.path.exists(path)
 
@@ -15,7 +17,9 @@ if not isExist:
 
 if fileitem.filename:
 	fn = os.path.basename(fileitem.filename)
+	dest_path = os.path.join(path, fn)
 	open(path + fn, 'wb').write(fileitem.file.read())
+
 	print ("HTTP/1.1 200 OK\nContent-type: text/html\n")
 	html_success = """
 	<!DOCTYPE html>
@@ -25,7 +29,7 @@ if fileitem.filename:
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Webserv - POST Form</title>
 		<link rel="stylesheet" href="/styles.css">
-		<link rel="icon" type="image/ico" href="/icon/favicon.ico">
+		<link rel="icon" type="image/ico" href="/favicon.ico">
 	</head>
 	<body>
 		<header>
@@ -45,13 +49,13 @@ if fileitem.filename:
 				<h2>Submit form</h2>
 				<div class="message-container">
 					<h3> File uploaded ! </h3>
-					<h3> Path : {path}{file_name} </h3>
+					<h3> See the <a href="http://{server_name}:{port}/upload/{file_name}">file</a> </h3>
 				</div>
 			</div>
 	</section>
 	</body>
 	</html>
-	""".format(file_name=fn, path=path)
+	""".format(file_name=fn, port=port, server_name=server_name)
 	print(html_success)
 
 else:
@@ -64,7 +68,7 @@ else:
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Webserv - POST Form</title>
 		<link rel="stylesheet" href="/styles.css">
-		<link rel="icon" type="image/ico" href="/icon/favicon.ico">
+		<link rel="icon" type="image/ico" href="/favicon.ico">
 	</head>
 	<body>
 		<header>
