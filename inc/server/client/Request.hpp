@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/12 14:47:15 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/13 11:11:15 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class Request
 		std::string										_body;
 		bool											_isParsed;
 		bool											_isChunked;
+		bool											_ExpectContinue;
 		std::string										_location;
 		std::string										_file;
 		bool											_autoindex;
@@ -70,7 +71,7 @@ class Request
 		void						print_request(void);
 		void						check_body_size(int fd, Config &conf);
 		void						trim_body();
-		void						parse_chunk_request();
+		std::string					parse_chunk_request();
 };
 
 #endif
