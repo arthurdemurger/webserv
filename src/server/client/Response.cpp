@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 10:25:48 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 11:01:00 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ std::string	Response::build_error(Request &request, int status)
 	return (response);
 }
 
-std::string	Response::build_post_method(Request &request)
+std::string	Response::build_post_method(Request &request, int sock)
 {
 	std::string content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
 	std::string content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
@@ -157,7 +157,7 @@ std::string	Response::build_post_method(Request &request)
 
 	Cgi	cgi;
 
-	return (cgi.launch(env, request.get_path(), request.get_body()));
+	return (cgi.launch(sock, env, request.get_path(), request.get_body()));
 }
 
 std::string	Response::build_get_method(Request &request)

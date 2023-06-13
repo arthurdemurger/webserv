@@ -84,11 +84,12 @@ std::string	Client::send_response(void)
 	else if (_request.get_method() == "GET")
 		response = _response.build_get_method(_request);
 	else if (_request.get_method() == "POST")
-		response = _response.build_post_method(_request);
+		response = _response.build_post_method(_request, _sock);
 	else if (_request.get_method() == "DELETE")
 		response = _response.build_delete_method(_request);
 
-	send(_sock, response.c_str(), response.length(), 0);
+	if (_request.get_method() != "POST")
+		send(_sock, response.c_str(), response.length(), 0);
 
 	return (response);
 }

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 10:46:16 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 10:53:29 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,10 @@ void	Request::parse(int fd, Config conf)
 			// std::cout << "end _body" << std::endl;
 			check_body_size(conf);
 			trim_body();
-			if (_isChunked)
-			{
-				parse_chunk_request();
-			}
+			// if (_isChunked)
+			// {
+			// 	parse_chunk_request();
+			// }
 			break;
 		}
 		i++;
@@ -162,10 +162,10 @@ void	Request::parse_request_headers(std::string &line)
 		if (!key.empty() && !value.empty())
 		{
 			_headers[key] = value;
-			if (_headers.count("Transfer-Encoding") && _headers["Transfer-Encoding"] == "chunked")
-			{
-				_isChunked = true;
-			}
+			// if (_headers.count("Transfer-Encoding") && _headers["Transfer-Encoding"] == "chunked")
+			// {
+			// 	_isChunked = true;
+			// }
 		}
 	}
 }
