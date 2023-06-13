@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 10:27:05 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 13:15:02 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ class Request
 		std::map<std::string, std::string>	get_headers() const;
 		bool								get_is_parsed() const;
 		bool								get_autoindex() const;
+
+		void								set_body(std::string body);
 
 		/*
 		** ------------------------------- METHODS --------------------------------

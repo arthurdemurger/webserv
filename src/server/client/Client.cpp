@@ -79,7 +79,7 @@ std::string	Client::send_response(void)
 	int	status = stoi(_request.get_status());
 	std::string	response;
 
-	if (status >= 400 && status < 500)
+	if (status >= 400)
 		response = _response.build_error(_request, status);
 	else if (_request.get_method() == "GET")
 		response = _response.build_get_method(_request);
@@ -88,8 +88,6 @@ std::string	Client::send_response(void)
 	else if (_request.get_method() == "DELETE")
 		response = _response.build_delete_method(_request);
 
-	if (_request.get_method() != "POST")
-		send(_sock, response.c_str(), response.length(), 0);
-
+	send(_sock, response.c_str(), response.length(), 0);
 	return (response);
 }
