@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 16:47:49 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 10:29:39 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class Launcher
 		std::string	getCurrentTime(void);
 		void		accepter(int sock);
 		void		handle_request(int &client_sock, Client &client);
-		void		handle_response(int &client_sock, Client &client);
+		void		handle_response(int &client_sock);
 		void		add_serv_to_sets(void);
 		void		add_to_set(int fd, fd_set &set);
 		void		remove_from_set(int fd, fd_set &set);

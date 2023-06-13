@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 17:01:49 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 11:02:37 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,9 @@ std::string Cgi::launch(int client_sock, char **env, std::string path, std::stri
 		close(pipe_out[1]);
 
 		execve(path.c_str(), NULL, env);
-
-		perror("execve");
+	// (void) env;
+	// (void) path;
+		// perror("execve");
 		exit(EXIT_FAILURE);
 	}
 	else // parent process
@@ -88,6 +89,7 @@ std::string Cgi::launch(int client_sock, char **env, std::string path, std::stri
 		int n;
 		while ((n = read(pipe_out[0], buffer, BUF_SIZE)) > 0) {
 			response += buffer;
+			write(client_sock, buffer, n);
 		}
 		close(pipe_out[0]);
 

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 17:40:22 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 10:47:41 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	Launcher::accepter(int server_sock)
 	_clients.erase(new_client);
 	_clients.insert(std::make_pair(new_client, Client(new_client, server_sock)));
 
-	// put_on_console(YELLOW, "ACCEPT CONNECTION", "client " + std::to_string(new_client) + " (" + _servers[server_sock].get_name() + ")");
+	put_on_console(YELLOW, "ACCEPT CONNECTION", "socket " + std::to_string(new_client) + " (" + _servers[server_sock].get_name() + ")");
 }
 
 std::string Launcher::getCurrentTime()
@@ -136,28 +136,32 @@ std::string Launcher::getCurrentTime()
 	std::cout << CYAN << "[" << getCurrentTime() << "] " << color << status << " " << message << RESET << std::endl;
 }
 
-void	Launcher::handle_response(int &client_sock, Client &client)
+void	Launcher::handle_response(int &client_sock)
 {
 		std::string response = _clients[client_sock].send_response();
 		std::string protocol = "HTTP/1.1 ";
-		std::string header = response.substr(protocol.length(), response.find("\n") - protocol.length());
+		size_t	size;
+		std::string	header = "";
 
-		// put_on_console(GREEN, "SEND RESPONSE", header);
+		if (((size = response.find("\n")) != std::string::npos) && (size - protocol.length() >= 0))
+			header = response.substr(protocol.length(), response.find("\n") - protocol.length());
+
+		put_on_console(GREEN, "SEND RESPONSE", header);
 		close_socket(client_sock);
 }
 
 void	Launcher::handle_request(int &client_sock, Client &client)
 {
-
-	client.add_request(_servers[client.get_server_fd()].get_config());
+	std::string path = client.add_request(_servers[client.get_server_fd()].get_config());
 	remove_from_set(client_sock, _read_pool);
 	add_to_set(client_sock, _write_pool);
-	// put_on_console(RED, "READ_REQUEST", " ");
+
+	put_on_console(RED, "READ_REQUEST", path);
 }
 
 void	Launcher::close_socket(int socket)
 {
-	// put_on_console(MAGENTA, "CONNECTION REMOVED", "client " + std::to_string(socket) + " (" + _servers[_clients[socket].get_server_fd()].get_name() + ")");
+	put_on_console(MAGENTA, "CONNECTION REMOVED", "socket " + std::to_string(socket) + " (" + _servers[_clients[socket].get_server_fd()].get_name() + ")");
 	if (FD_ISSET(socket, &_read_pool))
 		remove_from_set(socket, _read_pool);
 	if (FD_ISSET(socket, &_write_pool))
@@ -173,7 +177,7 @@ void	Launcher::run(void)
 	struct timeval	timer;
 
 	setup();
-	// put_on_console(DARK_GREY, "WEBSERV LAUNCHED", "");
+	put_on_console(DARK_GREY, "WEBSERV LAUNCHED", "");
 	while (true)
 	{
 		// std::cout << "########## WAITING ##########" << std::endl;
@@ -192,7 +196,7 @@ void	Launcher::run(void)
 					handle_request(sock, _clients[sock]);
 			}
 			else if (FD_ISSET(sock, &write_pool_cpy) && _clients.count(sock))
-				handle_response(sock, _clients[sock]);
+				handle_response(sock);
 		}
 		// std::cout << "########## DONE    ##########" << std::endl << std::endl;
 	}

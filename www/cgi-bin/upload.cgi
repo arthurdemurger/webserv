@@ -49,13 +49,12 @@ if fileitem.filename:
 				<h2>Submit form</h2>
 				<div class="message-container">
 					<h3> File uploaded ! </h3>
-					<h3> See the <a href="http://{server_name}:{port}/upload/{file_name}">file</a> </h3>
 				</div>
 			</div>
 	</section>
 	</body>
 	</html>
-	""".format(file_name=fn, port=port, server_name=server_name)
+	"""
 	print(html_success)
 
 else:

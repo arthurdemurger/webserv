@@ -6,13 +6,13 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:12:06 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/06 12:24:49 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 10:29:58 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Webserv.hpp"
 #include "../inc/Launcher.hpp"
-int main(int ac, char **av, char **env)
+int main(int ac, char **av)
 {
 	if (ac <= 2)
 	{

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 12:45:40 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 10:23:51 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,14 +92,14 @@ void	Config::setter(std::string &key, std::string &value, std::istringstream &is
 
 void	Config::setPortMBS(std::string &key, std::string &value)
 {
-	int i, port;
+	size_t i, port;
 
 	i = 0;
 	while (isdigit(value[i]))
 	{
 		i++;
 	}
-	if (i != value.size())
+	if (i != value.length())
 	{
 		std::cout << "Error: listen directive format\n";
 		exit(EXIT_FAILURE);
