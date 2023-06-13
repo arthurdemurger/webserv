@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/12 16:38:12 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/13 10:46:16 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,12 @@ void	Request::parse(int fd, Config conf)
 		data.append(buff);
 	}
 
-	std::ofstream file("request_log", std::ios::out | std::ios::app);
-    if (file.is_open())
-	{
-		file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
-		file.close();
-	}
+	// std::ofstream file("request_log", std::ios::out | std::ios::app);
+    // if (file.is_open())
+	// {
+	// 	file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
+	// 	file.close();
+	// }
 
 	ss << data;
 	while (getline(ss, line))
@@ -95,9 +95,9 @@ void	Request::parse(int fd, Config conf)
 		{
 			buffer << ss.rdbuf();
 			this->_body = buffer.str();
-			// std::cout << "_body: " << _body << std::endl; 
-			// std::cout << "end _body" << std::endl; 
-			check_body_size(fd, conf);
+			// std::cout << "_body: " << _body << std::endl;
+			// std::cout << "end _body" << std::endl;
+			check_body_size(conf);
 			trim_body();
 			if (_isChunked)
 			{
@@ -140,6 +140,7 @@ void	Request::parse_request_line(std::string &line, Config conf)
 		}
 		else if (i == 1)
 		{
+			this->_raw_path = str;
 			this->_path = str;
 			check_path(conf);
 		}
@@ -172,7 +173,7 @@ void	Request::parse_request_headers(std::string &line)
 void	Request::trim_value(std::string &value)
 {
 	size_t	pos;
-	
+
 	pos = value.find_first_not_of(32, 0);
 	if (pos != std::string::npos)
 	{
@@ -243,12 +244,13 @@ bool	Request::check_allowed_method(Location loc)
 	return (flag);
 }
 
-void	Request::check_body_size(int fd, Config &conf)
+void	Request::check_body_size(Config &conf)
 {
-	int			ret, n;
-	char 		buffer[BUF_SIZE];
+	// int			ret, n;
+	// char 		buffer[BUF_SIZE];
+	int	size = _body.size();
 
-	if (_body.size() > conf.get_CMBS())
+	if (size > conf.get_CMBS())
 		this->_status = CODE_413;
 	// if (!_headers["Content-Length"].empty())
 	// {
@@ -269,7 +271,7 @@ void	Request::check_body_size(int fd, Config &conf)
 
 void	Request::trim_body()
 {
-	while (!_body.empty() && (_body.back() == '\r' || _body.back() == '\n')) 
+	while (!_body.empty() && (_body.back() == '\r' || _body.back() == '\n'))
 	{
     //    std::cout << "remove carriage return\n";
 	   _body.pop_back();
@@ -277,7 +279,7 @@ void	Request::trim_body()
 	// size_t	pos = _body.find("/r/n");
 	// if (pos != std::string::npos)
     //    std::cout << "carriage return remains\n";
-		
+
 }
 
 void	Request::parse_chunk_request()
@@ -308,7 +310,7 @@ void	Request::parse_chunk_request()
         // Discard the line break after each chunk
         getline(iss, util);
     }
-    std::cout << "Reconstructed Body: " << _body << std::endl;
+    // std::cout << "Reconstructed Body: " << _body << std::endl;
 }
 
 void	Request::check_path(Config conf)
@@ -316,8 +318,8 @@ void	Request::check_path(Config conf)
 	std::vector<Location>			loc = conf.get_location();
 	std::vector<Location>::iterator	it;
 	std::string						root_path, substr = "/";
-	int								c = 0, count = 0, index = 0;
-	size_t							pos;
+	// int								c = 0, count = 0, index = 0;
+	// size_t							pos;
 
 	std::vector<std::string> vec = check_location_file(conf.get_root(), _path);
 	_location = vec[0];

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 17:34:34 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 10:25:48 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,6 @@ std::vector<std::string>	Response::get_files_current_directory(std::string path)
                 files.push_back(std::string(entry->d_name));
             }
         }
-
-        // Fermer le répertoire
         closedir(directory);
     }
 
@@ -144,7 +142,7 @@ std::string	Response::build_error(Request &request, int status)
 	return (response);
 }
 
-std::string	Response::build_post_method(Request &request, int sock)
+std::string	Response::build_post_method(Request &request)
 {
 	std::string content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
 	std::string content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
@@ -159,8 +157,7 @@ std::string	Response::build_post_method(Request &request, int sock)
 
 	Cgi	cgi;
 
-	if (!request.get_body().empty())
-		return (cgi.launch(sock, env, request.get_path(), request.get_body()));
+	return (cgi.launch(env, request.get_path(), request.get_body()));
 }
 
 std::string	Response::build_get_method(Request &request)

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/09 17:01:49 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 10:24:13 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ Cgi &Cgi::operator=(const Cgi &copy)
 ** ------------------------------- METHODS --------------------------------
 */
 
-std::string Cgi::launch(int client_sock, char **env, std::string path, std::string body)
+std::string Cgi::launch(char **env, std::string path, std::string body)
 {
 	std::string	response;
 	int pipe_in[2]; // Tube pour l'entrée standard du script CGI

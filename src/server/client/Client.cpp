@@ -67,10 +67,11 @@ Config		Client::get_conf(void) const { return (_conf); }
 ** ------------------------------- METHODS --------------------------------
 */
 
-void	Client::add_request(Config conf)
+std::string	Client::add_request(Config conf)
 {
 	_request.parse(_sock, conf);
 	_response.set_error_pages(conf.get_error_pages());
+	return (_request.get_raw_path());
 }
 
 std::string	Client::send_response(void)
@@ -83,7 +84,7 @@ std::string	Client::send_response(void)
 	else if (_request.get_method() == "GET")
 		response = _response.build_get_method(_request);
 	else if (_request.get_method() == "POST")
-		response = _response.build_post_method(_request, _sock);
+		response = _response.build_post_method(_request);
 	else if (_request.get_method() == "DELETE")
 		response = _response.build_delete_method(_request);
 

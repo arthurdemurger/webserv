@@ -6,7 +6,7 @@
 #    By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/15 11:46:45 by ademurge          #+#    #+#              #
-#    Updated: 2023/06/09 12:43:49 by ademurge         ###   ########.fr        #
+#    Updated: 2023/06/13 10:22:18 by ademurge         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ NAME		=	webserv
 # Flags
 CC			=	c++
 
-CPPFLAGS	=	-std=c++98
+CPPFLAGS	=	-std=c++98 -Werror -Wextra -Wall -g
 
 RM			=	rm -rf
 
