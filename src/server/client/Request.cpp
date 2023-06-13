@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 14:10:33 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 14:52:08 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void	Request::parse(int fd, Config conf)
 	std::string			request;
 	int					i = 0, n = 0;
 
-	i = 0;
-	n = 0;
+	this->_isChunked = false;
+	this->_ExpectContinue = false;
 	this->_status = CODE_200;
 	bzero(buff, BUF_SIZE);
 	std::string data(buff, n);
@@ -89,6 +89,7 @@ void	Request::parse(int fd, Config conf)
 	ss << data;
 	while (getline(ss, line))
 	{
+		// std::cout << "line: " << line << std::endl;
 		if (i == 0)
 			parse_request_line(line, conf);
 		else if (i > 0 && line.find(":") != std::string::npos)
@@ -97,14 +98,14 @@ void	Request::parse(int fd, Config conf)
 		{
 			buffer << ss.rdbuf();
 			this->_body = buffer.str();
-			// std::cout << "_body: " << _body << std::endl;
-			// std::cout << "end _body" << std::endl;
-			check_body_size(conf);
+			// std::cout << "end _body" << std::endl; 
+			check_body_size(fd, conf);
 			trim_body();
-			// if (_isChunked)
-			// {
-			// 	parse_chunk_request();
-			// }
+			if (_isChunked)
+			{
+				_body = parse_chunk_request();
+				std::cout << "new_body: " << _body << std::endl;
+			}
 			break;
 		}
 		i++;
@@ -164,10 +165,15 @@ void	Request::parse_request_headers(std::string &line)
 		if (!key.empty() && !value.empty())
 		{
 			_headers[key] = value;
-			// if (_headers.count("Transfer-Encoding") && _headers["Transfer-Encoding"] == "chunked")
-			// {
-			// 	_isChunked = true;
-			// }
+			std::cout << key << ": " << value << std::endl;
+		}
+		if (_headers.count("Transfer-Encoding") && _headers["Transfer-Encoding"] == "chunked")
+		{
+			_isChunked = true;
+		}
+		else if (_headers.count("Expect") && _headers["Expect"] == "100-continue")
+		{
+			_ExpectContinue = true;
 		}
 	}
 }
@@ -254,22 +260,32 @@ void	Request::check_body_size(Config &conf)
 
 	if (size > conf.get_CMBS())
 		this->_status = CODE_413;
+	if (_ExpectContinue)
+	{
+		std::string	response =  "HTTP/1.1 100 Continue";
+		send(fd, response.c_str(), response.size(), 0);
+		std::cout << "1\n";
+		while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
+		{
+			_body.append(buffer);
+		}
+	}
+}
+
 	// if (!_headers["Content-Length"].empty())
 	// {
-	// 	std::cout << "CL: " << _headers["Content-Length"] << std::endl;
-	// 	std::cout << "BS: " << _body.size() << std::endl;
 	// 	while (_body.size() != (ret = std::stoi(_headers["Content-Length"])))
 	// 	{
+	// 	std::cout << "CL: " << _headers["Content-Length"] << std::endl;
+	// 	std::cout << "BS: " << _body.size() << std::endl;
 	// 		std::string	response =  "HTTP/1.1 100 Continue";
 	// 		send(fd, response.c_str(), response.size(), 0);
-	// 		std::cout << "1\n";
 	// 		while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
 	// 		{
 	// 			_body.append(buffer);
 	// 		}
 	// 	}
 	// }
-}
 
 void	Request::trim_body()
 {
@@ -284,10 +300,10 @@ void	Request::trim_body()
 
 }
 
-void	Request::parse_chunk_request()
+std::string	Request::parse_chunk_request()
 {
 	std::istringstream iss(_body);
-    std::string line, util;
+    std::string line, util, new_body;
 
     // Read and process each chunk
     while (std::getline(iss, line)) {
@@ -302,16 +318,13 @@ void	Request::parse_chunk_request()
         // Read the chunk data
         std::string chunkData(chunkSize, '\0');
         iss.read(&chunkData[0], chunkSize);
-
-        // Process the chunk
-        // processChunk(chunkData);
-
         std::cout << "parsed chunk: " << chunkData << std::endl;
         // Append the chunk to the reconstructed request body
-        _body.append(chunkData);
+        new_body.append(chunkData);
         // Discard the line break after each chunk
         getline(iss, util);
     }
+	return (new_body);
     // std::cout << "Reconstructed Body: " << _body << std::endl;
 }
 
