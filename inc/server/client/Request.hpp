@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 11:22:11 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/13 11:24:12 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ class Request
 		bool						check_allowed_method(Location loc);
 		void						open_file(std::string path, Config);
 		void						print_request(void);
-		void						check_body_size(Config &conf);
+		void						check_body_size(int fd, Config &conf);
 		void						trim_body();
 		std::string					parse_chunk_request();
 };
