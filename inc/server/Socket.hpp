@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:50 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 17:12:57 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 11:21:55 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class Socket
 		** ------------------------------- Canonical form --------------------------------
 		*/
 		Socket();
-		Socket(int domain, int service, int protocol, int port, u_long interface, int backlog);
+		Socket(int port, u_long interface, int backlog);
 		~Socket();
 		Socket(const Socket &copy);
 

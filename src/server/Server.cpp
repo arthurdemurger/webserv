@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/07 14:31:49 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/13 11:22:10 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ for each port of the server object, create one socket object and populate vector
 then populate the fds vector w. the server socket
 */
 
-void	Server::activate(int protocol, int port, int backlog)
+void	Server::activate(int port, int backlog)
 {
-	_sockets.push_back(Socket(AF_INET, SOCK_STREAM, protocol, port, INADDR_ANY, backlog));
+	_sockets.push_back(Socket(port, INADDR_ANY, backlog));
 	_fds.push_back(_sockets.back().getServerFd());
 }
 
@@ -82,5 +82,5 @@ void	Server::configure(Config conf)
 	std::vector<int> ports = _config.get_ports();
 
 	for (std::vector<int>::iterator it = ports.begin(); it != ports.end(); it++)
-		activate(0, (*it), 10);
+		activate((*it), 10);
 }

@@ -22,6 +22,7 @@ class Cgi
 			/*
 			** ------------------------------- Attributes --------------------------------
 			*/
+			int	_status;
 
 		public:
 				/*
@@ -32,8 +33,13 @@ class Cgi
 			Cgi	 &operator=(const Cgi &copy);
 			~Cgi();
 
-				/*
+			/*
 			** ------------------------------- Accessors --------------------------------
+			*/
+			int	get_status(void) const;
+
+			/*
+			** ------------------------------- Methods --------------------------------
 			*/
 			std::string launch(int sock, char **env, std::string path, std::string body);
 

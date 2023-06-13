@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 11:47:38 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/13 14:55:30 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ bool								Request::get_is_parsed() const { return (_isParsed); };
 bool								Request::get_autoindex() const { return (_autoindex); };
 std::string							Request::get_location() const { return (_location); };
 
+void								Request::set_body(std::string body) { _body = body; };
+
 /*
 ** ------------------------------- METHODS --------------------------------
 */
@@ -77,12 +79,12 @@ void	Request::parse(int fd, Config conf)
 		data.append(buff);
 	}
 
-	// std::ofstream file("request_log", std::ios::out | std::ios::app);
-    // if (file.is_open())
-	// {
-	// 	file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
-	// 	file.close();
-	// }
+	std::ofstream file("request_log", std::ios::out | std::ios::app);
+    if (file.is_open())
+	{
+		file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
+		file.close();
+	}
 
 	ss << data;
 	while (getline(ss, line))

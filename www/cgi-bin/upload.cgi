@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import cgi, os
+import os, cgi, sys
 
 form = cgi.FieldStorage()
 
@@ -15,12 +15,18 @@ isExist = os.path.exists(path)
 if not isExist:
 	os.makedirs(path)
 
+if 'CONTENT_LENGTH' in os.environ:
+	content_length = int(os.environ['CONTENT_LENGTH'])
+	max_file_size = 1024 * 1024  # Limite de 1 Mo (modifiable selon vos besoins)
+	if content_length > max_file_size:
+		sys.exit(1)
+
 if fileitem.filename:
 	fn = os.path.basename(fileitem.filename)
 	dest_path = os.path.join(path, fn)
-	open(path + fn, 'wb').write(fileitem.file.read())
+	open(dest_path, 'wb').write(fileitem.file.read())
 
-	print ("HTTP/1.1 200 OK\nContent-type: text/html\n")
+	print("HTTP/1.1 200 OK\nContent-type: text/html\n")
 	html_success = """
 	<!DOCTYPE html>
 	<html lang="en">
@@ -58,7 +64,7 @@ if fileitem.filename:
 	print(html_success)
 
 else:
-	print ("HTTP/1.1 400 Bad Request\nContent-type: text/html\n")
+	print("HTTP/1.1 400 Bad Request\nContent-type: text/html\n")
 	html_failure = """
 	<!DOCTYPE html>
 	<html lang="en">
@@ -88,4 +94,3 @@ else:
 	</html>
 	"""
 	print(html_failure)
-

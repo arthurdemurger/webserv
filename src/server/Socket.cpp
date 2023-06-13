@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/05/25 10:08:06 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 11:26:12 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,20 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 Socket::Socket(void) { }
+#include <arpa/inet.h>
 
-Socket::Socket(int domain, int service, int protocol, int port,  u_long interface, int backlog)
+Socket::Socket(int port,  u_long interface, int backlog)
 {
-	_address.sin_family = domain;
+	_address.sin_family = AF_INET;
 	_address.sin_port = htons(port);
 	_address.sin_addr.s_addr = htonl(interface);
 
-	if((_server_fd = socket(domain, service, protocol)) < 0)
+	if((_server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		throw Socket::SocketException();
 	const int enable = 1;
 	if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
 		throw Socket::SocketException();
-	if (bind(_server_fd, (struct sockaddr *) &_address, sizeof(_address)) < 0)
+	if (bind(_server_fd, reinterpret_cast<sockaddr*>(&_address), sizeof(_address)) < 0)
 		throw Socket::BindException();
 	if (listen(_server_fd, backlog) < 0)
 		throw Socket::ListenException();

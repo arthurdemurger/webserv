@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 11:24:12 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/13 14:55:23 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ class Request
 		std::map<std::string, std::string>	get_headers() const;
 		bool								get_is_parsed() const;
 		bool								get_autoindex() const;
+
+		void								set_body(std::string body);
 
 		/*
 		** ------------------------------- METHODS --------------------------------

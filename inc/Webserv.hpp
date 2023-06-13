@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/08 17:33:46 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 13:45:50 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,9 @@
 # define CODE_404 "404 Not Found"
 # define CODE_405 "405 Not Allowed"
 # define CODE_413 "413 Payload Too Large"
+# define CODE_502 "502 Bad Gateaway"
 
+# define FILE_SIZE_MAX	1024 * 1024
 # define BUF_SIZE		30000
 # define TIME_OUT       3
 # define RESET			"\x1B[0m"
