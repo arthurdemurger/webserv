@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 15:30:02 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 15:34:41 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	Request::parse(int fd, Config conf)
 		{
 			buffer << ss.rdbuf();
 			this->_body = buffer.str();
-			// std::cout << "end _body" << std::endl; 
+			// std::cout << "end _body" << std::endl;
 			check_body_size(fd, conf);
 			trim_body();
 			if (_isChunked)
@@ -188,7 +188,7 @@ void	Request::trim_value(std::string &value)
 	{
 		value.erase(0, pos);
 	}
-	while (!value.empty() && (value.back() == '\r' || value.back() == '\n')) 
+	while (!value.empty() && (value.back() == '\r' || value.back() == '\n'))
 	{
 	   value.pop_back();
     }
@@ -255,25 +255,25 @@ bool	Request::check_allowed_method(Location loc)
 
 void	Request::check_body_size(int fd, Config &conf)
 {
-	size_t	ret, n;
-	char	buffer[BUF_SIZE];
+	// size_t	ret, n;
+	// char	buffer[BUF_SIZE];
 	(void)conf;
-	
-	if (!_headers["Content-Length"].empty())
-	{
-		while (_body.size() != (ret = std::stoi(_headers["Content-Length"])))
-		{
-			// std::cout << "CL: " << _headers["Content-Length"] << std::endl;
-			// std::cout << "BS: " << _body.size() << std::endl;
-			std::string	response =  "HTTP/1.1 100 Continue\r\n\r\n";
-			send(fd, response.c_str(), response.size(), 0);
-			while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
-			{
-				std::cout << buffer << std::endl;
-				_body.append(buffer);
-			}
-		}
-	}
+	(void) fd;
+	// if (!_headers["Content-Length"].empty())
+	// {
+	// 	while (_body.size() != (ret = std::stoi(_headers["Content-Length"])))
+	// 	{
+	// 		// std::cout << "CL: " << _headers["Content-Length"] << std::endl;
+	// 		// std::cout << "BS: " << _body.size() << std::endl;
+	// 		std::string	response =  "HTTP/1.1 100 Continue\r\n\r\n";
+	// 		send(fd, response.c_str(), response.size(), 0);
+	// 		while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
+	// 		{
+	// 			std::cout << buffer << std::endl;
+	// 			_body.append(buffer);
+	// 		}
+	// 	}
+	// }
 // 	int			n;
 // 	char 		buffer[BUF_SIZE];
 // 	int	size = _body.size();

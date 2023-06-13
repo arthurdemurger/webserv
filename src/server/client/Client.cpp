@@ -90,7 +90,11 @@ std::string	Client::send_response(void)
 
 	status = stoi(_request.get_status());
 	if (status >= 400)
+	{
 		response = _response.build_error(_request, status);
-	send(_sock, response.c_str(), response.length(), 0);
+		send(_sock, response.c_str(), response.length(), 0);
+	}
+	if (_request.get_method() != "POST")
+		send(_sock, response.c_str(), response.length(), 0);
 	return (response);
 }

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 15:28:27 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 15:51:52 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ std::string	Response::build_post_method(Request &request, int sock)
 		return ("");
 	}
 
-	// while ((int) request.get_body().size() < length)
+	// while (request.get_body().size() < (size_t) length)
 	// {
 	// 	int size = request.get_body().size();
 	// 	std::string	res = "HTTP/1.1 100 Continue\r\n\r\n";
@@ -176,6 +176,8 @@ std::string	Response::build_post_method(Request &request, int sock)
 
 	// 	while ((n = read(sock, buf, length - size)) > 0)
 	// 		body += buf;
+	// 	if (n < 0)
+	// 		break ;
 	// 	request.set_body(body);
 	// }
 
