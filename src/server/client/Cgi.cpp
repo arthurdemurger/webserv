@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 14:07:38 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 15:27:18 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ std::string Cgi::launch(int client_sock, char **env, std::string path, std::stri
 		int n;
 		while ((n = read(pipe_out[0], buffer, BUF_SIZE)) > 0)
 		{
-			// response += buffer;
+			response += buffer;
 			// (void) client_sock;
 			write(client_sock, buffer, n);
 		}
@@ -103,10 +103,7 @@ std::string Cgi::launch(int client_sock, char **env, std::string path, std::stri
 
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
-		{
 			_status = WEXITSTATUS(status);
-			std::cout << "status : " << _status << std::endl;
-		}
 	}
 	// std::cout << response << std::endl;
 	return (response);

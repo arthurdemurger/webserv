@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 14:51:45 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 15:13:39 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ class Request
 		bool								get_autoindex() const;
 
 		void								set_body(std::string body);
+		void								set_status(std::string status);
 
 		/*
 		** ------------------------------- METHODS --------------------------------
@@ -71,7 +72,7 @@ class Request
 		bool						check_allowed_method(Location loc);
 		void						open_file(std::string path, Config);
 		void						print_request(void);
-		void						check_body_size(Config &conf);
+		void						check_body_size(int fd, Config &conf);
 		void						trim_body();
 		std::string					parse_chunk_request();
 };

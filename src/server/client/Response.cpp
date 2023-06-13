@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 14:32:27 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 15:28:27 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,12 +130,8 @@ std::string	Response::build_body(std::string filename)
 
 std::string	Response::build_error(Request &request, int status)
 {
-	std::string response;
-
-	if (status == 502)
-		response = "HTTP/1.1 502 Bad Gateaway\n";
-	else
-		response =  "HTTP/1.1 " + request.get_status() + "\n";
+	// std::cout << _error_pages[status] << std::endl;
+	std::string response =  "HTTP/1.1 " + request.get_status() + "\n";
 
 	response += "Content-Type: text/html\n\n";
 
@@ -161,8 +157,13 @@ std::string	Response::build_post_method(Request &request, int sock)
 	char* env[] = {&content_type[0], &content_length[0], &request_method[0], &script_name[0],
 				   &server_protocol[0], &server_name[0], &server_port[0], NULL};
 
+
 	if (length > FILE_SIZE_MAX)
-		return (build_error(request, 502));
+	{
+		request.set_status(CODE_413);
+		return ("");
+	}
+
 	// while ((int) request.get_body().size() < length)
 	// {
 	// 	int size = request.get_body().size();
@@ -183,7 +184,7 @@ std::string	Response::build_post_method(Request &request, int sock)
 	std::string response = cgi.launch(sock, env, request.get_path(), request.get_body());
 
 	if (cgi.get_status() != 0)
-		return (build_error(request, 502));
+		request.set_status(CODE_502);
 	return (response);
 }
 

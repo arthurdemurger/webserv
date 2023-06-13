@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 14:52:08 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 15:13:49 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ bool								Request::get_autoindex() const { return (_autoindex); };
 std::string							Request::get_location() const { return (_location); };
 
 void								Request::set_body(std::string body) { _body = body; };
+void								Request::set_status(std::string status) { _status = status; };
 
 /*
 ** ------------------------------- METHODS --------------------------------
@@ -165,7 +166,7 @@ void	Request::parse_request_headers(std::string &line)
 		if (!key.empty() && !value.empty())
 		{
 			_headers[key] = value;
-			std::cout << key << ": " << value << std::endl;
+			// std::cout << key << ": " << value << std::endl;
 		}
 		if (_headers.count("Transfer-Encoding") && _headers["Transfer-Encoding"] == "chunked")
 		{
@@ -252,10 +253,10 @@ bool	Request::check_allowed_method(Location loc)
 	return (flag);
 }
 
-void	Request::check_body_size(Config &conf)
+void	Request::check_body_size(int fd, Config &conf)
 {
-	// int			ret, n;
-	// char 		buffer[BUF_SIZE];
+	int			n;
+	char 		buffer[BUF_SIZE];
 	int	size = _body.size();
 
 	if (size > conf.get_CMBS())
