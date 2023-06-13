@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 10:23:51 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 14:54:17 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,11 @@ void	Config::setServerNameDir(std::string &value)
 		this->_server_name.push_back(token);
 		// std::cout << "token: " << token << std::endl;
 	}
+	if (token.empty())
+	{
+		this->_server_name.push_back("null");
+	}
+	
 }
 
 void	Config::setErrorPageDir(std::string &value)

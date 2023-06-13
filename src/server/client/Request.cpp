@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 15:13:49 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/13 15:30:02 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,38 +255,42 @@ bool	Request::check_allowed_method(Location loc)
 
 void	Request::check_body_size(int fd, Config &conf)
 {
-	int			n;
-	char 		buffer[BUF_SIZE];
-	int	size = _body.size();
-
-	if (size > conf.get_CMBS())
-		this->_status = CODE_413;
-	if (_ExpectContinue)
+	size_t	ret, n;
+	char	buffer[BUF_SIZE];
+	(void)conf;
+	
+	if (!_headers["Content-Length"].empty())
 	{
-		std::string	response =  "HTTP/1.1 100 Continue";
-		send(fd, response.c_str(), response.size(), 0);
-		std::cout << "1\n";
-		while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
+		while (_body.size() != (ret = std::stoi(_headers["Content-Length"])))
 		{
-			_body.append(buffer);
+			// std::cout << "CL: " << _headers["Content-Length"] << std::endl;
+			// std::cout << "BS: " << _body.size() << std::endl;
+			std::string	response =  "HTTP/1.1 100 Continue\r\n\r\n";
+			send(fd, response.c_str(), response.size(), 0);
+			while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
+			{
+				std::cout << buffer << std::endl;
+				_body.append(buffer);
+			}
 		}
 	}
+// 	int			n;
+// 	char 		buffer[BUF_SIZE];
+// 	int	size = _body.size();
+
+// 	if (size > conf.get_CMBS())
+// 		this->_status = CODE_413;
+// 	if (_ExpectContinue)
+// 	{
+// 		std::string	response =  "HTTP/1.1 100 Continue";
+// 		send(fd, response.c_str(), response.size(), 0);
+// 		while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
+// 		{
+// 			_body.append(buffer);
+// 		}
+// 	}
 }
 
-	// if (!_headers["Content-Length"].empty())
-	// {
-	// 	while (_body.size() != (ret = std::stoi(_headers["Content-Length"])))
-	// 	{
-	// 	std::cout << "CL: " << _headers["Content-Length"] << std::endl;
-	// 	std::cout << "BS: " << _body.size() << std::endl;
-	// 		std::string	response =  "HTTP/1.1 100 Continue";
-	// 		send(fd, response.c_str(), response.size(), 0);
-	// 		while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
-	// 		{
-	// 			_body.append(buffer);
-	// 		}
-	// 	}
-	// }
 
 void	Request::trim_body()
 {
@@ -309,7 +313,7 @@ std::string	Request::parse_chunk_request()
     // Read and process each chunk
     while (std::getline(iss, line)) {
         // Parse the chunk size
-        std::cout << "line: " << line << std::endl;
+        // std::cout << "line: " << line << std::endl;
         size_t chunkSize = std::stoul(line, nullptr, 16);
         if (chunkSize == 0) {
             // Zero-length chunk indicates the end of the request body
@@ -319,7 +323,7 @@ std::string	Request::parse_chunk_request()
         // Read the chunk data
         std::string chunkData(chunkSize, '\0');
         iss.read(&chunkData[0], chunkSize);
-        std::cout << "parsed chunk: " << chunkData << std::endl;
+        // std::cout << "parsed chunk: " << chunkData << std::endl;
         // Append the chunk to the reconstructed request body
         new_body.append(chunkData);
         // Discard the line break after each chunk
