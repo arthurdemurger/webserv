@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 09:35:16 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/28 11:10:39 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ std::string	Response::build_error(Request &request, int status)
 	return (response);
 }
 
-std::string	Response::build_post_method(Request &request, int sock)
+std::string	Response::build_cgi(Request &request, int sock)
 {
 	std::string content_type = "CONTENT_TYPE=" + request.get_headers()["Content-Type"];
 	std::string content_length = "CONTENT_LENGTH=" + request.get_headers()["Content-Length"];
@@ -152,7 +152,9 @@ std::string	Response::build_post_method(Request &request, int sock)
 	std::string server_protocol = "SERVER_PROTOCOL=HTTP/1.1";
 	std::string server_name = "SERVER_NAME=localhost";
 	std::string server_port = "SERVER_PORT=8000";
-	long long length = stoll(request.get_headers()["Content-Length"]);
+	long long length = FILE_SIZE_MAX;
+	if (!request.get_headers()["Content-Length"].empty())
+		length = stoll(request.get_headers()["Content-Length"]);
 
 	char* env[] = {&content_type[0], &content_length[0], &request_method[0], &script_name[0],
 				   &server_protocol[0], &server_name[0], &server_port[0], NULL};

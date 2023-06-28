@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 09:34:24 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/28 10:58:05 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,31 @@ void	Launcher::close_socket(int socket)
 	_clients.erase(socket);
 }
 
+std::string	Launcher::log_launch(void)
+{
+	std::vector<int>	ports;
+	std::string			log;
+
+	for (std::map<int, Server>::iterator map_it = _servers.begin(); map_it != _servers.end(); map_it++)
+	{
+		std::vector<int> vec = map_it->second.get_config().get_ports();
+		for (std::vector<int>::iterator vec_it = vec.begin(); vec_it != vec.end(); vec_it++)
+			if (std::find(ports.begin(), ports.end(), (*vec_it)) == ports.end())
+				ports.push_back(*vec_it);
+	}
+
+	log = "[Ports : ";
+	for (std::vector<int>::iterator it = ports.begin(); it != ports.end(); it++)
+	{
+		if ((*it) != ports.back())
+			log += std::to_string((*it)) + ", ";
+		else
+			log += std::to_string((*it));
+	}
+	log += "]";
+	return (log);
+}
+
 void	Launcher::run(void)
 {
 	fd_set	read_pool_cpy;
@@ -177,7 +202,8 @@ void	Launcher::run(void)
 	struct timeval	timer;
 
 	setup();
-	put_on_console(DARK_GREY, "WEBSERV LAUNCHED", "");
+	std::string message_log = log_launch();
+	put_on_console(DARK_GREY, "WEBSERV LAUNCHED", message_log);
 	while (true)
 	{
 		// std::cout << "########## WAITING ##########" << std::endl;

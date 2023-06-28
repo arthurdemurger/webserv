@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 10:29:39 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/28 10:41:19 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class Launcher
 		void		add_serv_to_sets(void);
 		void		add_to_set(int fd, fd_set &set);
 		void		remove_from_set(int fd, fd_set &set);
+		std::string	log_launch(void);
 		void		setup();
 		void		close_socket(int socket);
 		void		put_on_console(std::string color, std::string status, std::string message);

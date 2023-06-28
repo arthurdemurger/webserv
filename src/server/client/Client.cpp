@@ -83,8 +83,8 @@ std::string	Client::send_response(void)
 		response = _response.build_error(_request, status);
 	else if (_request.get_method() == "GET")
 		response = _response.build_get_method(_request);
-	else if (_request.get_method() == "POST")
-		response = _response.build_post_method(_request, _sock);
+	else if (_request.get_path() == "cgi-bin/contact.cgi" || _request.get_path() == "cgi-bin/upload.cgi")
+		response = _response.build_cgi(_request, _sock);
 	else if (_request.get_method() == "DELETE")
 		response = _response.build_delete_method(_request);
 
