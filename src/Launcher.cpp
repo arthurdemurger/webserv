@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 10:58:05 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/28 12:59:09 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,8 @@ std::string	Launcher::log_launch(void)
 
 void	Launcher::run(void)
 {
+	int	ret;
+
 	fd_set	read_pool_cpy;
 	fd_set	write_pool_cpy;
 	struct timeval	timer;
@@ -210,8 +212,14 @@ void	Launcher::run(void)
 		timer.tv_sec = TIME_OUT;
 		read_pool_cpy = _read_pool;
 		write_pool_cpy = _write_pool;
-		if (select(_max_fd + 1, &read_pool_cpy, &write_pool_cpy, NULL, &timer) < 0)
+		if ((ret = select(_max_fd + 1, &read_pool_cpy, &write_pool_cpy, NULL, &timer)) < 0)
 			throw Launcher::SelectException();
+		if (!ret)
+		{
+			put_on_console(DARK_GREY, "TIMEOUT", "");
+			// system("leaks webserv");
+			break ;
+		}
 		for (int sock = 0; sock <= _max_fd; ++sock)
 		{
 			if (FD_ISSET(sock, &read_pool_cpy))

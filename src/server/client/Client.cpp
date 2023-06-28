@@ -79,22 +79,23 @@ std::string	Client::send_response(void)
 	int	status = stoi(_request.get_status());
 	std::string	response;
 
-	if (status >= 400)
-		response = _response.build_error(_request, status);
-	else if (_request.get_method() == "GET")
-		response = _response.build_get_method(_request);
-	else if (_request.get_path() == "cgi-bin/contact.cgi" || _request.get_path() == "cgi-bin/upload.cgi")
-		response = _response.build_cgi(_request, _sock);
-	else if (_request.get_method() == "DELETE")
-		response = _response.build_delete_method(_request);
-
+	if (status < 400)
+	{
+		if (_request.get_path() == "www/cgi-bin/contact.cgi" || _request.get_path() == "www/cgi-bin/upload.cgi")
+			response = _response.build_cgi(_request, _sock);
+		else if (_request.get_method() == "GET")
+			response = _response.build_get_method(_request);
+		else if (_request.get_method() == "DELETE")
+			response = _response.build_delete_method(_request);
+	}
 	status = stoi(_request.get_status());
+
 	if (status >= 400)
 	{
 		response = _response.build_error(_request, status);
 		send(_sock, response.c_str(), response.length(), 0);
 	}
-	if (_request.get_method() != "POST")
+	else if (_request.get_method() != "POST")
 		send(_sock, response.c_str(), response.length(), 0);
 	return (response);
 }

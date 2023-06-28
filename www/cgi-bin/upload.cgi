@@ -15,12 +15,6 @@ isExist = os.path.exists(path)
 if not isExist:
 	os.makedirs(path)
 
-if 'CONTENT_LENGTH' in os.environ:
-	content_length = int(os.environ['CONTENT_LENGTH'])
-	max_file_size = 1024 * 1024  # Limite de 1 Mo (modifiable selon vos besoins)
-	if content_length > max_file_size:
-		sys.exit(1)
-
 if fileitem.filename:
 	fn = os.path.basename(fileitem.filename)
 	dest_path = os.path.join(path, fn)

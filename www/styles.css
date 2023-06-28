@@ -216,6 +216,7 @@ h2 {
 }
 
 .form-container {
+	margin: 20px;
 	display: inline-block;
 	text-align: left;
 	width: 50%;

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:11 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 11:10:49 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/28 12:03:11 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ class Response
 		** ------------------------------- METHOD --------------------------------
 		*/
 
-		std::string					build_body(std::string filename);
 		std::string					build_get_method(Request &request);
 		std::string					build_cgi(Request &request, int sock);
 		std::string					build_autoindex(std::string path, std::string location);

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 09:35:00 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/28 12:30:10 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,12 @@ void	Request::parse(int fd, Config conf)
 		data.append(buff);
 	}
 
-	std::ofstream file("request_log", std::ios::out | std::ios::app);
-	if (file.is_open())
-	{
-		file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
-		file.close();
-	}
+	// std::ofstream file("request_log", std::ios::out | std::ios::app);
+	// if (file.is_open())
+	// {
+	// 	file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
+	// 	file.close();
+	// }
 
 	ss << data;
 	while (getline(ss, line))
@@ -144,8 +144,15 @@ void	Request::parse_request_line(std::string &line, Config conf)
 		}
 		else if (i == 1)
 		{
+			size_t pos;
+			if ((pos = str.find("?")) != std::string::npos)
+			{
+				_path = str.substr(0, pos);
+				_headers["Query-String"] = str.substr(pos + 1, str.size() - 1);
+			}
+			else
+				this->_path = str;
 			this->_raw_path = str;
-			this->_path = str;
 			check_path(conf);
 		}
 		i++;

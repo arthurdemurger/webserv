@@ -20,7 +20,7 @@ with open(file_name, 'w') as file:
     file.write("First Name: {}\n".format(first_name))
     file.write("Last Name: {}\n".format(last_name))
     file.write("Email: {}\n".format(email))
-    file.write("Message: {}\n".format(message))
+    file.write("Message: '{}'\n".format(message))
 
 html = """
 <!DOCTYPE html>

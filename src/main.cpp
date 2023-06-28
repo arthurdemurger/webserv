@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:12:06 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 12:17:25 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/28 12:07:37 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int main(int ac, char **av)
 
 		try
 		{
-		Launcher	launcher(conf_filename);
+			Launcher	launcher(conf_filename);
 
-		launcher.run();
+			launcher.run();
 		}
 		catch (std::exception const &e)
 		{

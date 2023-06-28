@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 11:10:39 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/28 12:40:20 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ std::string	Response::file_to_string(std::string filename) const
 	std::ifstream	file(filename);
 	std::string		str;
 
-	if (file.is_open())
+	if (!file.fail())
 	{
 		std::string line;
 		while (std::getline(file, line))
@@ -111,26 +111,8 @@ std::string	Response::build_autoindex(std::string path, std::string location)
 	return (response);
 }
 
-std::string	Response::build_body(std::string filename)
-{
-	std::ifstream	file(filename);
-	std::string		str;
-
-	if (file.is_open())
-	{
-		std::string line;
-		while (std::getline(file, line))
-			str += line + '\n';
-		file.close();
-	}
-	else
-		std::cerr << "Erreur lors de l'ouverture du fichier : " << filename << std::endl;
-	return (str);
-}
-
 std::string	Response::build_error(Request &request, int status)
 {
-	// std::cout << _error_pages[status] << std::endl;
 	std::string response =  "HTTP/1.1 " + request.get_status() + "\n";
 
 	response += "Content-Type: text/html\n\n";
@@ -150,14 +132,13 @@ std::string	Response::build_cgi(Request &request, int sock)
 	std::string request_method = "REQUEST_METHOD=" + request.get_method();
 	std::string script_name = "SCRIPT_NAME=" + request.get_path();
 	std::string server_protocol = "SERVER_PROTOCOL=HTTP/1.1";
-	std::string server_name = "SERVER_NAME=localhost";
-	std::string server_port = "SERVER_PORT=8000";
+	std::string	query_string = "QUERY_STRING=" + request.get_headers()["Query-String"];
 	long long length = FILE_SIZE_MAX;
 	if (!request.get_headers()["Content-Length"].empty())
 		length = stoll(request.get_headers()["Content-Length"]);
 
 	char* env[] = {&content_type[0], &content_length[0], &request_method[0], &script_name[0],
-				   &server_protocol[0], &server_name[0], &server_port[0], NULL};
+				   &server_protocol[0], &query_string[0], NULL};
 
 
 	if (length > FILE_SIZE_MAX)
@@ -188,7 +169,7 @@ std::string	Response::build_cgi(Request &request, int sock)
 	std::string response = cgi.launch(sock, env, request.get_path(), request.get_body());
 
 	if (cgi.get_status() != 0)
-		request.set_status(CODE_502);
+		request.set_status(CODE_500);
 	return (response);
 }
 
@@ -198,7 +179,7 @@ std::string	Response::build_get_method(Request &request)
 
 	if (request.get_autoindex() == true)
 		return (build_autoindex(request.get_path(), request.get_location()));
-	if (request.get_path().find(".html") != std::string::npos || request.get_path().find(".php") != std::string::npos)
+	if (request.get_path().find(".html") != std::string::npos)
 		 response += "Content-Type: text/html\n";
 	else if (request.get_path().find(".css") != std::string::npos)
 		response += "Content-Type: text/css\n";
@@ -207,7 +188,7 @@ std::string	Response::build_get_method(Request &request)
 
 	std::string body = file_to_string(request.get_path());
 	response += "Content-Length: " + std::to_string(body.size());
-	response += "\n\n" + body;
+	response += "\r\n\r\n" + body;
 	return (response);
 }
 
