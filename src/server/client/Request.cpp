@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 15:34:41 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/28 09:35:00 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	Request::parse(int fd, Config conf)
 	}
 
 	std::ofstream file("request_log", std::ios::out | std::ios::app);
-    if (file.is_open())
+	if (file.is_open())
 	{
 		file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
 		file.close();
@@ -191,7 +191,7 @@ void	Request::trim_value(std::string &value)
 	while (!value.empty() && (value.back() == '\r' || value.back() == '\n'))
 	{
 	   value.pop_back();
-    }
+	}
 }
 
 std::vector<std::string> Request::check_location_file(std::string root, const std::string& path)
@@ -296,41 +296,41 @@ void	Request::trim_body()
 {
 	while (!_body.empty() && (_body.back() == '\r' || _body.back() == '\n'))
 	{
-    //    std::cout << "remove carriage return\n";
+	//	std::cout << "remove carriage return\n";
 	   _body.pop_back();
-    }
+	}
 	// size_t	pos = _body.find("/r/n");
 	// if (pos != std::string::npos)
-    //    std::cout << "carriage return remains\n";
+	//	std::cout << "carriage return remains\n";
 
 }
 
 std::string	Request::parse_chunk_request()
 {
 	std::istringstream iss(_body);
-    std::string line, util, new_body;
+	std::string line, util, new_body;
 
-    // Read and process each chunk
-    while (std::getline(iss, line)) {
-        // Parse the chunk size
-        // std::cout << "line: " << line << std::endl;
-        size_t chunkSize = std::stoul(line, nullptr, 16);
-        if (chunkSize == 0) {
-            // Zero-length chunk indicates the end of the request body
-            break;
-        }
+	// Read and process each chunk
+	while (std::getline(iss, line)) {
+		// Parse the chunk size
+		// std::cout << "line: " << line << std::endl;
+		size_t chunkSize = std::stoul(line, nullptr, 16);
+		if (chunkSize == 0) {
+			// Zero-length chunk indicates the end of the request body
+			break;
+		}
 
-        // Read the chunk data
-        std::string chunkData(chunkSize, '\0');
-        iss.read(&chunkData[0], chunkSize);
-        // std::cout << "parsed chunk: " << chunkData << std::endl;
-        // Append the chunk to the reconstructed request body
-        new_body.append(chunkData);
-        // Discard the line break after each chunk
-        getline(iss, util);
-    }
+		// Read the chunk data
+		std::string chunkData(chunkSize, '\0');
+		iss.read(&chunkData[0], chunkSize);
+		// std::cout << "parsed chunk: " << chunkData << std::endl;
+		// Append the chunk to the reconstructed request body
+		new_body.append(chunkData);
+		// Discard the line break after each chunk
+		getline(iss, util);
+	}
 	return (new_body);
-    // std::cout << "Reconstructed Body: " << _body << std::endl;
+	// std::cout << "Reconstructed Body: " << _body << std::endl;
 }
 
 void	Request::check_path(Config conf)

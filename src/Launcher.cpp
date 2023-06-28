@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:26 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 10:47:41 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/28 09:34:24 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,11 @@ std::string Launcher::getCurrentTime()
 {
 	char buf[9];
 
-    std::time_t currentTime = std::time(NULL);
-    std::tm* timeStruct = std::localtime(&currentTime);
+	std::time_t currentTime = std::time(NULL);
+	std::tm* timeStruct = std::localtime(&currentTime);
 
 	std::sprintf(buf, "%02d:%02d:%02d", timeStruct->tm_hour, timeStruct->tm_min, timeStruct->tm_sec);
-    return (buf);
+	return (buf);
 }
 
  void	Launcher::put_on_console(std::string color, std::string status, std::string message)

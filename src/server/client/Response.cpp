@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 15:51:52 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/28 09:35:16 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,23 +67,23 @@ std::string	Response::file_to_string(std::string filename) const
 
 std::vector<std::string>	Response::get_files_current_directory(std::string path)
 {
-    std::vector<std::string> files;
-    DIR* directory;
-    struct dirent* entry;
+	std::vector<std::string> files;
+	DIR* directory;
+	struct dirent* entry;
 
-    directory = opendir(path.c_str());
-    if (directory != nullptr) {
-        // Lire les entrées du répertoire
-        while ((entry = readdir(directory)) != nullptr) {
-            // Ignorer les entrées spéciales "." et ".."
-            if (std::string(entry->d_name) != "." && std::string(entry->d_name) != "..") {
-                files.push_back(std::string(entry->d_name));
-            }
-        }
-        closedir(directory);
-    }
+	directory = opendir(path.c_str());
+	if (directory != nullptr) {
+		// Lire les entrées du répertoire
+		while ((entry = readdir(directory)) != nullptr) {
+			// Ignorer les entrées spéciales "." et ".."
+			if (std::string(entry->d_name) != "." && std::string(entry->d_name) != "..") {
+				files.push_back(std::string(entry->d_name));
+			}
+		}
+		closedir(directory);
+	}
 
-    return files;
+	return files;
 }
 
 std::string	Response::build_autoindex(std::string path, std::string location)
