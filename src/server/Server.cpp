@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 11:22:10 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/28 14:41:13 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,5 @@ void	Server::configure(Config conf)
 	std::vector<int> ports = _config.get_ports();
 
 	for (std::vector<int>::iterator it = ports.begin(); it != ports.end(); it++)
-		activate((*it), 10);
+		activate((*it), BACKLOG);
 }
