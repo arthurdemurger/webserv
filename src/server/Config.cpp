@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 15:57:32 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 16:02:54 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	Config::setHostDir(std::string &value)
 
 	std::istringstream iss(value);
 	std::string token;
-	int i, count, ret;
+	int i, count;
 
 	count = 0;
 	while (getline(iss, token, '.'))
@@ -143,8 +143,6 @@ void	Config::setHostDir(std::string &value)
 	{
 		std::cout << "Error: Host Directive format\n";
 		exit(EXIT_FAILURE);
-	}
-		
 	}
 	else
 	{
