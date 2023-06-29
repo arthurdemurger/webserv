@@ -69,7 +69,8 @@ Config		Client::get_conf(void) const { return (_conf); }
 
 std::string	Client::add_request(Config conf)
 {
-	_request.parse(_sock, conf);
+	if (_request.parse(_sock, conf) < 0)
+		return ("");
 	_response.set_error_pages(conf.get_error_pages());
 	return (_request.get_raw_path());
 }
@@ -81,21 +82,28 @@ std::string	Client::send_response(void)
 
 	if (status < 400)
 	{
-		if (_request.get_path() == "www/cgi-bin/contact.cgi" || _request.get_path() == "www/cgi-bin/upload.cgi")
+		if (_request.get_path().find("www/cgi-bin/") != std::string::npos || _request.get_path().find("www/cgi-bin/") != std::string::npos)
+		{
 			response = _response.build_cgi(_request, _sock);
-		else if (_request.get_method() == "GET")
-			response = _response.build_get_method(_request);
-		else if (_request.get_method() == "DELETE")
-			response = _response.build_delete_method(_request);
+			if (stoi(_request.get_status()) >= 400)
+				send(_sock, response.c_str(), response.length(), 0);
+		}
+		else
+		{
+			if (_request.get_method() == "GET")
+				response = _response.build_get_method(_request);
+			else if (_request.get_method() == "DELETE")
+				response = _response.build_delete_method(_request);
+			if (send(_sock, response.c_str(), response.length(), 0) < 0)
+				return ("");
+		}
 	}
-	status = stoi(_request.get_status());
-
-	if (status >= 400)
+	else if (status >= 400)
 	{
+		status = stoi(_request.get_status());
 		response = _response.build_error(_request, status);
-		send(_sock, response.c_str(), response.length(), 0);
+		if (send(_sock, response.c_str(), response.length(), 0) < 0)
+			return ("");
 	}
-	else if (_request.get_method() != "POST")
-		send(_sock, response.c_str(), response.length(), 0);
 	return (response);
 }

@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:49 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 14:41:13 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:13:22 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,22 +65,29 @@ for each port of the server object, create one socket object and populate vector
 then populate the fds vector w. the server socket
 */
 
-void	Server::activate(int port, int backlog)
+int	Server::activate(int port, int backlog)
 {
-	_sockets.push_back(Socket(port, INADDR_ANY, backlog));
+	Socket	sock;
+
+	if (sock.create_socket(port, INADDR_ANY, backlog) == -1)
+		return (-1);
+	_sockets.push_back(sock);
 	_fds.push_back(_sockets.back().getServerFd());
+	return (0);
 }
 
 /*
 for each Config block, configure the server object by getting its ports
 then loop through vector of ports and call activate() for each port
 */
-void	Server::configure(Config conf)
+int	Server::configure(Config conf)
 {
 	_config = conf;
 	_name = _config.get_name();
 	std::vector<int> ports = _config.get_ports();
 
 	for (std::vector<int>::iterator it = ports.begin(); it != ports.end(); it++)
-		activate((*it), BACKLOG);
+		if (activate((*it), BACKLOG) == -1)
+			return (-1);
+	return (0);
 }

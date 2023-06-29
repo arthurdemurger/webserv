@@ -22,8 +22,8 @@ class Cgi
 			/*
 			** ------------------------------- Attributes --------------------------------
 			*/
-			int	_status;
-
+			int			_status;
+			std::string	_response;
 		public:
 				/*
 			** ------------------------------- Canonical form --------------------------------
@@ -36,22 +36,15 @@ class Cgi
 			/*
 			** ------------------------------- Accessors --------------------------------
 			*/
-			int	get_status(void) const;
+			int			get_status(void) const;
+			std::string	get_response(void) const;
+			void		set_response(std::string rsp);
 
 			/*
 			** ------------------------------- Methods --------------------------------
 			*/
-			std::string launch(int sock, char **env, std::string path, std::string body);
+			int launch(int sock, char **env, std::string path, std::string body);
 
-			class ForkException : public std::exception
-			{
-				public:
-					virtual const char *what() const throw()
-					{
-						perror("fork");
-						return ("");
-					};
-			};
 };
 
 # endif

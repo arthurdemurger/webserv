@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:13:50 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 11:21:55 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:15:11 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ class Socket
 		** ------------------------------- Canonical form --------------------------------
 		*/
 		Socket();
-		Socket(int port, u_long interface, int backlog);
 		~Socket();
 		Socket(const Socket &copy);
 
+		int		create_socket(int port, u_long interface, int backlog);
 		/*
 		** ------------------------------- Operator overload --------------------------------
 		*/
@@ -42,35 +42,6 @@ class Socket
 		*/
 		int					getServerFd(void) const;
 		struct sockaddr_in	getAddress(void) const;
-
-		/*
-		** ------------------------------- Exceptions --------------------------------
-		*/
-		class SocketException : public std::exception
-		{
-			public:
-				virtual const char *what() const throw() { return "Socket failed."; };
-		};
-		class BindException : public std::exception
-		{
-			public:
-				virtual const char *what() const throw()
-				{
-					perror("bind");
-					return "";
-				};
-		};
-		class ListenException : public std::exception
-		{
-			public:
-				virtual const char *what() const throw() { return "Listen failed."; };
-		};
-		class FcntlException : public std::exception
-		{
-			public:
-				virtual const char *what() const throw() { return "fcntl failed."; };
-		};
-
 };
 
 # endif

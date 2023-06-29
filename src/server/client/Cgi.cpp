@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 15:27:18 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:44:09 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,15 @@ Cgi &Cgi::operator=(const Cgi &copy)
 /*
 ** ------------------------------- ACCESSOR --------------------------------
 */
-int	Cgi::get_status(void) const { return (_status); };
+int			Cgi::get_status(void) const { return (_status); };
+std::string	Cgi::get_response(void) const { return (_response); };
+void		Cgi::set_response(std::string rsp) { _response = rsp; };
 
 /*
 ** ------------------------------- METHODS --------------------------------
 */
 
-std::string Cgi::launch(int client_sock, char **env, std::string path, std::string body)
+int Cgi::launch(int client_sock, char **env, std::string path, std::string body)
 {
 	std::string	response = "";
 	int pipe_in[2]; // Tube pour l'entrée standard du script CGI
@@ -54,12 +56,16 @@ std::string Cgi::launch(int client_sock, char **env, std::string path, std::stri
 	pid_t pid;
 	int status;
 
-	if (pipe(pipe_in) < 0 || pipe(pipe_out) < 0) {
+	if (pipe(pipe_in) < 0 || pipe(pipe_out) < 0)
+	{
 		perror("pipe");
-		return ("");
+		return (-1);
 	}
 	if ((pid = fork()) < 0)
-		throw Cgi::ForkException();
+	{
+		perror("fork");
+		return (-1);
+	}
 
 	if (!pid) // child process
 	{
@@ -68,18 +74,26 @@ std::string Cgi::launch(int client_sock, char **env, std::string path, std::stri
 		close(pipe_out[0]);
 
 		// Rediriger l'entrée standard (stdin) vers le côté de lecture du tube d'entrée
-		dup2(pipe_in[0], STDIN_FILENO);
+		if (dup2(pipe_in[0], STDIN_FILENO) < 0)
+		{
+			perror("dup2");
+			return (-1);
+		}
+
 		close(pipe_in[0]);
 
 		// Rediriger la sortie standard (stdout) vers le côté d'écriture du tube de sortie
-		dup2(pipe_out[1], STDOUT_FILENO);
+		if (dup2(pipe_out[1], STDOUT_FILENO) < 0)
+		{
+			perror("dup2");
+			return (-1);
+		}
+
 		close(pipe_out[1]);
 
 		execve(path.c_str(), NULL, env);
-	// (void) env;
-	// (void) path;
-		// perror("execve");
-		exit(EXIT_FAILURE);
+		perror("execve");
+		exit (EXIT_FAILURE);
 	}
 	else // parent process
 	{
@@ -87,7 +101,11 @@ std::string Cgi::launch(int client_sock, char **env, std::string path, std::stri
 		close(pipe_out[1]);
 
 		// Écrire les données de la requête POST dans le tube d'entrée du script CGI
-		write(pipe_in[1], body.c_str(), body.length());
+		if (write(pipe_in[1], body.c_str(), body.length()) < 0)
+		{
+			perror("write");
+			return (-1);
+		}
 		close(pipe_in[1]);
 
 		char buffer[BUF_SIZE];
@@ -96,8 +114,16 @@ std::string Cgi::launch(int client_sock, char **env, std::string path, std::stri
 		while ((n = read(pipe_out[0], buffer, BUF_SIZE)) > 0)
 		{
 			response += buffer;
-			// (void) client_sock;
-			write(client_sock, buffer, n);
+			if (write(client_sock, buffer, n) < 0)
+			{
+				perror("write");
+				return (-1);
+			}
+		}
+		if (n < 0)
+		{
+			perror("read");
+			return (-1);
 		}
 		close(pipe_out[0]);
 
@@ -105,7 +131,6 @@ std::string Cgi::launch(int client_sock, char **env, std::string path, std::stri
 		if (WIFEXITED(status))
 			_status = WEXITSTATUS(status);
 	}
-	// std::cout << response << std::endl;
-	return (response);
+	_response = response;
+	return (0);
 }
-

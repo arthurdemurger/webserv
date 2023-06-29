@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:17:23 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 10:41:19 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:14:47 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,10 @@ class Launcher
 		void		accepter(int sock);
 		void		handle_request(int &client_sock, Client &client);
 		void		handle_response(int &client_sock);
-		void		add_serv_to_sets(void);
 		void		add_to_set(int fd, fd_set &set);
 		void		remove_from_set(int fd, fd_set &set);
 		std::string	log_launch(void);
-		void		setup();
+		int			setup();
 		void		close_socket(int socket);
 		void		put_on_console(std::string color, std::string status, std::string message);
 		// void	print_fd(void);

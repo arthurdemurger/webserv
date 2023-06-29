@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 12:30:10 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 14:25:44 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void								Request::set_status(std::string status) { _status = status; };
 ** ------------------------------- METHODS --------------------------------
 */
 
-void	Request::parse(int fd, Config conf)
+int	Request::parse(int fd, Config conf)
 {
 	std::stringstream	ss, buffer;
 	char				buff[BUF_SIZE];
@@ -75,11 +75,10 @@ void	Request::parse(int fd, Config conf)
 	this->_status = CODE_200;
 	bzero(buff, BUF_SIZE);
 	std::string data(buff, n);
-	while (	(n = read(fd, buff, BUF_SIZE) > 0) )
-	{
+	while ((n = read(fd, buff, BUF_SIZE) > 0))
 		data.append(buff);
-	}
-
+	if (n < 0)
+		return (-1);
 	// std::ofstream file("request_log", std::ios::out | std::ios::app);
 	// if (file.is_open())
 	// {
@@ -112,6 +111,7 @@ void	Request::parse(int fd, Config conf)
 		i++;
 	}
 	_isParsed = true;
+	return (0);
 }
 
 void	Request::check_method()

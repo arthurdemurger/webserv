@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 15:31:35 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 14:25:11 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ class Request
 		/*
 		** ------------------------------- METHODS --------------------------------
 		*/
-		void						parse(int fd, Config config);
+		int							parse(int fd, Config config);
 		void						parse_request_line(std::string &line, Config conf);
 		void						parse_request_headers(std::string &line);
 		void						trim_value(std::string &value);

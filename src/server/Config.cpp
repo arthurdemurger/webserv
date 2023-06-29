@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 09:35:22 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:13:57 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ Config &Config::operator=(const Config &rhs)
 void	Config::setter(std::string &key, std::string &value, std::istringstream &iss, std::string &location)
 {
 	if (!key.compare("listen"))
-		 setPortMBS(key, value);
+		setPortMBS(key, value);
 	else if (!key.compare("host"))
 		setHostDir(value);
 	else if (!key.compare("server_name"))
@@ -177,9 +177,7 @@ void	Config::setErrorPageDir(std::string &value)
 		if (!(i % 2))
 			val = token;
 		else
-		{
 			key = atoi (token.c_str());
-		}
 		i++;
 	}
 	this->_error_page.insert(std::pair<int, std::string>(key, val));

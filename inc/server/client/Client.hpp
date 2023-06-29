@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 10:56:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 10:47:05 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 14:03:40 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ class Client
 		Request	get_request(void) const;
 		void	set_socket(int sock_fd);
 		bool	is_request_parsed(void) const;
-
+		void	close_connection();
 		/*
 		** ------------------------------- METHODS --------------------------------
 		*/

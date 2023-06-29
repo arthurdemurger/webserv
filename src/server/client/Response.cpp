@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:20:18 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 12:40:20 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:44:57 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,37 +140,17 @@ std::string	Response::build_cgi(Request &request, int sock)
 	char* env[] = {&content_type[0], &content_length[0], &request_method[0], &script_name[0],
 				   &server_protocol[0], &query_string[0], NULL};
 
-
-	if (length > FILE_SIZE_MAX)
-	{
-		request.set_status(CODE_413);
-		return ("");
-	}
-
-	// while (request.get_body().size() < (size_t) length)
-	// {
-	// 	int size = request.get_body().size();
-	// 	std::string	res = "HTTP/1.1 100 Continue\r\n\r\n";
-	// 	send(sock, res.c_str(), res.length(), 0);
-
-	// 	char buf[length - size];
-	// 	std::string body = request.get_body();
-	// 	int	n;
-
-	// 	while ((n = read(sock, buf, length - size)) > 0)
-	// 		body += buf;
-	// 	if (n < 0)
-	// 		break ;
-	// 	request.set_body(body);
-	// }
-
 	Cgi	cgi;
 
-	std::string response = cgi.launch(sock, env, request.get_path(), request.get_body());
+	if (cgi.launch(sock, env, request.get_path(), request.get_body()) < 0)
+		return ("");
 
 	if (cgi.get_status() != 0)
+	{
 		request.set_status(CODE_500);
-	return (response);
+		cgi.set_response(build_error(request, 500));
+	}
+	return (cgi.get_response());
 }
 
 std::string	Response::build_get_method(Request &request)

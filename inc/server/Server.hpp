@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:10:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 11:22:16 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:15:05 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,39 +54,8 @@ class Server
 		/*
 		** ------------------------------- Methods --------------------------------
 		*/
-		void					activate(int port, int backlog);
-		void					configure(Config conf);
-
-		/*
-		** ------------------------------- Exceptions --------------------------------
-		*/
-		class ReadException : public std::exception
-		{
-			public:
-				virtual const char *what() const throw()
-				{
-					perror("read");
-					return ("");
-				};
-		};
-		class AcceptException : public std::exception
-		{
-			public:
-				virtual const char *what() const throw()
-				{
-					perror("accept");
-					return ("");
-				};
-		};
-		class FcntlException : public std::exception
-		{
-			public:
-				virtual const char *what() const throw()
-				{
-					perror("fcntl");
-					return ("");
-				};
-		};
+		int					activate(int port, int backlog);
+		int					configure(Config conf);
 };
 
 

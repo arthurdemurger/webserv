@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 14:41:28 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 14:10:28 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@
 # define BACKLOG		64
 # define FILE_SIZE_MAX	1024 * 1024
 # define BUF_SIZE		30000
-# define TIME_OUT		60
+# define TIME_OUT		180
 # define RESET			"\x1B[0m"
 # define RED			"\x1B[31m"
 # define GREEN          "\x1b[32m"
