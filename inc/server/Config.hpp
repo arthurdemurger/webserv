@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 16:04:44 by hdony             #+#    #+#             */
-/*   Updated: 2023/06/09 12:45:16 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:05:53 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ class Config
 		std::string					get_name(void) const;
 		std::string					get_root(void) const;
 		std::string					get_index(void) const;
+		std::string					get_host(void) const;
 		std::vector<int>			get_ports(void) const;
 		std::vector<Location>		get_location(void) const;
 		int							get_CMBS(void) const;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/28 12:30:10 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:16:07 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,6 @@ void	Request::parse(int fd, Config conf)
 	{
 		data.append(buff);
 	}
-
-	// std::ofstream file("request_log", std::ios::out | std::ios::app);
-	// if (file.is_open())
-	// {
-	// 	file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
-	// 	file.close();
-	// }
-
 	ss << data;
 	while (getline(ss, line))
 	{
@@ -94,18 +86,17 @@ void	Request::parse(int fd, Config conf)
 		if (i == 0)
 			parse_request_line(line, conf);
 		else if (i > 0 && line.find(":") != std::string::npos)
-			parse_request_headers(line);
+			parse_request_headers(line, conf);
 		else
 		{
 			buffer << ss.rdbuf();
 			this->_body = buffer.str();
-			// std::cout << "end _body" << std::endl;
 			check_body_size(fd, conf);
 			trim_body();
 			if (_isChunked)
 			{
 				_body = parse_chunk_request();
-				std::cout << "new_body: " << _body << std::endl;
+				// std::cout << "new_body: " << _body << std::endl;
 			}
 			break;
 		}
@@ -161,7 +152,7 @@ void	Request::parse_request_line(std::string &line, Config conf)
 		this->_status = CODE_400;
 }
 
-void	Request::parse_request_headers(std::string &line)
+void	Request::parse_request_headers(std::string &line, Config conf)
 {
 	std::istringstream	iss(line);
 	std::string			key, value;
@@ -173,7 +164,6 @@ void	Request::parse_request_headers(std::string &line)
 		if (!key.empty() && !value.empty())
 		{
 			_headers[key] = value;
-			// std::cout << key << ": " << value << std::endl;
 		}
 		if (_headers.count("Transfer-Encoding") && _headers["Transfer-Encoding"] == "chunked")
 		{
@@ -182,6 +172,13 @@ void	Request::parse_request_headers(std::string &line)
 		else if (_headers.count("Expect") && _headers["Expect"] == "100-continue")
 		{
 			_ExpectContinue = true;
+		}
+		else if (_headers.count("Host"))
+		{
+			if (_headers["Host"].compare(conf.get_host()))
+			{
+				this->_status = CODE_400;
+			}
 		}
 	}
 }
@@ -264,14 +261,12 @@ void	Request::check_body_size(int fd, Config &conf)
 {
 	// size_t	ret, n;
 	// char	buffer[BUF_SIZE];
-	(void)conf;
-	(void) fd;
+	// conf;
+	// fd;
 	// if (!_headers["Content-Length"].empty())
 	// {
 	// 	while (_body.size() != (ret = std::stoi(_headers["Content-Length"])))
 	// 	{
-	// 		// std::cout << "CL: " << _headers["Content-Length"] << std::endl;
-	// 		// std::cout << "BS: " << _body.size() << std::endl;
 	// 		std::string	response =  "HTTP/1.1 100 Continue\r\n\r\n";
 	// 		send(fd, response.c_str(), response.size(), 0);
 	// 		while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
@@ -281,21 +276,21 @@ void	Request::check_body_size(int fd, Config &conf)
 	// 		}
 	// 	}
 	// }
-// 	int			n;
-// 	char 		buffer[BUF_SIZE];
-// 	int	size = _body.size();
+	int			n;
+	char 		buffer[BUF_SIZE];
+	int	size = _body.size();
 
-// 	if (size > conf.get_CMBS())
-// 		this->_status = CODE_413;
-// 	if (_ExpectContinue)
-// 	{
-// 		std::string	response =  "HTTP/1.1 100 Continue";
-// 		send(fd, response.c_str(), response.size(), 0);
-// 		while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
-// 		{
-// 			_body.append(buffer);
-// 		}
-// 	}
+	if (size > conf.get_CMBS())
+		this->_status = CODE_413;
+	if (_ExpectContinue)
+	{
+		std::string	response =  "HTTP/1.1 100 Continue";
+		send(fd, response.c_str(), response.size(), 0);
+		while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
+		{
+			_body.append(buffer);
+		}
+	}
 }
 
 
@@ -306,10 +301,6 @@ void	Request::trim_body()
 	//	std::cout << "remove carriage return\n";
 	   _body.pop_back();
 	}
-	// size_t	pos = _body.find("/r/n");
-	// if (pos != std::string::npos)
-	//	std::cout << "carriage return remains\n";
-
 }
 
 std::string	Request::parse_chunk_request()
@@ -320,7 +311,6 @@ std::string	Request::parse_chunk_request()
 	// Read and process each chunk
 	while (std::getline(iss, line)) {
 		// Parse the chunk size
-		// std::cout << "line: " << line << std::endl;
 		size_t chunkSize = std::stoul(line, nullptr, 16);
 		if (chunkSize == 0) {
 			// Zero-length chunk indicates the end of the request body
@@ -330,14 +320,12 @@ std::string	Request::parse_chunk_request()
 		// Read the chunk data
 		std::string chunkData(chunkSize, '\0');
 		iss.read(&chunkData[0], chunkSize);
-		// std::cout << "parsed chunk: " << chunkData << std::endl;
 		// Append the chunk to the reconstructed request body
 		new_body.append(chunkData);
 		// Discard the line break after each chunk
 		getline(iss, util);
 	}
 	return (new_body);
-	// std::cout << "Reconstructed Body: " << _body << std::endl;
 }
 
 void	Request::check_path(Config conf)
@@ -345,8 +333,6 @@ void	Request::check_path(Config conf)
 	std::vector<Location>			loc = conf.get_location();
 	std::vector<Location>::iterator	it;
 	std::string						root_path, substr = "/";
-	// int								c = 0, count = 0, index = 0;
-	// size_t							pos;
 
 	std::vector<std::string> vec = check_location_file(conf.get_root(), _path);
 	_location = vec[0];
@@ -356,7 +342,6 @@ void	Request::check_path(Config conf)
 	{
 		if (!_location.compare(it->getLocationType()))
 		{
-			// std::cout << it->getLocationType() << " | autoindex : " << it->getAutoindex() << std::endl;
 			if (!check_allowed_method(*it))
 			{
 				this->_status = CODE_405;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/13 15:31:35 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:03:56 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class Request
 		std::string										_status;
 		std::string										_path;
 		std::string										_raw_path;
+		std::string										_host;
 		std::map<std::string, std::string>				_headers;
 		std::string										_body;
 		bool											_isParsed;
@@ -63,7 +64,7 @@ class Request
 		*/
 		void						parse(int fd, Config config);
 		void						parse_request_line(std::string &line, Config conf);
-		void						parse_request_headers(std::string &line);
+		void						parse_request_headers(std::string &line, Config conf);
 		void						trim_value(std::string &value);
 		void						check_method();
 		void						check_path(Config conf);
