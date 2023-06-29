@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 15:13:57 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:57:32 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,7 @@ void	Config::setHostDir(std::string &value)
 
 	std::istringstream iss(value);
 	std::string token;
-	int i;
-	int count;
+	int i, count, ret;
 
 	count = 0;
 	while (getline(iss, token, '.'))
@@ -145,7 +144,18 @@ void	Config::setHostDir(std::string &value)
 		std::cout << "Error: Host Directive format\n";
 		exit(EXIT_FAILURE);
 	}
+		
+	}
+	else
+	{
+		if (value.compare("localhost") != 0)
+		{
+			std::cout << "Error: Host Directive format\n";
+			exit(EXIT_FAILURE);
+		}
+	}
 	this->_host = value;
+	// std::cout << "host: " << _host << std::endl;
 }
 
 void	Config::setServerNameDir(std::string &value)
@@ -188,5 +198,6 @@ std::vector<int>			Config::get_ports(void) const { return (_port); }
 std::vector<Location>		Config::get_location(void) const { return (_location); }
 std::string					Config::get_root(void) const { return (_root); }
 std::string					Config::get_index(void) const { return (_index); }
+std::string					Config::get_host(void) const { return (_host); }
 int							Config::get_CMBS(void) const { return (_client_max_body_size); }
 std::map<int, std::string>	Config::get_error_pages(void) const { return (_error_page); };
