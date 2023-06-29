@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 15:57:46 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 16:04:16 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,12 @@ int	Request::parse(int fd, Config conf)
 	std::string data(buff, n);
 	while ((n = read(fd, buff, BUF_SIZE) > 0))
 		data.append(buff);
-	}
-
 	// std::ofstream file("request_log", std::ios::out | std::ios::app);
 	// if (file.is_open())
 	// {
 	// 	file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
 	// 	file.close();
 	// }
-
 	ss << data;
 	while (getline(ss, line))
 	{
