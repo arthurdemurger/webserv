@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 16:02:54 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/29 16:20:53 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,31 +118,34 @@ void	Config::setHostDir(std::string &value)
 
 	std::istringstream iss(value);
 	std::string token;
-	int i, count;
+	int i, count, ret;
 
 	count = 0;
-	while (getline(iss, token, '.'))
+	if ( (ret = value.find(".") != std::string::npos) )
 	{
-		for (std::string::iterator it = token.begin(); it != token.end(); ++it)
+		while (getline(iss, token, '.'))
 		{
-			if (!isdigit(*it))
+			for (std::string::iterator it = token.begin(); it != token.end(); ++it)
+			{
+				if (!isdigit(*it))
+				{
+					std::cout << "Error: Host Directive format\n";
+					exit(EXIT_FAILURE);
+				}
+			}
+			i = atoi(value.c_str());
+			if (i < 0 || i > 255 )
 			{
 				std::cout << "Error: Host Directive format\n";
 				exit(EXIT_FAILURE);
 			}
+			count++;
 		}
-		i = atoi(value.c_str());
-		if (i < 0 || i > 255 )
+		if (count != 4)
 		{
 			std::cout << "Error: Host Directive format\n";
 			exit(EXIT_FAILURE);
 		}
-		count++;
-	}
-	if (count != 4)
-	{
-		std::cout << "Error: Host Directive format\n";
-		exit(EXIT_FAILURE);
 	}
 	else
 	{
