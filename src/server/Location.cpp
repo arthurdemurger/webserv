@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.s19.be>         +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:24:10 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/31 10:54:07 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 17:57:04 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,16 @@
 
 Location::Location(std::string LocationBlock, std::string LocationType)
 {
-	// std::cout << "LocationBlock: " << LocationBlock << std::endl;
 	setLocType(LocationType);
 	std::istringstream  iss(LocationBlock);
 	std::string		 line;
 	while (getline(iss, line))
 	{
-		// std::cout << "line: " << line << std::endl;
 		RemoveTab(line);
 		std::istringstream iss_line(line);
 		std::string key, value;
 		getline(iss_line, key, ' ');
-		// std::cout << "key: " << key << std::endl;
 		getline(iss_line, value, ';');
-		// std::cout << "value: " << value << std::endl;
 		if (!key.compare("root"))
 			this->_root = value;
 		else if (!key.compare("autoindex"))
@@ -36,7 +32,6 @@ Location::Location(std::string LocationBlock, std::string LocationType)
 				this->_autoindex = true;
 			else
 				this->_autoindex = false;
-			// std::cout << "autoindex: " << _autoindex << std::endl;
 		}
 		else if (!key.compare("allow_methods"))
 			setAllowMethods(value);
@@ -78,7 +73,6 @@ void	Location::setLocType(std::string &LocationType)
 
 	getline(iss, line, ' ');
 	this->_location_type = line;
-	// std::cout << "location type: " << _location_type << std::endl;
 }
 
 void	Location::setAllowMethods(std::string &value)
@@ -89,7 +83,6 @@ void	Location::setAllowMethods(std::string &value)
 	while (getline(iss, token, ' '))
 	{
 		this->_allow_methods.push_back(token);
-		// std::cout << "token: " << token << std::endl;
 	}
 }
 

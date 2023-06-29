@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 12:09:04 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 14:10:28 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 17:56:31 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,6 @@
 #include <unistd.h>
 #include <vector>
 #include <sys/stat.h>
-
-/* Sockets headers */
-// #include "server/client/Client.hpp"
-// #include "server/client/Request.hpp"
-// #include "server/client/Response.hpp"
-// #include "server/Config.hpp"
-// #include "server/Socket.hpp"
-// #include "parser/Parser.hpp"
-// #include "Launcher.hpp"
 
 /* Define constants */
 // status code

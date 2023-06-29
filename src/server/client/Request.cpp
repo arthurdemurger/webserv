@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 17:12:34 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 17:57:28 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ int	Request::parse(int fd, Config conf)
 	ss << data;
 	while (getline(ss, line))
 	{
-		// std::cout << "line: " << line << std::endl;
 		if (i == 0)
 			parse_request_line(line, conf);
 		else if (i > 0 && line.find(":") != std::string::npos)
@@ -111,7 +110,6 @@ int	Request::parse(int fd, Config conf)
 			if (_isChunked)
 			{
 				_body = parse_chunk_request();
-				// std::cout << "new_body: " << _body << std::endl;
 			}
 			break;
 		}
@@ -275,25 +273,7 @@ bool	Request::check_allowed_method(Location loc)
 
 void	Request::check_body_size(int fd, Config &conf)
 {
-	// size_t	ret, n;
-	// char	buffer[BUF_SIZE];
-	// conf;
-	// fd;
-	// if (!_headers["Content-Length"].empty())
-	// {
-	// 	while (_body.size() != (ret = std::stoi(_headers["Content-Length"])))
-	// 	{
-	// 		std::string	response =  "HTTP/1.1 100 Continue\r\n\r\n";
-	// 		send(fd, response.c_str(), response.size(), 0);
-	// 		while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
-	// 		{
-	// 			std::cout << buffer << std::endl;
-	// 			_body.append(buffer);
-	// 		}
-	// 	}
-	// }
-	// int			n;
-	// char 		buffer[BUF_SIZE];
+
 	int	size = 0;
 	(void) fd;
 
@@ -303,15 +283,6 @@ void	Request::check_body_size(int fd, Config &conf)
 	if (size > conf.get_CMBS())
 		this->_status = CODE_413;
 
-	// if (_ExpectContinue)
-	// {
-	// 	std::string	response =  "HTTP/1.1 100 Continue";
-	// 	send(fd, response.c_str(), response.size(), 0);
-	// 	while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
-	// 	{
-	// 		_body.append(buffer);
-	// 	}
-	// }
 }
 
 
@@ -319,7 +290,6 @@ void	Request::trim_body()
 {
 	while (!_body.empty() && (_body.back() == '\r' || _body.back() == '\n'))
 	{
-	//	std::cout << "remove carriage return\n";
 	   _body.pop_back();
 	}
 }

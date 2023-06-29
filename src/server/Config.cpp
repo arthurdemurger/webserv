@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 16:20:53 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/29 17:56:48 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,6 @@ void	Config::setHostDir(std::string &value)
 		}
 	}
 	this->_host = value;
-	// std::cout << "host: " << _host << std::endl;
 }
 
 void	Config::setServerNameDir(std::string &value)
@@ -167,7 +166,6 @@ void	Config::setServerNameDir(std::string &value)
 	while (getline(iss, token, ' '))
 	{
 		this->_server_name.push_back(token);
-		// std::cout << "token: " << token << std::endl;
 	}
 	if (token.empty())
 	{
