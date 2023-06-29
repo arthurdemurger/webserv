@@ -6,7 +6,7 @@
 /*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:37:52 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 15:44:09 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/29 17:12:08 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int Cgi::launch(int client_sock, char **env, std::string path, std::string body)
 		int n;
 		while ((n = read(pipe_out[0], buffer, BUF_SIZE)) > 0)
 		{
-			response += buffer;
+			response.append(buffer, n);
 			if (write(client_sock, buffer, n) < 0)
 			{
 				perror("write");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 16:04:16 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/29 17:12:34 by ademurge         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,24 +65,35 @@ void								Request::set_status(std::string status) { _status = status; };
 int	Request::parse(int fd, Config conf)
 {
 	std::stringstream	ss, buffer;
-	char				buff[BUF_SIZE];
+	char				buff[BUF_SIZE + 1];
 	std::string			line;
 	std::string			request;
-	int					i = 0, n = 0;
-
+	int					i = 0;
+	int				n = 0;
 	this->_isChunked = false;
 	this->_ExpectContinue = false;
 	this->_status = CODE_200;
 	bzero(buff, BUF_SIZE);
-	std::string data(buff, n);
-	while ((n = read(fd, buff, BUF_SIZE) > 0))
+	std::string data;
+
+	n = read(fd, buff, BUF_SIZE);
+	data.append(buff);
+	while (n == BUF_SIZE)
+	{
+		n = read(fd, buff, BUF_SIZE);
 		data.append(buff);
+	}
+	if (n < 0)
+		return (-1);
+
+
 	// std::ofstream file("request_log", std::ios::out | std::ios::app);
 	// if (file.is_open())
 	// {
 	// 	file << "********** REQUEST **********\n" << data << "********** END **********\n" << std::endl;
 	// 	file.close();
 	// }
+
 	ss << data;
 	while (getline(ss, line))
 	{
@@ -281,21 +292,26 @@ void	Request::check_body_size(int fd, Config &conf)
 	// 		}
 	// 	}
 	// }
-	int			n;
-	char 		buffer[BUF_SIZE];
-	int	size = _body.size();
+	// int			n;
+	// char 		buffer[BUF_SIZE];
+	int	size = 0;
+	(void) fd;
+
+	if (!_headers["Content-Length"].empty())
+		size = std::stoi(_headers["Content-Length"]);
 
 	if (size > conf.get_CMBS())
 		this->_status = CODE_413;
-	if (_ExpectContinue)
-	{
-		std::string	response =  "HTTP/1.1 100 Continue";
-		send(fd, response.c_str(), response.size(), 0);
-		while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
-		{
-			_body.append(buffer);
-		}
-	}
+
+	// if (_ExpectContinue)
+	// {
+	// 	std::string	response =  "HTTP/1.1 100 Continue";
+	// 	send(fd, response.c_str(), response.size(), 0);
+	// 	while ( (n = read(fd, buffer, BUF_SIZE) > 0) )
+	// 	{
+	// 		_body.append(buffer);
+	// 	}
+	// }
 }
 
 
