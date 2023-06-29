@@ -82,11 +82,12 @@ std::string	Client::send_response(void)
 
 	if (status < 400)
 	{
-		if (_request.get_path().find("www/cgi-bin/") != std::string::npos || _request.get_path().find("www/cgi-bin/") != std::string::npos)
+		if (_request.get_path().find("www/cgi-bin/") != std::string::npos)
 		{
 			response = _response.build_cgi(_request, _sock);
 			if (stoi(_request.get_status()) >= 400)
-				send(_sock, response.c_str(), response.length(), 0);
+				if (send(_sock, response.c_str(), response.length(), 0) < 0)
+					return ("");
 		}
 		else
 		{
