@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 17:56:48 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/30 16:10:02 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ Config &Config::operator=(const Config &rhs)
 	{
 		this->_port = rhs._port;
 		this->_host = rhs._host;
+		this->_allow_methods = rhs._allow_methods;
 		this->_server_name = rhs._server_name;
 		this->_error_page = rhs._error_page;
 		this->_client_max_body_size = rhs._client_max_body_size;

@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/30 15:37:06 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/30 16:09:05 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,17 @@ Request	&Request::operator=(const Request &copy)
 	if (this != &copy)
 	{
 		_method = copy._method;
+		_status = copy._status;
 		_path = copy._path;
+		_raw_path = copy._raw_path;
+		_host = copy._host;
 		_headers = copy._headers;
 		_body = copy._body;
+		_isParsed = copy._isParsed;
+		_isChunked = copy._isChunked;
+		_location = copy._location;
+		_file = copy._file;
+		_autoindex = copy._autoindex;
 	}
 	return (*this);
 }
@@ -71,7 +79,6 @@ int	Request::parse(int fd, Config conf)
 	int					i = 0;
 	int				n = 0;
 	this->_isChunked = false;
-	this->_ExpectContinue = false;
 	this->_status = CODE_200;
 	bzero(buff, BUF_SIZE);
 	std::string data;
@@ -182,10 +189,6 @@ void	Request::parse_request_headers(std::string &line, Config conf)
 		if (_headers.count("Transfer-Encoding") && _headers["Transfer-Encoding"] == "chunked")
 		{
 			_isChunked = true;
-		}
-		else if (_headers.count("Expect") && _headers["Expect"] == "100-continue")
-		{
-			_ExpectContinue = true;
 		}
 		else if (_headers.count("Host"))
 		{

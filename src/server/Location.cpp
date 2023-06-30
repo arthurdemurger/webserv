@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:24:10 by hdony             #+#    #+#             */
-/*   Updated: 2023/06/29 17:57:04 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/30 16:16:54 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/server/Location.hpp"
+
+/*
+** ------------------------------- CONSTRUCTOR --------------------------------
+*/
+Location::Location() {}
 
 Location::Location(std::string LocationBlock, std::string LocationType)
 {
@@ -49,6 +54,14 @@ Location::Location(const Location &rhs)
 	*this = rhs;
 }
 
+/*
+** ------------------------------- DESTRUCTOR --------------------------------
+*/
+Location::~Location() {}
+
+/*
+** ------------------------------- OPERATOR OVERLOAD --------------------------------
+*/
 Location	&Location::operator=(const Location &rhs)
 {
 	if (this != &rhs)
@@ -64,7 +77,9 @@ Location	&Location::operator=(const Location &rhs)
 	return (*this);
 }
 
-Location::~Location() {}
+/*
+** ------------------------------- ACCESSORS --------------------------------
+*/
 
 void	Location::setLocType(std::string &LocationType)
 {
@@ -86,37 +101,10 @@ void	Location::setAllowMethods(std::string &value)
 	}
 }
 
-std::string &Location::getLocationType()
-{
-	return (this->_location_type);
-}
-
-std::string &Location::getRoot()
-{
-	return (this->_root);
-}
-
-bool	&Location::getAutoindex()
-{
-	return (this->_autoindex);
-}
-
-std::vector<std::string>	&Location::getAllowMethods()
-{
-	return (this->_allow_methods);
-}
-
-std::string &Location::getIndex()
-{
-	return (this->_index);
-}
-
-std::string &Location::getReturn()
-{
-	return (this->_return);
-}
-
-std::string &Location::getAlias()
-{
-	return (this->_alias);
-}
+std::string &Location::getLocationType() {	return (this->_location_type); }
+std::string &Location::getRoot() {	return (this->_root); }
+bool	&Location::getAutoindex() {	return (this->_autoindex); }
+std::vector<std::string>	&Location::getAllowMethods() {	return (this->_allow_methods); }
+std::string &Location::getIndex() {	return (this->_index); }
+std::string &Location::getReturn() { return (this->_return); }
+std::string &Location::getAlias() {	return (this->_alias); }

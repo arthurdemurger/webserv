@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:24:08 by hdony             #+#    #+#             */
-/*   Updated: 2023/05/26 14:53:18 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/30 16:11:51 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ class Location
 {
     private:
         /*
-        ** ------------------------------- Attributes --------------------------------
+        ** ------------------------------- ATTRIBUTES --------------------------------
         */
         std::string                 _location_type;
         std::string                 _root;
@@ -32,15 +32,16 @@ class Location
 
     public:
         /*
-    	** ------------------------------- Canonical form --------------------------------
+    	** ------------------------------- COPLIEN --------------------------------
 	    */
+        Location();
         Location(std::string LocationBlock, std::string LocationType);
         Location(const Location &rhs);
         Location    &operator=(const Location &rhs);
         ~Location();
 
         /*
-	    ** ------------------------------- Accessors --------------------------------
+	    ** ------------------------------- ACCESSORS --------------------------------
 	    */
         void                        setLocType(std::string &LocationType);
         void                        setAllowMethods(std::string &value);

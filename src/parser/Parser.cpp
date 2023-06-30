@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:41:07 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 14:31:02 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/30 16:05:49 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,18 @@ Parser &Parser::operator=(const Parser &copy)
 {
 	if (this != &copy)
 	{
-
+		_content = copy._content;
+		_server_nb = copy._server_nb;
+		_start_block = copy._start_block;
+		_end_block = copy._end_block;
+		_config_block = copy._config_block;
+		_config = copy._config;
 	}
 	return (*this);
 }
 
 /*
-** ------------------------------- Methods --------------------------------
+** ------------------------------- METHODS --------------------------------
 */
 
 std::string Parser::reading(std::string path)
@@ -130,7 +135,8 @@ std::vector<Config>   Parser::build_server_config()
 	return (this->_config);
 }
 
-const std::vector<Config> Parser::getConfig() const
-{
-	return (this->_config);
-}
+/*
+** ------------------------------- ACCESSOR --------------------------------
+*/
+
+const std::vector<Config> Parser::getConfig() const { return (this->_config); }

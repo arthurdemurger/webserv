@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:09 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 15:57:26 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/30 16:08:23 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ class Request
 		std::string										_body;
 		bool											_isParsed;
 		bool											_isChunked;
-		bool											_ExpectContinue;
 		std::string										_location;
 		std::string										_file;
 		bool											_autoindex;
