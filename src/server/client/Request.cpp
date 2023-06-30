@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/30 16:09:05 by hdony            ###   ########.fr       */
+/*   Updated: 2023/06/30 16:26:00 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ int	Request::parse(int fd, Config conf)
 	std::string data;
 
 	n = read(fd, buff, BUF_SIZE);
+	if (n < 0)
+		return (-1);
 	data.append(buff);
 	while (n == BUF_SIZE)
 	{
