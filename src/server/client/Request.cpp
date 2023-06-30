@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademurge <ademurge@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:49:10 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/29 17:57:28 by ademurge         ###   ########.fr       */
+/*   Updated: 2023/06/30 15:37:06 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,9 @@ void	Request::parse_request_headers(std::string &line, Config conf)
 		}
 		else if (_headers.count("Host"))
 		{
-			if (_headers["Host"].compare(conf.get_host()))
+			size_t pos = _headers["Host"].find(":");
+			this->_host =  _headers["Host"].substr(0, pos);
+ 			if (this->_host.compare(conf.get_host()))
 			{
 				this->_status = CODE_400;
 			}
