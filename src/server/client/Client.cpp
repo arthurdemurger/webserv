@@ -95,6 +95,8 @@ std::string	Client::send_response(void)
 				response = _response.build_get_method(_request);
 			else if (_request.get_method() == "DELETE")
 				response = _response.build_delete_method(_request);
+			else if (_request.get_method() == "POST")
+				response = "HTTP/1.1 204 No Content\r\n\r\n";
 			if (send(_sock, response.c_str(), response.length(), 0) < 0)
 				return ("");
 		}
