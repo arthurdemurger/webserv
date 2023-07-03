@@ -6,7 +6,7 @@
 /*   By: hdony <hdony@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 17:32:53 by ademurge          #+#    #+#             */
-/*   Updated: 2023/06/30 16:10:02 by hdony            ###   ########.fr       */
+/*   Updated: 2023/07/03 13:49:55 by hdony            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ void	Config::setServerNameDir(std::string &value)
 	}
 	if (token.empty())
 	{
-		this->_server_name.push_back("null");
+		this->_server_name.push_back("default name");
 	}
 }
 
